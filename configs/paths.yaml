@@ -1,0 +1,52 @@
+# configs/paths.yaml  (owner: Monirul)
+#
+# Where data, model weights and outputs live, once for the PC and once for the cluster.
+# Code picks the profile from NULLSCALE_PROFILE (setup_env.sh sets it inside the conda env).
+#   Load it in Python with:   from nullscale.config import load_paths; P = load_paths()
+#
+# Placeholders:  ${PROJECT_ROOT} = this repository folder,  ${WORK_ROOT} = the profile's work_root,
+#                ${USER} or ~ are expanded from the environment.
+
+profiles:
+
+  # --- RTX 5070 PC (Windows 11 + WSL2 Ubuntu) -------------------------------------------
+  # The code stays in the OneDrive folder (small, synced, in git).
+  # Everything heavy lives in the WSL home folder: it is much faster than /mnt/c,
+  # and OneDrive will not try to sync gigabytes of model weights and answers.
+  pc:
+    gpu: "RTX 5070, 12 GB"
+    work_root: ~/nullscale_work
+    hf_home: ${WORK_ROOT}/hf_cache            # Hugging Face model weights (~24 GB: Qwen3 4B + Llama 3.1 8B)
+    data:
+      riker2: ${WORK_ROOT}/data/riker2         # RIKER2 zips + unzipped files (~5 GB)
+      nullscale: ${WORK_ROOT}/data/nullscale   # generated documents and questions
+      nq: ${WORK_ROOT}/data/nq                 # Natural Questions subset + Wikipedia passages
+    outputs:
+      answers: ${WORK_ROOT}/outputs/answers    # one JSONL line per model answer (agreed format)
+      scores: ${WORK_ROOT}/outputs/scores
+      audit: ${PROJECT_ROOT}/outputs/audit     # small, shared with Jayden -> keep in the synced folder
+      figures: ${PROJECT_ROOT}/outputs/figures # small, goes into the paper -> keep in the synced folder
+    logs: ${PROJECT_ROOT}/logs
+
+  # --- UC ARCC2 cluster (Slurm) ---------------------------------------------------------
+  # TODO(Monirul): confirm the scratch/project filesystem path on ARCC2 and the GPU type
+  # (H200 or A100) before the first cluster run. The weights alone need ~420 GB.
+  cluster:
+    gpu: "TODO: H200 (141 GB) or A100 (80 GB)"
+    work_root: /scratch/${USER}/nullscale      # TODO: replace with the real ARCC2 scratch path
+    hf_home: ${WORK_ROOT}/hf_cache             # all 7 models + helpers, ~420 GB
+    data:
+      riker2: ${WORK_ROOT}/data/riker2
+      nullscale: ${WORK_ROOT}/data/nullscale
+      nq: ${WORK_ROOT}/data/nq
+    outputs:
+      answers: ${WORK_ROOT}/outputs/answers
+      scores: ${WORK_ROOT}/outputs/scores
+      audit: ${WORK_ROOT}/outputs/audit
+      figures: ${WORK_ROOT}/outputs/figures
+    logs: ${WORK_ROOT}/logs
+    slurm:
+      qos: proj-606                            # PPMS project 606
+      partition: TODO                          # the GPU partition name on ARCC2
+      gpu_type: TODO                           # e.g. h200 or a100, as written in --gres
+      max_hours_per_job: 24

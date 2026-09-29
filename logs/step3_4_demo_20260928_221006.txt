@@ -1,0 +1,208 @@
+######## 1. schema.py: the fake business world ########
+
+BUSINESS records
+  company
+    name            stem_name required   (invented stem + generic word, e.g. 'Morvane Logistics')
+    industry        choice    required
+    founded_year    year      required
+    headquarters    choice    required   (city)
+    employees       int       required
+    ceo             ref       optional -> person
+    website         text      optional
+  person
+    name            stem_name required   (real first name + invented last name)
+    role            choice    required
+    employer        ref       required -> company
+    start_year      year      required
+    email           text      optional
+    phone           text      optional
+  building
+    name            stem_name required   (invented stem + building word, e.g. 'Talbrick Court')
+    address         text      required
+    city            choice    required
+    floors          int       required
+    year_built      year      required
+    manager         ref       optional -> person
+    parking_spaces  int       optional
+  lease
+    lease_id        code      required
+    tenant          ref       required -> company
+    building        ref       required -> building
+    floor           int       required
+    start_date      date      required
+    end_date        date      required
+    monthly_rent    money     required
+    deposit         money     optional
+    signed_by       ref       optional -> person
+    renewal_option  choice    optional
+
+UNRELATED records
+  shipment
+    tracking_code   code      required
+    carrier         stem_name required   (invented stem + 'Freight' etc.)
+    origin          choice    required
+    destination     choice    required
+    weight_kg       float     required
+    ship_date       date      required
+    contents        choice    required
+    packages        int       required
+    priority        choice    required
+    insured_value   money     optional
+  equipment
+    asset_tag       code      required
+    model           stem_name required   (invented stem + model number)
+    category        choice    required
+    purchase_year   year      required
+    room            text      required
+    condition       choice    required
+    serial_number   code      required
+    warranty_until  year      required
+    last_service    date      optional
+  weather
+    station         stem_name required   (invented stem + 'Station')
+    date            date      required
+    high_c          float     required
+    low_c           float     required
+    precipitation_mmfloat     required
+    sky             choice    required
+    humidity_pct    int       required
+    visibility_km   float     required
+    wind_kmh        int       optional
+
+Queryable facts: lease.monthly_rent, lease.deposit, lease.start_date, lease.end_date, lease.floor, company.employees, company.founded_year, building.year_built, person.role
+
+######## 2. records.py: no two names accidentally similar ########
+records made: 600   distinct name stems: 1328
+smallest edit distance between any two of 600 stems: 3  (must be >= 3)
+example stems: bacaikom, baimclind, baindpoand, baipam, bairnles, balsoal, bamgor, bandveart, banprock, barnsiend, bartmick, basgound
+OK
+
+######## 3. render.py: 10 readable fake records ########
+[1] LEASE
+    Lease L-76563 records that Grirast Robotics rents floor 3 of Stieckdrie Yard. It began on October 14, 2019, ends on October 14, 2026, and carries a monthly rent of $24,900. The deposit on file is $34,600. Renewal option: one year at a time.
+
+[2] LEASE
+    Under lease L-35601, Ciernclea Laboratories occupies floor 16 at Cackbor Court from August 14, 2017 until August 14, 2027. Rent is set at $44,900 per month. A security deposit of $117,450 was paid. Leila Menfle signed on behalf of the tenant. The lease can be renewed for one year at a time.
+
+[3] COMPANY
+    Tournour Ventures is a biotechnology company founded in 1986. It is headquartered in Syracuse and employs 3,155 people. The company is led by Grace Burnsu. It can be found online at www.tournour.com.
+
+[4] PERSON
+    Felix Humcefieck works as senior accountant at Skaisskoan Traders and joined in 2015. Phone: (596) 555-3995.
+
+[5] BUILDING
+    Completed in 1941, Cleprur Hall is a 6-floor building located at 2895 Geastpurt Avenue, Savannah. The property manager is Arjun Cumno. Parking: 296 spaces.
+
+[6] LEASE
+    Lease L-22083 records that Doastoust Foods rents floor 18 of Stendcusde Exchange. It began on September 29, 2017, ends on September 28, 2027, and carries a monthly rent of $8,500. A security deposit of $9,600 was paid.
+
+[7] SHIPMENT
+    On January 8, 2024, Keckpem Freight moved shipment SH-931800 (paper stock, 820.6 kg) from Tacoma to Indianapolis. The 170 packages travelled at overnight priority. It was insured for $1,450.
+
+[8] EQUIPMENT
+    The forklift tagged EQ-89805 is a Ceckclum 845 unit from 2020. It sits in room 828 and is in like new condition. Its serial number is SN82645591 and the warranty runs until 2025. Last serviced on January 16, 2023.
+
+[9] WEATHER
+    Partrend Weather Post reported overcast weather on September 6, 2025, with a high of 5.7 C, a low of -0.1 C and 0.0 mm of precipitation. Humidity was 96 percent and visibility 6.4 km. Wind reached 43 km/h.
+
+[10] BUILDING
+    Ginoal House stands at 1705 Stoundtaix Boulevard in Madison. The building has 22 floors and was completed in 1934. It offers 50 parking spaces.
+
+
+######## 4. lookalike.py: both ladders, four levels ########
+
+==================== NAME LADDER ====================
+
+[none]  Q: What monthly rent does Chouseaber Dynamics pay under its lease?
+    (no look-alike record in the document)
+
+[weak]  Q: What monthly rent does Chouseaber Dynamics pay under its lease?
+    LOOK-ALIKE: Under lease L-38221, Zarnzix Dynamics occupies floor 9 at Clemclais Point from June 24, 2018 until June 24, 2023. Rent is set at $9,750 per month. The lease can be renewed for one year at a time.
+
+[medium]  Q: What monthly rent does Chouseaber Dynamics pay under its lease?
+    LOOK-ALIKE: Treasgir Commons, floor 4: lease L-95181 with Chouseaber Engineering. Start date January 14, 2021; end date January 14, 2031. Monthly rent: $11,950. The deposit on file is $14,400. It was signed by Chloe Gaxnouquea. The lease can be renewed for one two-year term.
+
+[strong]  Q: What monthly rent does Chouseaber Dynamics pay under its lease?
+    LOOK-ALIKE: Lease L-38893 records that Cheuseaber Dynamics rents floor 23 of Surnsharn Plaza. It began on April 11, 2020, ends on April 11, 2030, and carries a monthly rent of $23,250. The deposit on file is $37,450. It was signed by Victor Ceakaist. The lease can be renewed for one five-year term.
+
+==================== ROLE LADDER ====================
+
+[none]  Q: What was the monthly rent of Chouseaber Dynamics' lease at Maildornhe Place that started in 2019?
+    (no look-alike record in the document)
+
+[weak]  Q: What was the monthly rent of Chouseaber Dynamics' lease at Maildornhe Place that started in 2019?
+    LOOK-ALIKE: Lease L-97841 records that Treststirt Ventures rents floor 8 of Maildornhe Place. It began on July 9, 2014, ends on July 9, 2019, and carries a monthly rent of $12,500. The deposit on file is $22,200. Arjun Tairnwar signed on behalf of the tenant.
+
+[medium]  Q: What was the monthly rent of Chouseaber Dynamics' lease at Maildornhe Place that started in 2019?
+    LOOK-ALIKE: Under lease L-37460, Chouseaber Dynamics occupies floor 11 at Lucktrour Square from March 25, 2019 until March 25, 2024. Rent is set at $19,950 per month. The lease can be renewed for one five-year term.
+
+[strong]  Q: What was the monthly rent of Chouseaber Dynamics' lease at Maildornhe Place that started in 2019?
+    LOOK-ALIKE: Under lease L-97841, Chouseaber Dynamics occupies floor 9 at Maildornhe Place from July 9, 2017 until July 9, 2022. Rent is set at $12,500 per month. Renewal option: two three-year terms.
+
+[name/strong, copies=4]  Q: What monthly rent does Chouseaber Dynamics pay under its lease?
+    tenant: Cheuseaber Dynamics   rent: 43200
+    tenant: Chouseabar Dynamics   rent: 4100
+    tenant: Chousoaber Dynamics   rent: 25450
+    tenant: Chouseaberr Dynamics   rent: 12650
+
+######## 5. filler.py: unrelated vs sibling at equal size ########
+tokenizer: meta-llama/Llama-3.1-8B-Instruct
+budget 30,000 tokens, 547 records per kind
+
+unrelated  records 547  tokens 30,041  words 16,204  mix: equipment 28%, shipment 40%, weather 32%
+sibling    records 547  tokens 30,026  words 15,857  mix: building 14%, company 21%, lease 44%, person 21%
+
+######## 6. assemble.py: one 32K document with a strong look-alike ########
+tokenizer: meta-llama/Llama-3.1-8B-Instruct    output: /mnt/c/Users/mahmu/OneDrive/Desktop/Dr. Justin Zhan/One Record is Enough/nullscale-naacl2027/data/nullscale/demo
+ladder level   filler       tokens      dev   ok   recs filler   words  look-alike at
+name  strong  unrelated    32,015   +0.05%  yes    582    577  17,761  50%
+
+QUESTION (no answer in the document): What monthly rent does Quearzes Laboratories pay under its lease?
+look-alike value(s) of 'monthly_rent': [35800]
+
+--- around the look-alike ---
+...ndition: fair. Serial number SN50403648, under warranty until 2027. Its last service was on November 6, 2024.
+
+Shipment SH-649898 of packaged coffee left Columbus for Fresno on January 24, 2022 with Vouschiem Cargo. It weighed 775.3 kg in 237 packages and was sent economy. Declared value: $38,950.
+
+>>>Lease L-47367 records that Qiearzes Laboratories rents floor 5 of Stoalnirt Tower. It began on May 19, 2016, ends on May 19, 2018, and carries a monthly rent of $35,800. The deposit on file is $64,400. Andre Leamgre signed on behalf of the tenant.<<<
+
+Asset EQ-70065 is a 3D printer, model Chumchal 970, bought in 2008 and kept in room 220. Condition: like new. Serial number SN55708491, under warranty until 2026.
+
+Inventory entry EQ-81633: label printer (Soarfaist 212), purchased 2018, located in room 132, currently needs repair; serial SN9327767...
+
+saved: /mnt/c/Users/mahmu/OneDrive/Desktop/Dr. Justin Zhan/One Record is Enough/nullscale-naacl2027/data/nullscale/demo/name-strong-c1-unrelated-32k-monthly_rent-s1.txt  (+ .json metadata)
+
+######## 7. assemble.py: all 16 ladder x level x filler documents at 32K ########
+tokenizer: meta-llama/Llama-3.1-8B-Instruct    output: /mnt/c/Users/mahmu/OneDrive/Desktop/Dr. Justin Zhan/One Record is Enough/nullscale-naacl2027/data/nullscale/demo
+ladder level   filler       tokens      dev   ok   recs filler   words  look-alike at
+name  none    unrelated    32,001   +0.00%  yes    583    579  17,755  -
+name  none    sibling      31,993   -0.02%  yes    583    579  17,240  -
+name  weak    unrelated    32,007   +0.02%  yes    582    577  17,745  50%
+name  weak    sibling      32,000   +0.00%  yes    582    577  16,999  50%
+name  medium  unrelated    31,981   -0.06%  yes    582    577  17,667  50%
+name  medium  sibling      32,005   +0.02%  yes    582    577  17,281  50%
+name  strong  unrelated    32,015   +0.05%  yes    582    577  17,761  50%
+name  strong  sibling      32,000   +0.00%  yes    582    577  17,065  50%
+role  none    unrelated    31,980   -0.06%  yes    583    577  17,661  -
+role  none    sibling      32,029   +0.09%  yes    583    577  17,201  -
+role  weak    unrelated    32,001   +0.00%  yes    583    576  17,713  50%
+role  weak    sibling      31,994   -0.02%  yes    583    576  17,116  50%
+role  medium  unrelated    31,993   -0.02%  yes    582    575  17,606  50%
+role  medium  sibling      31,988   -0.04%  yes    582    575  17,294  50%
+role  strong  unrelated    32,007   +0.02%  yes    583    576  17,759  50%
+role  strong  sibling      31,996   -0.01%  yes    583    576  17,162  50%
+
+saved to /mnt/c/Users/mahmu/OneDrive/Desktop/Dr. Justin Zhan/One Record is Enough/nullscale-naacl2027/data/nullscale/demo
+
+######## 8. assemble.py: the other lengths (8K, 64K, 128K) ########
+ladder level   filler       tokens      dev   ok   recs filler   words  look-alike at
+role  strong  sibling       8,000   +0.00%  yes    145    138   4,308  50%
+ladder level   filler       tokens      dev   ok   recs filler   words  look-alike at
+role  strong  sibling      63,962   -0.06%  yes   1167   1160  34,505  50%
+ladder level   filler       tokens      dev   ok   recs filler   words  look-alike at
+role  strong  sibling     128,051   +0.04%  yes   2334   2327  68,470  50%
+
+######## 9. assemble.py: eight copies of the look-alike (Exp 4) ########
+ladder level   filler       tokens      dev   ok   recs filler   words  look-alike at
+name  strong  unrelated    31,980   -0.06%  yes    580    568  17,694  39%,42%,46%,49%,52%,55%,57%,60%

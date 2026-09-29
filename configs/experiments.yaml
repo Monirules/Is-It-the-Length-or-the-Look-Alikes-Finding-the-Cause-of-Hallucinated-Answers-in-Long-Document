@@ -1,0 +1,138 @@
+# configs/experiments.yaml  (owner: Monirul)
+#
+# Every experiment in the proposal, with its grid. nullscale/build_dataset.py builds the data from this file
+# and run/run_vllm.py runs it. Check that it adds up with:   python -m nullscale.config
+#
+# Grid rule for NullScale experiments: every combination of
+#   lengths x ladders x lookalike_levels x lookalike_copies x filler
+# is one "cell"; each cell gets contexts_per_cell documents; each document gets
+# 8 unanswerable + 4 answerable questions (defaults.questions_per_context).
+
+defaults:
+  # "32K" means 32,000 tokens, not 32,768, so a 128K document plus the prompt and the answer
+  # still fits inside the 131,072-token window of Llama, Gemma and GLM.
+  length_unit_tokens: 1000
+  length_tolerance: 0.01                 # assemble.py: within 1% of the target
+  reference_tokenizer: meta-llama/Llama-3.1-8B-Instruct   # lengths are counted with this tokenizer;
+                                         # assemble.py must also check the document fits every model's own tokenizer
+  prompt_headroom_tokens: 1500           # instructions + question + answer on top of the document
+  questions_per_context: {unanswerable: 8, answerable: 4}
+  lookalike_position: middle             # look-alike record placed at the middle of the document
+  prompt: normal                         # normal | strict | batch12  (run/prompts.py)
+  one_question_per_call: true
+  decoding: {temperature: 0.0, top_p: 1.0, max_tokens: 256}
+  base_seed: 20261012                    # every experiment derives its seeds from this plus its own offset
+  allowed:
+    ladders: [name, role]
+    lookalike_levels: [none, weak, medium, strong]
+    filler: [unrelated, sibling]
+
+experiments:
+
+  exp1:
+    rq: RQ3
+    title: "Split Roig's results by look-alike presence"
+    type: reanalysis
+    source: riker2
+    riker_context_lengths: [32, 128, 200]
+    split_by: [lookalike_present, no_lookalike]
+    model_runs: false
+    runs_on: [pc]                        # laptop/PC is enough, no GPU needed
+    owner: Jayden
+
+  exp2:
+    rq: RQ1
+    title: "Look-alike ladder at fixed length"
+    type: nullscale
+    seed_offset: 2000
+    lengths: [32]
+    ladders: [name, role]
+    lookalike_levels: [none, weak, medium, strong]
+    lookalike_copies: [1]
+    filler: [unrelated]
+    contexts_per_cell: 15                # 1 x 2 x 4 x 1 x 1 = 8 cells -> 120 contexts, 1,440 questions
+    models: all_open
+    api_models: [claude_haiku45]         # optional
+    repeats:
+      temperature: 0.7
+      seeds: [1, 2, 3]                   # three extra runs to check stability
+    runs_on: [pc, cluster]
+
+  exp3:
+    rq: RQ2
+    title: "Length with and without a strong look-alike, two filler types"
+    type: nullscale
+    seed_offset: 3000
+    lengths: [8, 32, 64, 128]
+    ladders: [name, role]
+    lookalike_levels: [none, strong]
+    lookalike_copies: [1]
+    filler: [unrelated, sibling]
+    contexts_per_cell: 10                # 4 x 2 x 2 x 1 x 2 = 32 cells -> 320 contexts, 3,840 questions
+    models: all_open
+    runs_on: [pc, cluster]               # PC: 8K and 32K only
+
+  exp4:
+    rq: RQ1
+    title: "One, two, four or eight copies of the same look-alike"
+    type: nullscale
+    seed_offset: 4000
+    lengths: [32]
+    ladders: [name, role]
+    lookalike_levels: [strong]
+    lookalike_copies: [1, 2, 4, 8]
+    filler: [unrelated]
+    hold_fixed: [token_count, record_count]   # copies replace filler records, never add to them
+    contexts_per_cell: 10                # 1 x 2 x 1 x 4 x 1 = 8 cells -> 80 contexts, 960 questions
+    models: all_open
+    runs_on: [pc, cluster]
+
+  exp5:
+    rq: RQ4
+    title: "Sibling padding against standard fixes at equal cost"
+    type: fixes
+    seed_offset: 5000
+    lengths: [32]
+    n_questions: {unanswerable: 200, answerable: 100}   # 300 total; answerable ones check fixes don't refuse everything
+    lookalike_levels: [strong]
+    pool_records: 5000
+    retrieval_top_k: 20
+    sibling_padding_records: 20
+    versions:
+      - full_context                     # 1. baseline: whole 32K document, normal prompt
+      - strict_prompt                    # 2. whole document, strict "say not found" prompt
+      - retrieval_top20                  # 3. retrieve top 20 records from the 5,000 pool
+      - retrieval_sibling_padding        # 4. 3 + 20 same-kind records that clearly lack the fact (our fix)
+      - retrieval_reranker_cutoff        # 5. 3 + drop low reranker scores, "not found" if nothing is left
+      - retrieval_fact_checker           # 6. 3 + MiniCheck; unsupported answer -> "not found"
+    models: all_open
+    runs_on: [pc, cluster]
+
+  exp6:
+    rq: real-text check
+    title: "Natural Questions with the gold passage removed"
+    type: realdata
+    seed_offset: 6000
+    source: natural_questions
+    n_questions: 300
+    lengths: [8, 32]
+    settings:
+      - gold_present_8k                  # control: gold passage kept, answerable
+      - no_gold_lookalike_8k             # gold removed, similar Wikipedia passages as filler
+      - no_gold_random_8k                # gold removed, random passages as filler
+      - no_gold_lookalike_32k
+      - no_gold_random_32k
+    models: all_open
+    runs_on: [pc, cluster]
+    data_owner: Jayden
+
+  exp7:
+    rq: protocol check
+    title: "Does asking 12 questions in one call hide made-up answers?"
+    type: batching
+    seed_offset: 7000
+    lengths: [32]
+    contexts: 20
+    modes: [one_per_call, batch12]
+    models: [qwen3_4b, llama31_8b]       # two models, small enough to also test on the PC
+    runs_on: [pc, cluster]

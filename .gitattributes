@@ -1,0 +1,4 @@
+# keep Linux line endings so the .sh scripts run in WSL and on the cluster
+*.sh text eol=lf
+*.py text eol=lf
+*.yaml text eol=lf

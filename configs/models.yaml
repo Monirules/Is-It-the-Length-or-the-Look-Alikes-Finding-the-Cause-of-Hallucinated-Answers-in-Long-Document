@@ -1,0 +1,136 @@
+# configs/models.yaml  (owner: Monirul)
+#
+# Every model the project uses. Keys (llama31_8b, ...) are the names used everywhere else
+# (experiments.yaml, answer files, figures).
+#
+# Field meanings
+#   hf_id            Hugging Face repo that is downloaded and served on the cluster.
+#   base_hf_id       The original repo (licence page, tokenizer). Same as hf_id unless hf_id is a quantized copy.
+#   gated            true = accept the licence on the base_hf_id page first (free).
+#   max_model_len    Native context window in tokens. A 128K document must fit inside it with room for the prompt.
+#   roig_fab_32k     Roig (2026) Table 9, lowest fabrication rate at 32K (%). null = not tested by Roig.
+#   pc               How it runs on the RTX 5070. Only the 4B and 8B fit, 8-bit FP8 (weights and KV cache), up to 32K documents
+#                    (max_len 34,816 = a 32K document + 1% + prompt headroom). Development only:
+#                    no paper number comes from the PC, because FP8 answers differ slightly from full precision.
+#                    (vLLM >= 0.11 removed bitsandbytes 4-bit; FP8 is native on the RTX 5070.)
+#   cluster          How it runs on the cluster. tp = number of GPUs (tensor parallel).
+#                    tp_h200 is the plan; tp_a100 is the fallback if the cluster turns out to be A100 80 GB.
+#   vllm_args        Extra keyword arguments passed to vllm.LLM(...).
+#
+# All hf_id and base_hf_id repos were confirmed accessible with setup_env.sh on 2026-09-28.
+
+open_models:
+
+  llama31_8b:
+    family: llama
+    hf_id: meta-llama/Llama-3.1-8B-Instruct
+    base_hf_id: meta-llama/Llama-3.1-8B-Instruct
+    gated: true
+    params_b: 8
+    active_params_b: 8
+    max_model_len: 131072
+    roig_fab_32k: 39.98
+    pc:     {runnable: true,  quantization: fp8, kv_cache_dtype: fp8, max_len: 34816}
+    cluster: {dtype: bfloat16, tp_h200: 1, tp_a100: 1}
+    vllm_args: {}
+
+  qwen3_4b:
+    family: qwen
+    hf_id: Qwen/Qwen3-4B-Instruct-2507      # the 2507 Instruct model (Roig 25.30%), NOT plain Qwen3-4B (57.44%)
+    base_hf_id: Qwen/Qwen3-4B-Instruct-2507
+    gated: false
+    params_b: 4
+    active_params_b: 4
+    max_model_len: 262144
+    roig_fab_32k: 25.30
+    pc:     {runnable: true,  quantization: fp8, kv_cache_dtype: fp8, max_len: 34816}
+    cluster: {dtype: bfloat16, tp_h200: 1, tp_a100: 1}
+    vllm_args: {}
+
+  gemma3_27b:
+    family: gemma
+    hf_id: google/gemma-3-27b-it
+    base_hf_id: google/gemma-3-27b-it
+    gated: true
+    params_b: 27
+    active_params_b: 27
+    max_model_len: 131072
+    roig_fab_32k: null
+    pc:     {runnable: false}
+    cluster: {dtype: bfloat16, tp_h200: 1, tp_a100: 2}
+    vllm_args:
+      limit_mm_per_prompt: {image: 0}        # text only: skip the vision encoder's memory
+
+  qwen3_30b_a3b:
+    family: qwen
+    hf_id: Qwen/Qwen3-30B-A3B-Instruct-2507
+    base_hf_id: Qwen/Qwen3-30B-A3B-Instruct-2507
+    gated: false
+    params_b: 30
+    active_params_b: 3
+    max_model_len: 262144
+    roig_fab_32k: 36.11
+    pc:     {runnable: false}
+    cluster: {dtype: bfloat16, tp_h200: 1, tp_a100: 1}
+    vllm_args: {}
+
+  llama33_70b:
+    family: llama
+    hf_id: RedHatAI/Llama-3.3-70B-Instruct-FP8-dynamic
+    base_hf_id: meta-llama/Llama-3.3-70B-Instruct
+    gated: true
+    params_b: 70
+    active_params_b: 70
+    max_model_len: 131072
+    roig_fab_32k: 41.67
+    pc:     {runnable: false}
+    cluster: {dtype: fp8, tp_h200: 1, tp_a100: 2}
+    vllm_args: {}
+
+  qwen3_next_80b:
+    family: qwen
+    hf_id: Qwen/Qwen3-Next-80B-A3B-Instruct-FP8
+    base_hf_id: Qwen/Qwen3-Next-80B-A3B-Instruct
+    gated: false
+    params_b: 80
+    active_params_b: 3
+    max_model_len: 262144
+    roig_fab_32k: 7.04
+    pc:     {runnable: false}
+    cluster: {dtype: fp8, tp_h200: 1, tp_a100: 2}
+    vllm_args: {}
+
+  glm45_air:
+    family: glm
+    hf_id: zai-org/GLM-4.5-Air-FP8
+    base_hf_id: zai-org/GLM-4.5-Air
+    gated: false
+    params_b: 106
+    active_params_b: 12
+    max_model_len: 131072
+    roig_fab_32k: 3.37
+    pc:     {runnable: false}
+    cluster: {dtype: fp8, tp_h200: 2, tp_a100: 2}
+    vllm_args: {}
+
+# Optional: only if Prof. Zhan approves the ~$50 budget. Exp 2 only.
+api_models:
+  claude_haiku45:
+    family: anthropic
+    api_model: claude-haiku-4-5-20251001
+    max_model_len: 200000
+    roig_fab_32k: null
+    experiments: [exp2]
+    optional: true
+
+# Small models used by the fixes (Exp 5) and the real-data retrieval (Exp 6). Not "tested" models.
+helper_models:
+  fact_checker:
+    hf_id: bespokelabs/Bespoke-MiniCheck-7B       # fallback: lytang/MiniCheck-Flan-T5-Large (smaller, faster)
+    used_by: fixes/fact_checker.py
+  reranker:
+    hf_id: BAAI/bge-reranker-v2-m3
+    used_by: fixes/reranker_cutoff.py
+  embedder:
+    hf_id: BAAI/bge-base-en-v1.5                  # optional; realdata/retrieve.py may use BM25 only
+    used_by: realdata/retrieve.py

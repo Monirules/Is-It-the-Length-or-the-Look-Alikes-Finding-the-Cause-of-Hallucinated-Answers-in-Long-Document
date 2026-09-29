@@ -1,0 +1,9 @@
+# heavy or machine-specific folders (their contents are not code)
+data/
+outputs/answers/
+outputs/scores/
+logs/*.log
+hf_cache/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
