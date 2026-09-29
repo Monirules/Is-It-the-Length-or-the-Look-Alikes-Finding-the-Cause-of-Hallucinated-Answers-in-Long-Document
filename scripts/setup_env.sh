@@ -128,28 +128,40 @@ PY
 
 if [[ "$SMOKE" == "1" ]]; then
   step "Smoke test: Qwen3 4B answers one question"
-  python - <<'PY'
+  # vLLM starts its engine in a fresh "spawned" process (always on WSL), which re-imports the calling
+  # script. So the test must be a real .py file with a __main__ guard, not code piped into python.
+  SMOKE_PY="$(mktemp --suffix=_nullscale_smoke.py)"
+  cat > "$SMOKE_PY" <<'PY'
 import os, time
-from vllm import LLM, SamplingParams
-from nullscale.config import load_models
-m = load_models()["open_models"]["qwen3_4b"]
-pc = os.environ.get("NULLSCALE_PROFILE") == "pc"
-kw = dict(model=m["hf_id"], max_model_len=4096, gpu_memory_utilization=0.85, seed=0)
-if pc:
-    kw.update(quantization=m["pc"]["quantization"], kv_cache_dtype=m["pc"]["kv_cache_dtype"], enforce_eager=True)
-t = time.time()
-llm = LLM(**kw)
-print(f"loaded in {time.time()-t:.0f}s ({'FP8' if pc else 'bf16'})")
-doc = "Lease record. Tenant: Harbor Lane Bakery. Building: Elm Court. Monthly rent: $4,200."
-msgs = [[{"role": "user", "content": f"{doc}\n\nWhat is the monthly rent for Harbor Lane Bakery? "
-                                     "Answer only from the text."}],
-        [{"role": "user", "content": f"{doc}\n\nWhat is the monthly rent for Quarry Point Florist? "
-                                     "Answer only from the text. If it is not in the text, say NOT FOUND."}]]
-outs = llm.chat(msgs, SamplingParams(temperature=0.0, max_tokens=40))
-for label, o in zip(["answerable", "unanswerable"], outs):
-    print(f"{label:>13}: {o.outputs[0].text.strip()!r}")
-print("SMOKE TEST PASSED")
+
+
+def main():
+    from vllm import LLM, SamplingParams
+    from nullscale.config import load_models
+    m = load_models()["open_models"]["qwen3_4b"]
+    pc = os.environ.get("NULLSCALE_PROFILE") == "pc"
+    kw = dict(model=m["hf_id"], max_model_len=4096, gpu_memory_utilization=0.85, seed=0)
+    if pc:
+        kw.update(quantization=m["pc"]["quantization"], kv_cache_dtype=m["pc"]["kv_cache_dtype"], enforce_eager=True)
+    t = time.time()
+    llm = LLM(**kw)
+    print(f"loaded in {time.time()-t:.0f}s ({'FP8' if pc else 'bf16'})")
+    doc = "Lease record. Tenant: Harbor Lane Bakery. Building: Elm Court. Monthly rent: $4,200."
+    msgs = [[{"role": "user", "content": f"{doc}\n\nWhat is the monthly rent for Harbor Lane Bakery? "
+                                         "Answer only from the text."}],
+            [{"role": "user", "content": f"{doc}\n\nWhat is the monthly rent for Quarry Point Florist? "
+                                         "Answer only from the text. If it is not in the text, say NOT FOUND."}]]
+    outs = llm.chat(msgs, SamplingParams(temperature=0.0, max_tokens=40))
+    for label, o in zip(["answerable", "unanswerable"], outs):
+        print(f"{label:>13}: {o.outputs[0].text.strip()!r}")
+    print("SMOKE TEST PASSED")
+
+
+if __name__ == "__main__":
+    main()
 PY
+  python "$SMOKE_PY"
+  rm -f "$SMOKE_PY"
 fi
 
 step "Done"

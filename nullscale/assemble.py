@@ -29,12 +29,12 @@ from functools import lru_cache
 from pathlib import Path
 
 from nullscale import filler as F
-from nullscale.lookalike import LADDERS, LEVELS, make_case
+from nullscale.lookalike import LADDERS, LEVELS
+from nullscale.questions import N_ANSWERABLE, N_UNANSWERABLE, plan_document
 from nullscale.records import World
 from nullscale.render import render
 
 SEP = "\n\n"
-N_WITNESSES = 4
 
 
 # ----------------------------------------------------------------------------- tokenizer
@@ -109,14 +109,14 @@ class DocSpec:
     filler: str = "unrelated"
     copies: int = 1
     seed: int = 0
-    field: str = "monthly_rent"
+    n_unanswerable: int = N_UNANSWERABLE
+    n_answerable: int = N_ANSWERABLE
     unit: int = 1000
     tolerance: float = 0.01
 
     @property
     def doc_id(self) -> str:
-        return (f"{self.ladder}-{self.level}-c{self.copies}-{self.filler}-{self.length_k}k-"
-                f"{self.field}-s{self.seed}")
+        return f"{self.ladder}-{self.level}-c{self.copies}-{self.filler}-{self.length_k}k-s{self.seed}"
 
     @property
     def target_tokens(self) -> int:
@@ -128,9 +128,11 @@ def _jsonable(v):
 
 
 def _positions(k: int) -> list[float]:
+    """Where the k look-alike records go: exactly the middle for one, else spread evenly over the
+    middle 30% of the document (35% to 65%)."""
     if k <= 1:
         return [0.5]
-    return [0.4 + 0.2 * i / (k - 1) for i in range(k)]
+    return [0.35 + 0.30 * i / (k - 1) for i in range(k)]
 
 
 def build_document(spec: DocSpec, tok: TokenCounter | None = None) -> dict:
@@ -139,12 +141,12 @@ def build_document(spec: DocSpec, tok: TokenCounter | None = None) -> dict:
     rrng = random.Random(spec.seed * 1000 + 29)       # template choices
     prng = random.Random(spec.seed * 1000 + 31)       # placement and selection
 
-    case = make_case(world, spec.ladder, spec.level, spec.copies, spec.field)
-    witnesses = [world.lease() for _ in range(N_WITNESSES)]
-    for r in witnesses:
-        r.role = "witness"
-    core = case.entities + witnesses
-    las = case.lookalikes
+    cases, answer_records, questions = plan_document(world, spec.ladder, spec.level, spec.copies,
+                                                     spec.n_unanswerable, spec.n_answerable)
+    core = [r for c in cases for r in c.entities] + answer_records
+    # interleave the probes' look-alikes so copies of one probe are not all next to each other
+    las = [r for k in range(max((len(c.lookalikes) for c in cases), default=0))
+           for c in cases if k < len(c.lookalikes) for r in [c.lookalikes[k]]]
 
     core_txt = [render(r, rrng) for r in core]
     la_txt = [render(r, rrng) for r in las]
@@ -164,11 +166,13 @@ def build_document(spec: DocSpec, tok: TokenCounter | None = None) -> dict:
         items = [(pool[i], pool_txt[i], costs[i]) for i in idx]
         items += list(zip(core, core_txt, core_costs))
         random.Random(shuffle_seed).shuffle(items)
-        base_total = sum(c for _, _, c in items)
-        for frac, r, t, c in sorted(zip(_positions(len(las)), las, la_txt, la_costs), key=lambda z: -z[0]):
+        grand_total = sum(c for _, _, c in items) + sum(la_costs)
+        # insert from first to last, measuring against the FINAL length (look-alikes included), so
+        # each one starts at its target fraction of the finished document
+        for frac, r, t, c in sorted(zip(_positions(len(las)), las, la_txt, la_costs), key=lambda z: z[0]):
             cum, at = 0, len(items)
             for i, (_, _, ci) in enumerate(items):
-                if cum >= frac * base_total:
+                if cum >= frac * grand_total:
                     at = i
                     break
                 cum += ci
@@ -209,13 +213,18 @@ def build_document(spec: DocSpec, tok: TokenCounter | None = None) -> dict:
         n_tok = tok.count(text)
 
     # metadata
-    records, offset = [], 0
-    for r, t, _ in items:
+    records, offset, cum = [], 0, 0
+    est_total = sum(c for _, _, c in items)
+    for r, t, c in items:
         records.append({"rid": r.rid, "type": r.type, "role": r.role, "char_start": offset,
-                        "char_end": offset + len(t), "tags": r.tags,
-                        "fields": {k: _jsonable(v) for k, v in r.fields.items()}})
+                        "char_end": offset + len(t), "token_pos": round(cum / est_total, 4),
+                        "tags": r.tags, "fields": {k: _jsonable(v) for k, v in r.fields.items()}})
         offset += len(t) + len(SEP)
-    la_pos = [round(tok.count(text[:rec["char_start"]]) / n_tok, 3) for rec in records if rec["role"] == "lookalike"]
+        cum += c
+    la_pos = [rec["token_pos"] for rec in records if rec["role"] == "lookalike"]
+    for q in questions:
+        q["doc_id"] = spec.doc_id
+        q["qid"] = f"{spec.doc_id}/{q['probe_id']}"
     dev = (n_tok - target) / target
     return {
         "doc_id": spec.doc_id,
@@ -228,10 +237,9 @@ def build_document(spec: DocSpec, tok: TokenCounter | None = None) -> dict:
         "n_words": len(text.split()),
         "n_records": len(records),
         "n_filler": sum(r["role"] == "filler" for r in records),
-        "question": case.question,
-        "target": case.target,
-        "lookalike_values": [_jsonable(v) for v in case.lookalike_values()],
+        "n_lookalikes": len(la_pos),
         "lookalike_positions": la_pos,
+        "questions": questions,
         "records": records,
         "text": text,
     }
@@ -262,6 +270,10 @@ def _summary_row(d: dict) -> str:
             f"{'yes' if d['within_tolerance'] else 'NO':>4} {d['n_records']:>6} {d['n_filler']:>6} {d['n_words']:>7,}  {pos}")
 
 
+def spec_n(d: dict) -> int:
+    return d["spec"]["n_unanswerable"]
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--length", type=int, default=32, choices=[8, 32, 64, 128])
@@ -270,7 +282,6 @@ def main() -> None:
     ap.add_argument("--filler", default="unrelated", choices=F.FILLER_KINDS)
     ap.add_argument("--copies", type=int, default=1)
     ap.add_argument("--seed", type=int, default=1)
-    ap.add_argument("--field", default="monthly_rent")
     ap.add_argument("--demo", action="store_true", help="build all ladders x levels x fillers at --length")
     ap.add_argument("--out", default=None, help="output folder (default: <data.nullscale>/demo)")
     a = ap.parse_args()
@@ -286,20 +297,22 @@ def main() -> None:
         for ladder in LADDERS:
             for level in LEVELS:
                 for kind in F.FILLER_KINDS:
-                    d = build_document(DocSpec(a.length, ladder, level, kind, a.copies, a.seed, a.field), tok)
+                    d = build_document(DocSpec(a.length, ladder, level, kind, a.copies, a.seed), tok)
                     save_document(d, out)
                     print(_summary_row(d))
         print(f"\nsaved to {out}")
         return
 
-    d = build_document(DocSpec(a.length, a.ladder, a.level, a.filler, a.copies, a.seed, a.field), tok)
+    d = build_document(DocSpec(a.length, a.ladder, a.level, a.filler, a.copies, a.seed), tok)
     path = save_document(d, out)
     print(header)
     print(_summary_row(d))
-    print(f"\nQUESTION (no answer in the document): {d['question']}")
-    print(f"look-alike value(s) of '{a.field}': {d['lookalike_values']}")
+    q = next(x for x in d["questions"] if x["probe_id"] == "u0")
+    print(f"\n{d['n_lookalikes']} look-alike records for {spec_n(d)} unanswerable questions. First one:")
+    print(f"QUESTION (no answer in the document): {q['question']}")
+    print(f"look-alike value(s) of '{q['field']}': {q['lookalike_values']}")
     for rec in d["records"]:
-        if rec["role"] == "lookalike":
+        if rec["role"] == "lookalike" and rec["tags"].get("probe_id") == "u0":
             s, e = rec["char_start"], rec["char_end"]
             print("\n--- around the look-alike ---")
             print("..." + d["text"][max(0, s - 300):s] + ">>>" + d["text"][s:e] + "<<<" + d["text"][e:e + 300] + "...")

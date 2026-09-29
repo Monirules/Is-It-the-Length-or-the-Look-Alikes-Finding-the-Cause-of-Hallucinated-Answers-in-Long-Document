@@ -1,0 +1,140 @@
+######## 1. questions.py: template bank and one document's 12 questions ########
+Template bank: 27 unanswerable, 27 answerable (same wording)
+
+  N-monthly_rent-1  What monthly rent does {tenant} pay under its lease?
+  N-monthly_rent-2  How much is {tenant} charged in rent each month?
+  N-monthly_rent-3  According to the records, what is the monthly rent on {tenant_pos} lease?
+  N-deposit-1       How large was the security deposit on {tenant_pos} lease?
+  N-deposit-2       What deposit did {tenant} pay for its lease?
+  N-deposit-3       What security deposit is recorded for {tenant_pos} lease?
+  N-start_date-1    On what date did {tenant_pos} lease begin?
+  N-start_date-2    When did {tenant} start its lease?
+  N-start_date-3    What is the start date of the lease held by {tenant}?
+  N-end_date-1      On what date does {tenant_pos} lease end?
+  N-end_date-2      When does the lease held by {tenant} expire?
+  N-end_date-3      What is the end date of {tenant_pos} lease?
+  N-floor-1         Which floor does {tenant} lease?
+  N-floor-2         On what floor is the space leased by {tenant}?
+  N-floor-3         What floor number appears on {tenant_pos} lease?
+  R-monthly_rent-1  What was the monthly rent of {tenant_pos} lease at {building} that started in {year}?
+  R-monthly_rent-2  How much rent per month did {tenant} pay at {building} under the lease that began in {year}?
+  R-monthly_rent-3  For the lease between {tenant} and {building} that started in {year}, what is the monthly rent?
+  R-deposit-1       How large was the security deposit on {tenant_pos} lease at {building} that started in {year}?
+  R-deposit-2       What deposit did {tenant} pay for its {year} lease at {building}?
+  R-deposit-3       For the lease between {tenant} and {building} that started in {year}, what was the deposit?
+  R-end_date-1      When does {tenant_pos} lease at {building} that started in {year} end?
+  R-end_date-2      On what date does the {year} lease between {tenant} and {building} expire?
+  R-end_date-3      What is the end date of the lease {tenant} signed at {building} starting in {year}?
+  R-floor-1         Which floor did {tenant} lease at {building} under the lease that started in {year}?
+  R-floor-2         On what floor of {building} is the space {tenant} leased starting in {year}?
+  R-floor-3         For the lease between {tenant} and {building} that started in {year}, which floor is it on?
+
+One name-ladder document's 12 questions (strong look-alikes):
+  u2  On what floor is the space leased by Priesquis Printworks?
+        -> no answer; look-alike says ['10']
+  u5  When did Trextean Logistics start its lease?
+        -> no answer; look-alike says ['October 24, 2024']
+  u7  On what floor is the space leased by Mieckraind Dynamics?
+        -> no answer; look-alike says ['11']
+  u3  What deposit did Vienstea Brewing pay for its lease?
+        -> no answer; look-alike says ['$12,800']
+  a3  What deposit did Skexchil Networks pay for its lease?
+        -> ANSWER: $55,950
+  a0  How much is Hundquun Ventures charged in rent each month?
+        -> ANSWER: $14,650
+  u4  How much is Kouxtund Interiors charged in rent each month?
+        -> no answer; look-alike says ['$19,200']
+  u6  On what date does Ramnaim Supply's lease end?
+        -> no answer; look-alike says ['October 28, 2016']
+  u1  On what date does Dromgras Outfitters' lease end?
+        -> no answer; look-alike says ['March 16, 2019']
+  a2  What is the start date of the lease held by Thelthax Pharma?
+        -> ANSWER: July 20, 2019
+  a1  On what floor is the space leased by Wilgroux Media?
+        -> ANSWER: 7
+  u0  What is the start date of the lease held by Shomrest Studios?
+        -> no answer; look-alike says ['April 20, 2012']
+
+One role-ladder document's 12 questions (strong look-alikes):
+  a0  How large was the security deposit on Priestskim Logistics' lease at Rirnmaist Court that started in 2015?
+        -> ANSWER: $98,100
+  u7  When does Tailbrert Ventures' lease at Faisbist Point that started in 2020 end?
+        -> no answer; look-alike says ['March 15, 2022']
+  a1  How much rent per month did Houmlack Robotics pay at Fulzurn Point under the lease that began in 2020?
+        -> ANSWER: $23,550
+  a3  On what floor of Roamshou Court is the space Bromfluck Ventures leased starting in 2014?
+        -> ANSWER: 26
+  u3  What is the end date of the lease Masgroal Foods signed at Bilgroux Commons starting in 2021?
+        -> no answer; look-alike says ['June 9, 2025']
+  u1  For the lease between Zeckdund Textiles and Honvien Square that started in 2021, what was the deposit?
+        -> no answer; look-alike says ['$127,600']
+  u6  On what floor of Pearnbral Place is the space Tunnail Partners leased starting in 2018?
+        -> no answer; look-alike says ['26']
+  u4  How much rent per month did Zavolthern Partners pay at Patherskex Plaza under the lease that began in 2017?
+        -> no answer; look-alike says ['$36,650']
+  a2  On what date does the 2019 lease between Hiestaix Partners and Hisskest Exchange expire?
+        -> ANSWER: March 9, 2021
+  u5  For the lease between Daickgreas Interiors and Branfo Exchange that started in 2018, what was the deposit?
+        -> no answer; look-alike says ['$6,450']
+  u2  On what floor of Veasquix Exchange is the space Wusrund Outfitters leased starting in 2020?
+        -> no answer; look-alike says ['16']
+  u0  What was the monthly rent of Koarlou Traders' lease at Sharwon Plaza that started in 2014?
+        -> no answer; look-alike says ['$4,150']
+
+######## 2. tests/test_absence.py: 100 random documents + planted-error tests ########
+============================= test session starts ==============================
+platform linux -- Python 3.11.16, pytest-9.1.1, pluggy-1.6.0 -- /home/monirul/miniconda3/envs/nullscale/bin/python
+cachedir: .pytest_cache
+rootdir: /mnt/c/Users/mahmu/OneDrive/Desktop/Dr. Justin Zhan/One Record is Enough/nullscale-naacl2027
+plugins: anyio-4.15.1
+collecting ... collected 10 items
+
+tests/test_absence.py::test_100_random_documents_pass PASSED             [ 10%]
+tests/test_absence.py::test_lengths_within_tolerance PASSED              [ 20%]
+tests/test_absence.py::test_question_counts PASSED                       [ 30%]
+tests/test_absence.py::test_clean_fixtures_pass PASSED                   [ 40%]
+tests/test_absence.py::test_catches_planted_answer_name PASSED           [ 50%]
+tests/test_absence.py::test_catches_stray_one_letter_lookalike PASSED    [ 60%]
+tests/test_absence.py::test_catches_stray_generic_word PASSED            [ 70%]
+tests/test_absence.py::test_catches_planted_answer_role PASSED           [ 80%]
+tests/test_absence.py::test_catches_second_witness PASSED                [ 90%]
+tests/test_absence.py::test_catches_broken_tiling PASSED                 [100%]
+
+============================= 10 passed in 13.67s ==============================
+
+######## 3. build_dataset.py: every NullScale experiment ########
+tokenizer: meta-llama/Llama-3.1-8B-Instruct   output: /home/monirul/nullscale_work/data/nullscale   workers: 6
+
+=== exp2: Look-alike ladder at fixed length  (120 documents) ===
+  6/120 documents  0s elapsed, ~3s left     12/120 documents  2s elapsed, ~19s left     18/120 documents  3s elapsed, ~15s left     24/120 documents  3s elapsed, ~12s left     30/120 documents  4s elapsed, ~11s left     36/120 documents  4s elapsed, ~9s left     42/120 documents  4s elapsed, ~8s left     48/120 documents  5s elapsed, ~8s left     54/120 documents  6s elapsed, ~7s left     60/120 documents  6s elapsed, ~6s left     66/120 documents  6s elapsed, ~5s left     72/120 documents  7s elapsed, ~5s left     78/120 documents  7s elapsed, ~4s left     84/120 documents  8s elapsed, ~3s left     90/120 documents  8s elapsed, ~3s left     96/120 documents  9s elapsed, ~2s left     102/120 documents  9s elapsed, ~2s left     108/120 documents  9s elapsed, ~1s left     114/120 documents  10s elapsed, ~1s left     120/120 documents  10s elapsed, ~0s left   
+  documents 120  questions 1440 (960 no answer + 480 with answer)  rebuilt 0  reused 6  length deviation -0.10% .. +0.07%  [10s]
+  saved: /home/monirul/nullscale_work/data/nullscale/exp2/questions.jsonl
+
+=== exp3: Length with and without a strong look-alike, two filler types  (320 documents) ===
+  16/320 documents  2s elapsed, ~36s left     32/320 documents  2s elapsed, ~20s left     48/320 documents  3s elapsed, ~14s left     64/320 documents  3s elapsed, ~11s left     80/320 documents  3s elapsed, ~9s left     96/320 documents  4s elapsed, ~10s left     112/320 documents  6s elapsed, ~11s left     128/320 documents  7s elapsed, ~11s left     144/320 documents  8s elapsed, ~10s left     160/320 documents  9s elapsed, ~9s left     176/320 documents  12s elapsed, ~10s left     192/320 documents  15s elapsed, ~10s left     208/320 documents  17s elapsed, ~9s left     224/320 documents  20s elapsed, ~8s left     240/320 documents  22s elapsed, ~7s left     256/320 documents  28s elapsed, ~7s left     272/320 documents  35s elapsed, ~6s left     288/320 documents  41s elapsed, ~5s left     304/320 documents  46s elapsed, ~2s left     320/320 documents  52s elapsed, ~0s left   
+  documents 320  questions 3840 (2560 no answer + 1280 with answer)  rebuilt 0  reused 6  length deviation -0.10% .. +0.10%  [52s]
+  saved: /home/monirul/nullscale_work/data/nullscale/exp3/questions.jsonl
+
+=== exp4: One, two, four or eight copies of the same look-alike  (80 documents) ===
+  4/80 documents  0s elapsed, ~3s left     8/80 documents  2s elapsed, ~19s left     12/80 documents  2s elapsed, ~13s left     16/80 documents  3s elapsed, ~10s left     20/80 documents  3s elapsed, ~9s left     24/80 documents  3s elapsed, ~7s left     28/80 documents  4s elapsed, ~7s left     32/80 documents  4s elapsed, ~6s left     36/80 documents  4s elapsed, ~5s left     40/80 documents  4s elapsed, ~4s left     44/80 documents  5s elapsed, ~4s left     48/80 documents  5s elapsed, ~3s left     52/80 documents  5s elapsed, ~3s left     56/80 documents  6s elapsed, ~2s left     60/80 documents  6s elapsed, ~2s left     64/80 documents  6s elapsed, ~2s left     68/80 documents  7s elapsed, ~1s left     72/80 documents  7s elapsed, ~1s left     76/80 documents  7s elapsed, ~0s left     80/80 documents  7s elapsed, ~0s left   
+  documents 80  questions 960 (640 no answer + 320 with answer)  rebuilt 0  reused 6  length deviation -0.10% .. +0.06%  [7s]
+  saved: /home/monirul/nullscale_work/data/nullscale/exp4/questions.jsonl
+
+=== exp5: Sibling padding against standard fixes at equal cost  (25 documents) ===
+  1/25 documents  0s elapsed, ~3s left     2/25 documents  0s elapsed, ~1s left     3/25 documents  0s elapsed, ~1s left     4/25 documents  0s elapsed, ~1s left     5/25 documents  0s elapsed, ~1s left     6/25 documents  0s elapsed, ~0s left     7/25 documents  2s elapsed, ~5s left     8/25 documents  2s elapsed, ~4s left     9/25 documents  2s elapsed, ~3s left     10/25 documents  2s elapsed, ~3s left     11/25 documents  2s elapsed, ~3s left     12/25 documents  2s elapsed, ~2s left     13/25 documents  2s elapsed, ~2s left     14/25 documents  2s elapsed, ~2s left     15/25 documents  2s elapsed, ~2s left     16/25 documents  2s elapsed, ~1s left     17/25 documents  2s elapsed, ~1s left     18/25 documents  2s elapsed, ~1s left     19/25 documents  3s elapsed, ~1s left     20/25 documents  3s elapsed, ~1s left     21/25 documents  3s elapsed, ~1s left     22/25 documents  3s elapsed, ~0s left     23/25 documents  3s elapsed, ~0s left     24/25 documents  3s elapsed, ~0s left     25/25 documents  3s elapsed, ~0s left   
+  documents 25  questions 300 (200 no answer + 100 with answer)  rebuilt 0  reused 6  length deviation -0.09% .. +0.07%  [3s]
+  saved: /home/monirul/nullscale_work/data/nullscale/exp5/questions.jsonl
+
+=== exp7: Does asking 12 questions in one call hide made-up answers?  (20 documents) ===
+  1/20 documents  0s elapsed, ~3s left     2/20 documents  0s elapsed, ~1s left     3/20 documents  0s elapsed, ~1s left     4/20 documents  0s elapsed, ~1s left     5/20 documents  0s elapsed, ~0s left     6/20 documents  0s elapsed, ~0s left     7/20 documents  2s elapsed, ~4s left     8/20 documents  2s elapsed, ~3s left     9/20 documents  2s elapsed, ~2s left     10/20 documents  2s elapsed, ~2s left     11/20 documents  2s elapsed, ~2s left     12/20 documents  2s elapsed, ~1s left     13/20 documents  2s elapsed, ~1s left     14/20 documents  2s elapsed, ~1s left     15/20 documents  2s elapsed, ~1s left     16/20 documents  2s elapsed, ~1s left     17/20 documents  2s elapsed, ~0s left     18/20 documents  2s elapsed, ~0s left     19/20 documents  3s elapsed, ~0s left     20/20 documents  3s elapsed, ~0s left   
+  documents 20  questions 240 (160 no answer + 80 with answer)  rebuilt 0  reused 6  length deviation -0.09% .. +0.05%  [3s]
+  saved: /home/monirul/nullscale_work/data/nullscale/exp7/questions.jsonl
+
+Done.
+
+######## 4. absence_check.py: re-check every saved document from disk ########
+PASS  role-strong-c1-unrelated-32k-s27261031
+
+565/565 documents pass
+
+Dataset folder: /home/monirul/nullscale_work/data/nullscale

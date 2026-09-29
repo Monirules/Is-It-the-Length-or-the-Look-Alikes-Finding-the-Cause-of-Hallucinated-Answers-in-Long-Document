@@ -17,6 +17,7 @@ Run  `python -m nullscale.records`  for a quick self-check.
 from __future__ import annotations
 
 import random
+import re
 from dataclasses import dataclass, field
 from datetime import date, timedelta
 from itertools import combinations
@@ -107,15 +108,53 @@ _VOWELS = ["a", "e", "i", "o", "u", "ai", "ea", "oa", "ou", "ie"]
 _CODAS = ["", "", "n", "r", "l", "s", "m", "nd", "rt", "st", "ck", "x", "rn"]
 
 
+# Invented words containing any of these are rejected, so no document shows an offensive name.
+_BLOCKED = ("sex", "fuck", "shit", "cunt", "cock", "dick", "porn", "rape", "slut", "nazi", "nig", "fag",
+            "piss", "tit", "cum", "anal", "anus", "poop", "butt", "twat", "wank", "hitl", "kill", "dead",
+            "ass", "gay", "jew", "isis", "bomb", "gun", "hell", "damn", "crap", "fart", "puke")
+
+
 def invent_word(rng: random.Random) -> str:
     while True:
         n = rng.choice([2, 2, 3])
         w = "".join(rng.choice(_ONSETS) + rng.choice(_VOWELS) + rng.choice(_CODAS) for _ in range(n))
-        if 5 <= len(w) <= 10:
+        if 5 <= len(w) <= 10 and not any(b in w for b in _BLOCKED):
             return w.capitalize()
 
 
 # ----------------------------------------------------------------------------- the world
+
+_FIXED_VOCAB: list[str] | None = None
+
+
+def fixed_vocabulary() -> list[str]:
+    """Every ordinary word a document or question can contain (templates, value pools, first names,
+    cities...). Invented stems must stay 3+ edits away from these too, e.g. a stem 'Cleaer' would
+    otherwise be two letters from the weather word 'clear'."""
+    global _FIXED_VOCAB
+    if _FIXED_VOCAB is None:
+        from nullscale import questions, render      # imported lazily to avoid an import cycle
+        texts = []
+        for v in vars(S).values():
+            if isinstance(v, (list, tuple)) and v and all(isinstance(x, str) for x in v):
+                texts += list(v)
+        for tpls in render.MAIN.values():
+            texts += tpls
+        for opts in render.OPTIONAL.values():
+            for wordings in opts.values():
+                texts += wordings
+        for fs in questions.TEMPLATES.values():
+            for ts in fs.values():
+                texts += ts
+        import calendar
+        texts += list(calendar.month_name[1:]) + list(calendar.month_abbr[1:])   # dates are written out
+        texts += ["percent", "www", "com"]
+        words = set()
+        for t in texts:
+            words |= {w.lower() for w in re.findall(r"[A-Za-z]{4,}", re.sub(r"\{[^}]*\}", " ", t))}
+        _FIXED_VOCAB = sorted(words)
+    return _FIXED_VOCAB
+
 
 class World:
     """Makes records for one document. Keeps the name registry and all ids unique."""
@@ -126,8 +165,11 @@ class World:
         self.names = NameRegistry()
         self.optional_rate = optional_rate      # chance that each optional field is present
         self.reserved_generics: set[str] = set()
+        self.asked_stems: list[str] = []          # stems of asked (absent) companies, one per probe
         self._codes: set[str] = set()
         self._n = 0
+        for w in fixed_vocabulary():               # ordinary words are taken; stems must stay far from them
+            self.names.add(w, force=True)
 
     # ---- helpers
     def new_stem(self) -> str:
@@ -285,13 +327,16 @@ class World:
 def main() -> None:
     w = World(seed=7)
     recs = [w.make(t) for t in ["company", "person", "building", "lease"] * 150]
-    stems = w.names.stems()
+    fixed = set(fixed_vocabulary())
+    stems = [x for x in w.names.stems() if x not in fixed]
     sample = stems[:600]
     min_d = min(edit_distance(a, b) for a, b in combinations(sample, 2))
-    print(f"records made: {len(recs)}   distinct name stems: {len(stems)}")
-    print(f"smallest edit distance between any two of {len(sample)} stems: {min_d}  (must be >= 3)")
+    min_f = min(edit_distance(a, b) for a in sample[:300] for b in fixed)
+    print(f"records made: {len(recs)}   invented name stems: {len(stems)}   ordinary words blocked: {len(fixed)}")
+    print(f"smallest edit distance between two of {len(sample)} invented stems: {min_d}  (must be >= 3)")
+    print(f"smallest edit distance between an invented stem and an ordinary word: {min_f}  (must be >= 3)")
     print("example stems:", ", ".join(stems[:12]))
-    assert min_d >= 3, "similarity guarantee broken"
+    assert min_d >= 3 and min_f >= 3, "similarity guarantee broken"
     print("OK")
 
 

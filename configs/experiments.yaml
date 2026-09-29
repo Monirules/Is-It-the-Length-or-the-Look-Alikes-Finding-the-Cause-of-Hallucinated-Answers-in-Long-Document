@@ -94,7 +94,11 @@ experiments:
     seed_offset: 5000
     lengths: [32]
     n_questions: {unanswerable: 200, answerable: 100}   # 300 total; answerable ones check fixes don't refuse everything
+    contexts: 25                         # 25 documents x (8 + 4) questions = 200 + 100
+    ladders: [name, role]                # alternated across the 25 documents
     lookalike_levels: [strong]
+    lookalike_copies: [1]
+    filler: [unrelated]
     pool_records: 5000
     retrieval_top_k: 20
     sibling_padding_records: 20
@@ -133,6 +137,10 @@ experiments:
     seed_offset: 7000
     lengths: [32]
     contexts: 20
+    ladders: [name, role]                # alternated across the 20 documents
+    lookalike_levels: [strong]
+    lookalike_copies: [1]
+    filler: [unrelated]
     modes: [one_per_call, batch12]
     models: [qwen3_4b, llama31_8b]       # two models, small enough to also test on the PC
     runs_on: [pc, cluster]

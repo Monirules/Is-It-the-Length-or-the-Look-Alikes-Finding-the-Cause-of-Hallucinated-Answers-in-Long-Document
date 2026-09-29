@@ -231,7 +231,10 @@ def main() -> None:
     ap.add_argument("--get", metavar="KEY", help="print one top-level path, e.g. hf_home or work_root")
     a = ap.parse_args()
     if a.get:
-        print(load_paths(a.profile)[a.get])
+        v = load_paths(a.profile)
+        for part in a.get.split("."):          # dotted keys work too, e.g. data.nullscale
+            v = v[part]
+        print(v)
         return
     sys.exit(check(a.profile, a.make_dirs))
 

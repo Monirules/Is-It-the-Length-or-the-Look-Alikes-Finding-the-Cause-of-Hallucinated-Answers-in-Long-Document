@@ -74,8 +74,9 @@ class Case:
         return [r.get(self.field) for r in self.lookalikes]
 
 
-def one_edit_variants(stem: str, rng: random.Random, k: int) -> list[str]:
-    """k distinct spellings exactly one edit away from stem (never touching the first letter)."""
+def one_edit_variants(stem: str, rng: random.Random, k: int, avoid: list[str] = ()) -> list[str]:
+    """k distinct spellings exactly one edit away from stem (never touching the first letter),
+    each at least 3 edits away from every stem in `avoid` (the other probes' asked stems)."""
     s = stem.lower()
     cands = set()
     for i in range(1, len(s)):
@@ -88,14 +89,16 @@ def one_edit_variants(stem: str, rng: random.Random, k: int) -> list[str]:
             cands.add(s[:i] + c + s[i:])
         if 1 <= i < len(s) - 1:                            # drop an inner letter
             cands.add(s[:i] + s[i + 1:])
-    cands = sorted(w for w in cands if w != s and edit_distance(w, s) == 1)
+    from nullscale.records import _BLOCKED
+    cands = sorted(w for w in cands if w != s and edit_distance(w, s) == 1 and not any(b in w for b in _BLOCKED)
+                   and all(edit_distance(w, a) >= 3 for a in avoid if a.lower() != s))
     if len(cands) < k:
         raise ValueError(f"only {len(cands)} one-edit variants of {stem}")
     return [w.capitalize() for w in rng.sample(cands, k)]
 
 
 def make_case(world: World, ladder: str, level: str, copies: int = 1,
-              field: str = "monthly_rent") -> Case:
+              field: str = "monthly_rent", probe_id: str = "u0", generic: str | None = None) -> Case:
     if ladder not in LADDERS or level not in LEVELS:
         raise ValueError(f"unknown ladder/level {ladder}/{level}")
     if field not in QUESTION[ladder]:
@@ -106,19 +109,19 @@ def make_case(world: World, ladder: str, level: str, copies: int = 1,
 
     if ladder == "name":
         stem = world.new_stem()
-        generic = world.generic()
+        world.asked_stems.append(stem)
+        generic = generic or world.generic()
         world.reserved_generics.add(generic)               # filler companies never use this word
         tenant = f"{stem} {generic}"
-        target = {"tenant": tenant, "stem": stem, "generic": generic, "field": field}
+        target = {"probe_id": probe_id, "tenant": tenant, "stem": stem, "generic": generic, "field": field}
         if level == "weak":
             las = [world.lease(tenant=world.company_name(generic=generic)) for _ in range(k)]
         elif level == "medium":
-            others = rng.sample([g for g in S.COMPANY_GENERICS if g != generic], k)
-            for g in others:
-                world.reserved_generics.add(g)
+            # any word except the asked ones (all asked words are reserved up front by questions.py)
+            others = rng.sample([g for g in S.COMPANY_GENERICS if g not in world.reserved_generics], k)
             las = [world.lease(tenant=f"{stem} {g}") for g in others]
         elif level == "strong":
-            for v in one_edit_variants(stem, rng, k):
+            for v in one_edit_variants(stem, rng, k, avoid=world.asked_stems):
                 world.reserve_stem(v, force=True)
                 las.append(world.lease(tenant=f"{v} {generic}"))
         question = QUESTION["name"][field].format(tenant=tenant, tenant_pos=possessive(tenant))
@@ -129,25 +132,27 @@ def make_case(world: World, ladder: str, level: str, copies: int = 1,
         y = world.building()
         year = rng.randint(2014, 2022)
         tenant, building = x.get("name"), y.get("name")
-        target = {"tenant": tenant, "building": building, "start_year": year, "field": field}
+        target = {"probe_id": probe_id, "tenant": tenant, "building": building, "start_year": year, "field": field}
         if level == "weak":
             las = [world.lease(building=building, start_year=rng.choice([t for t in range(2012, 2025) if t != year]))
                    for _ in range(k)]
         elif level == "medium":
             las = [world.lease(tenant=tenant, start_year=year) for _ in range(k)]
         elif level == "strong":
-            years = rng.sample([t for t in range(year - 4, year + 5) if t != year and 2010 <= t <= 2025], k)
+            near = [t for t in range(year - 9, year + 10) if t != year and 2006 <= t <= 2026]
+            years = sorted(near, key=lambda t: (abs(t - year), rng.random()))[:k]   # closest other years first
             las = [world.lease(tenant=tenant, building=building, start_year=t) for t in years]
         question = QUESTION["role"][field].format(tenant=tenant, tenant_pos=possessive(tenant),
                                                   building=building, year=year)
         entities = [x, y]
         for r in entities:
             r.role = "entity"
+            r.tags = {"probe_id": probe_id}
 
     for r in las:
         r.role = "lookalike"
-        r.tags = {"ladder": ladder, "level": level}
-        if field in {"deposit"} and field not in r.fields:     # asked optional field must exist in the look-alike
+        r.tags = {"ladder": ladder, "level": level, "probe_id": probe_id}
+        if field == "deposit" and field not in r.fields:     # asked optional field must exist in the look-alike
             r.fields[field] = world.money(r.get("monthly_rent"), r.get("monthly_rent") * 3)
     return Case(ladder, level, copies, field, question, target, las, entities)
 
