@@ -1,0 +1,127 @@
+{
+ "model": "qwen3_4b",
+ "profile": "pc",
+ "gpu": "NVIDIA GeForce RTX 5070",
+ "quantization": "fp8 (PC)",
+ "vllm_version": "0.30.0",
+ "prompt": "normal",
+ "load_seconds": 42.13947314100005,
+ "max_model_len": 39278,
+ "measured": {
+  "8": {
+   "cell": [
+    "name",
+    "none",
+    "unrelated",
+    1
+   ],
+   "n_docs": 3,
+   "first_seconds": 3.055255227333267,
+   "rest_seconds": 2.0522768346666,
+   "doc_seconds": 5.1075320619998665,
+   "mean_prompt_tokens": 9766.666666666666,
+   "mean_cached_tokens": 9739.151515151516,
+   "questions_per_doc": 12
+  },
+  "32": {
+   "cell": [
+    "name",
+    "none",
+    "unrelated",
+    1
+   ],
+   "n_docs": 3,
+   "first_seconds": 16.631498682666763,
+   "rest_seconds": 3.080770087999857,
+   "doc_seconds": 19.712268770666622,
+   "mean_prompt_tokens": 38771.0,
+   "mean_cached_tokens": 38743.27272727273,
+   "questions_per_doc": 12
+  }
+ },
+ "projection": {
+  "fit": {
+   "b_per_k": 0.617327993710782,
+   "c_per_k2": 0.0,
+   "formula": "seconds per document = b*L + c*L^2 (L in K tokens)"
+  },
+  "per_experiment": [
+   {
+    "exp": "exp2",
+    "what": "Look-alike ladder at fixed length",
+    "seconds": 2370.539495849403,
+    "extrapolated_seconds": 0,
+    "lengths": [
+     32
+    ]
+   },
+   {
+    "exp": "exp2 repeats",
+    "what": "3 repeats at T=0.7",
+    "seconds": 7111.618487548209,
+    "extrapolated_seconds": 0.0,
+    "lengths": [
+     32
+    ]
+   },
+   {
+    "exp": "exp3",
+    "what": "Length with and without a strong look-alike, two filler types",
+    "seconds": 11457.607563272099,
+    "extrapolated_seconds": 9482.1579833976,
+    "lengths": [
+     8,
+     32,
+     64,
+     128
+    ]
+   },
+   {
+    "exp": "exp4",
+    "what": "One, two, four or eight copies of the same look-alike",
+    "seconds": 1580.3596638995998,
+    "extrapolated_seconds": 0,
+    "lengths": [
+     32
+    ]
+   },
+   {
+    "exp": "exp5",
+    "what": "Sibling padding against standard fixes at equal cost",
+    "seconds": 1111.1903886794075,
+    "extrapolated_seconds": 0.0,
+    "lengths": [
+     32
+    ]
+   },
+   {
+    "exp": "exp6",
+    "what": "Natural Questions with the gold passage removed",
+    "seconds": 13750.379096775687,
+    "extrapolated_seconds": 0.0,
+    "lengths": [
+     8,
+     32
+    ]
+   },
+   {
+    "exp": "exp7",
+    "what": "Does asking 12 questions in one call hide made-up answers?",
+    "seconds": 728.4324395330988,
+    "extrapolated_seconds": 0,
+    "lengths": [
+     32
+    ]
+   }
+  ],
+  "total_hours": 10.58614642654375,
+  "extrapolated_hours": 2.633932773166,
+  "t_of_L": {
+   "8": 4.938623949686256,
+   "32": 19.754495798745022,
+   "64": 39.508991597490045,
+   "128": 79.01798319498009
+  }
+ },
+ "finished": "2026-09-29 21:00:33"
+}

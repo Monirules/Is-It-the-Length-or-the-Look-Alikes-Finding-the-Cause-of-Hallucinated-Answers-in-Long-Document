@@ -136,16 +136,13 @@ import os, time
 
 
 def main():
-    from vllm import LLM, SamplingParams
-    from nullscale.config import load_models
-    m = load_models()["open_models"]["qwen3_4b"]
+    from vllm import SamplingParams
+    from run.run_vllm import engine_settings, make_llm
     pc = os.environ.get("NULLSCALE_PROFILE") == "pc"
-    kw = dict(model=m["hf_id"], max_model_len=4096, gpu_memory_utilization=0.85, seed=0)
-    if pc:
-        kw.update(quantization=m["pc"]["quantization"], kv_cache_dtype=m["pc"]["kv_cache_dtype"], enforce_eager=True)
+    kw, info = engine_settings("qwen3_4b", "pc" if pc else "cluster", 4096, None, None)
     t = time.time()
-    llm = LLM(**kw)
-    print(f"loaded in {time.time()-t:.0f}s ({'FP8' if pc else 'bf16'})")
+    llm = make_llm(kw)
+    print(f"loaded in {time.time()-t:.0f}s ({info['quantization']})")
     doc = "Lease record. Tenant: Harbor Lane Bakery. Building: Elm Court. Monthly rent: $4,200."
     msgs = [[{"role": "user", "content": f"{doc}\n\nWhat is the monthly rent for Harbor Lane Bakery? "
                                          "Answer only from the text."}],

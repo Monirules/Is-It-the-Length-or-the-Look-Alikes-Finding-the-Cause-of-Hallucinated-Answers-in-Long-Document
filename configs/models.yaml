@@ -13,6 +13,7 @@
 #                    (max_len 34,816 = a 32K document + 1% + prompt headroom). Development only:
 #                    no paper number comes from the PC, because FP8 answers differ slightly from full precision.
 #                    (vLLM >= 0.11 removed bitsandbytes 4-bit; FP8 is native on the RTX 5070.)
+#                    attention_backend: TRITON_ATTN is built into vLLM; FlashInfer is not installed on the PC.
 #   cluster          How it runs on the cluster. tp = number of GPUs (tensor parallel).
 #                    tp_h200 is the plan; tp_a100 is the fallback if the cluster turns out to be A100 80 GB.
 #   vllm_args        Extra keyword arguments passed to vllm.LLM(...).
@@ -30,7 +31,7 @@ open_models:
     active_params_b: 8
     max_model_len: 131072
     roig_fab_32k: 39.98
-    pc:     {runnable: true,  quantization: fp8, kv_cache_dtype: fp8, max_len: 34816}
+    pc:     {runnable: true,  quantization: fp8, kv_cache_dtype: fp8, max_len: 34816, attention_backend: TRITON_ATTN}
     cluster: {dtype: bfloat16, tp_h200: 1, tp_a100: 1}
     vllm_args: {}
 
@@ -43,7 +44,7 @@ open_models:
     active_params_b: 4
     max_model_len: 262144
     roig_fab_32k: 25.30
-    pc:     {runnable: true,  quantization: fp8, kv_cache_dtype: fp8, max_len: 34816}
+    pc:     {runnable: true,  quantization: fp8, kv_cache_dtype: fp8, max_len: 40960, attention_backend: TRITON_ATTN}   # Qwen splits every digit: a 32K (Llama-token) document is ~39K Qwen tokens
     cluster: {dtype: bfloat16, tp_h200: 1, tp_a100: 1}
     vllm_args: {}
 
@@ -112,6 +113,7 @@ open_models:
     pc:     {runnable: false}
     cluster: {dtype: fp8, tp_h200: 2, tp_a100: 2}
     vllm_args: {}
+    chat_template_kwargs: {enable_thinking: false}   # GLM-4.5 thinks by default; we want direct answers
 
 # Optional: only if Prof. Zhan approves the ~$50 budget. Exp 2 only.
 api_models:
