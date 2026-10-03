@@ -110,7 +110,8 @@ cmd_check() {
   printf "  %-5s %6s questions (expected %s)\n" exp6 "$n" "$EXPECTED_exp6"
   echo; echo "== models =="
   for m in $ALL_MODELS; do
-    d="$(model_dir "$m")"; s="not downloaded"; [[ -d "$d" ]] && s="$(du -sh "$d" 2>/dev/null | cut -f1)"
+    d="$(model_dir "$m")"; s="not downloaded"
+    [[ -d "$d/snapshots" ]] && s="$(du -shL "$d/snapshots" 2>/dev/null | cut -f1)"   # -L: files are links to a shared blob store
     printf "  %-16s %-46s tp=%s  %s\n" "$m" "$(mcfg "$m" hf_id)" "$(tp_for "$m")" "$s"
   done
   echo; echo "== 128K documents vs each model's window =="
@@ -130,7 +131,7 @@ download_one() {
   echo "== $m: $id =="
   hfdl "$id" all
   [[ "$base" != "$id" ]] && hfdl "$base" tokenizer || true
-  echo "  done: $(du -sh "$(model_dir "$m")" | cut -f1)"
+  echo "  done: $(du -shL "$(model_dir "$m")/snapshots" | cut -f1)"
 }
 cmd_download() {
   need_env
@@ -145,7 +146,17 @@ cmd_download() {
 cmd_cleanup() {
   local m="$1"; local d; d="$(model_dir "$m")"
   [[ -d "$d" ]] || { echo "$m: no weights at $d"; return; }
-  echo "deleting $d ($(du -sh "$d" | cut -f1))"; rm -rf "$d"
+  echo "deleting $m ($(du -shL "$d/snapshots" 2>/dev/null | cut -f1)), including its files in the shared blob store"
+  python - "$d" <<'PY'
+import os, shutil, sys
+d = sys.argv[1]
+for root, _, files in os.walk(os.path.join(d, "snapshots")):
+    for f in files:
+        target = os.path.realpath(os.path.join(root, f))
+        if os.path.isfile(target):
+            os.remove(target)
+shutil.rmtree(d)
+PY
 }
 
 # ----------------------------------------------------------------------------- build
