@@ -53,7 +53,17 @@ for k in sys.argv[2].split("."):
 print("" if v is None else v)
 PY
 }
-hfdl() { if command -v hf >/dev/null; then hf download "$@"; else huggingface-cli download "$@"; fi; }
+hfdl() {   # hfdl <repo> [all|tokenizer]   (Python API: works with every huggingface_hub version)
+  python - "$1" "${2:-all}" <<'PY'
+import sys
+from huggingface_hub import snapshot_download
+repo, what = sys.argv[1], sys.argv[2]
+if what == "tokenizer":
+    snapshot_download(repo, allow_patterns=["tokenizer*", "*.json", "*.model", "*.txt"])
+else:
+    snapshot_download(repo, ignore_patterns=["*.pth", "original/*", "*.gguf"], max_workers=8)
+PY
+}
 need_env() {
   if [[ "${CONDA_DEFAULT_ENV:-}" != "nullscale" ]]; then
     echo "Please run:  conda activate nullscale   (then run this again)"; exit 1
@@ -118,8 +128,8 @@ PY
 download_one() {
   local m="$1"; local id base; id="$(mcfg "$m" hf_id)"; base="$(mcfg "$m" base_hf_id)"
   echo "== $m: $id =="
-  hfdl "$id" --exclude "*.pth" "original/*" >/dev/null
-  [[ "$base" != "$id" ]] && hfdl "$base" --include "tokenizer*" "*.json" >/dev/null || true
+  hfdl "$id" all
+  [[ "$base" != "$id" ]] && hfdl "$base" tokenizer || true
   echo "  done: $(du -sh "$(model_dir "$m")" | cut -f1)"
 }
 cmd_download() {
@@ -128,7 +138,7 @@ cmd_download() {
   local models="${1:-$ALL_MODELS}"
   echo "Downloading to $HF_HOME  (free: $(df -h --output=avail "$HF_HOME" | tail -1 | tr -d ' '))"
   echo "Needs 'hf auth login' (or huggingface-cli login) with the Llama and Gemma licences accepted."
-  hfdl meta-llama/Llama-3.1-8B-Instruct --include "tokenizer*" "*.json" >/dev/null   # reference tokenizer
+  hfdl meta-llama/Llama-3.1-8B-Instruct tokenizer   # reference tokenizer
   for m in ${models//,/ }; do download_one "$m"; done
   echo "Next: bash scripts/run_h200.sh build"
 }
