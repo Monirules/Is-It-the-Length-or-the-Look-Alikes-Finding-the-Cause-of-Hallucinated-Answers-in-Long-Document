@@ -30,13 +30,13 @@ profiles:
 
   # --- UC ARCC2 cluster (Slurm; https://arc.uc.edu) -------------------------------------
   # GPU partition gpu-h200: 8 x H200 (141 GB each). Project folder /N/lustre/project/proj-606 has a
-  # 2 TB quota shared by the whole project (1.7 TB used on 2026-10-03), so only ~300 GB are free.
-  # All 7 models need ~400 GB. Either use a scratch folder (set hf_home below; `run_h200.sh check` looks for
-  # one), or run in two waves and free each model's weights after its runs (`run_h200.sh submit --cleanup`).
+  # 2 TB quota shared by the whole project (1.7 TB used on 2026-10-03), so only ~250 GB are free.
+  # Model weights (~400 GB) therefore go to scratch (/N/lustre/scratch/$USER, 917 GB free); they can be
+  # downloaded again at any time. Data, answers and scores stay in the project folder.
   cluster:
     gpu: "H200, 141 GB (partition gpu-h200, 8 GPUs)"
     work_root: /N/lustre/project/proj-606/${USER}/nullscale
-    hf_home: ${WORK_ROOT}/hf_cache             # move to a scratch folder if one exists (models ~400 GB)
+    hf_home: /N/lustre/scratch/${USER}/hf_cache   # model weights (~400 GB) on scratch: 917 GB free (2026-10-03)
     data:
       riker2: ${WORK_ROOT}/data/riker2
       nullscale: ${WORK_ROOT}/data/nullscale
