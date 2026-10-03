@@ -14,7 +14,8 @@ When a long document does not contain the answer, language models often make one
 | `score/` | official scoring rules: refusal, answer matching, look-alike capture, results table | Jayden |
 | `riker/` | Exp 1: download, inspect and re-analyse Roig's RIKER2 data | Jayden |
 | `tests/` | `test_absence.py` (generator), `test_scoring.py` (scoring rules) | both |
-| `scripts/` | setup, the PC run (`run_5070.sh`), figures, first look | Monirul |
+| `scripts/` | setup, the PC run (`run_5070.sh`), the cluster runs (`run_h200.sh`), figures, first look | Monirul |
+| `realdata/` | Exp 6: Natural Questions with the answer removed, look-alike and random Wikipedia passages | Jayden |
 | `outputs/` | small results that go into git: figures, tables, reports | both |
 
 Large files (model weights, documents, answers, RIKER2 data) live **outside** this folder, in the work folder from `configs/paths.yaml` (PC: `~/nullscale_work`). OneDrive and git never see them.
@@ -56,7 +57,7 @@ with a `.meta.json` file next to it (settings, package versions, timings). Every
 | `temperature`, `top_p`, `seed`, `max_tokens` | decoding settings |
 | `question` | the question as asked |
 | `answerable` | `true` if the answer is in the document |
-| `field` | asked fact: `monthly_rent`, `deposit`, `start_date`, `end_date` or `floor` |
+| `field` | asked fact: `monthly_rent`, `deposit`, `start_date`, `end_date` or `floor` (Exp 6: `nq_answer`) |
 | `ladder`, `level`, `copies`, `filler`, `length_k` | the condition: `name`/`role`; `none`/`weak`/`medium`/`strong`; 1-8 copies; `unrelated`/`sibling`; 8, 32, 64 or 128 |
 | `gold`, `gold_aliases` | the true answer and its other written forms (`null` and `[]` if there is no answer) |
 | `lookalike_values` | the asked fact's value in the look-alike record(s), used for the capture tag |
@@ -66,6 +67,7 @@ with a `.meta.json` file next to it (settings, package versions, timings). Every
 | `call_id`, `call_size`, `call_seconds`, `batch_index` | which vLLM call produced it, how many answers it held, its time; position inside a `batch12` reply |
 | `timestamp`, `vllm_version` | when, and with which vLLM |
 | `raw_batch_response` | `batch12` only: the whole numbered reply |
+| `source`, `setting`, `nq_id`, `true_answers` | Exp 6 only: `wikipedia`; one of the five settings; the Natural Questions id; the real answers (kept even when the document does not contain them, to see if a model answered from memory) |
 
 Scoring adds these fields (`score/score_all.py`, saved as `.scored.jsonl` in `<work folder>/outputs/scores/`):
 `label` (correct / wrong_refusal / wrong / refused / made_up / other), `outcome` (correct / made_up / other), `captured`, `mentions_lookalike`, `source`, `refusal`, `hedged`, `answer_part`, `answer_source`, `scoring_version`.
@@ -85,6 +87,29 @@ python -m riker.inspect_riker                       # Step 2: what is inside
 python -m riker.find_lookalikes                     # Step 3: mark every trap question
 python -m riker.reanalyze_riker                     # Step 4: the Exp 1 chart
 python -m score.refusal_rules --riker               # Step 5: refusal rules on RIKER2's answers
+```
+
+## Step 7: main runs (cluster, H200) and the Wikipedia data (Exp 6)
+
+On the **cluster login node** (`ssh <UC username>@arcc2.uc.edu`, UC network or VPN). The runs use the
+`gpu-h200` partition (8 x H200). Each model is its own Slurm job (several models run at the same time), and
+each job runs 2 copies of its model on 2 GPUs in parallel (data parallel, `--gpus` changes it):
+
+```bash
+conda activate nullscale
+bash scripts/run_h200.sh check        # settings, H200 partition, storage, data, models
+bash scripts/run_h200.sh download     # model weights (~400 GB; see storage note in configs/paths.yaml)
+bash scripts/run_h200.sh build        # Exp 2, 3, 4 documents
+bash scripts/run_h200.sh submit       # one job per model, smallest first, 2 H200 each
+bash scripts/run_h200.sh status       # progress
+```
+
+On the **PC** (Ubuntu/WSL), Jayden's part:
+
+```bash
+python -m realdata.nq_build           # 300 Natural Questions items, answer passages removed
+python -m realdata.retrieve           # 1,500 documents (5 settings x 300) for Exp 6
+python -m run.run_vllm --model qwen3_4b --exp exp6 --n-docs 10 --balanced   # quick test of the hand-over
 ```
 
 The research questions and the expected results are fixed in `hypotheses.md` **before** any main run.

@@ -50,12 +50,37 @@ BATCH12 = _HEAD + (
 TEMPLATES = {"normal": NORMAL, "strict": STRICT, "batch12": BATCH12}
 PROMPT_VERSION = "v1-" + hashlib.sha1("\n".join(TEMPLATES[s] for s in STYLES).encode()).hexdigest()[:8]
 
+# Exp 6 (real text): the same two prompts, worded for Wikipedia passages instead of company records.
+# They have their own version tag, so PROMPT_VERSION of the NullScale prompts above stays unchanged.
+_WIKI_HEAD = ("Below is a collection of passages from Wikipedia. Each paragraph is one passage.\n\n"
+              "<passages>\n{document}\n</passages>\n\n")
+WIKI_TEMPLATES = {
+    "normal": _WIKI_HEAD + (
+        "Answer the question using only the passages above. If the passages do not contain the answer, "
+        "say that it is not in the passages.\n\n"
+        "Question: {question}\n"
+        "Answer briefly."),
+    "strict": _WIKI_HEAD + (
+        "Answer the question using only the passages above. The answer must be stated explicitly in a "
+        "passage about exactly what the question asks. Do not guess, do not use your own knowledge, and do "
+        "not use a similar-looking passage. If no passage states the answer, reply with exactly: "
+        f"{ABSTAIN_PHRASE}\n\n"
+        "Question: {question}\n"
+        "Answer briefly."),
+}
+PROMPT_VERSION_WIKI = "wiki-v1-" + hashlib.sha1("\n".join(WIKI_TEMPLATES[s] for s in ("normal", "strict")).encode()).hexdigest()[:8]
 
-def build_messages(document: str, question: str, style: str = "normal") -> list[dict]:
-    """Chat messages for ONE question (normal or strict)."""
+
+def prompt_version(source: str = "records") -> str:
+    return PROMPT_VERSION_WIKI if source == "wikipedia" else PROMPT_VERSION
+
+
+def build_messages(document: str, question: str, style: str = "normal", source: str = "records") -> list[dict]:
+    """Chat messages for ONE question (normal or strict). source="wikipedia" for Exp 6 documents."""
     if style not in ("normal", "strict"):
         raise ValueError(f"style must be normal or strict for one question, got {style}")
-    return [{"role": "user", "content": TEMPLATES[style].format(document=document, question=question)}]
+    tpl = WIKI_TEMPLATES[style] if source == "wikipedia" else TEMPLATES[style]
+    return [{"role": "user", "content": tpl.format(document=document, question=question)}]
 
 
 def build_batch_messages(document: str, questions: list[str]) -> list[dict]:

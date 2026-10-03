@@ -41,7 +41,8 @@ from score.refusal_rules import (answer_part, clean, has_hedge, is_abstain_token
                                  sentences)
 
 KIND = {"monthly_rent": "money", "deposit": "money", "rent": "money", "security_deposit": "money",
-        "start_date": "date", "end_date": "date", "floor": "floor"}
+        "start_date": "date", "end_date": "date", "floor": "floor",
+        "nq_answer": "text"}                     # Exp 6 (Natural Questions): free-text answers
 
 _MONTHS = {m: i for i, m in enumerate(
     ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october",
@@ -230,8 +231,40 @@ def label_answer(response: str, field: str, answerable: bool, gold_aliases: list
     return out
 
 
+def _norm_qa(s: str) -> str:
+    """Standard open-domain QA normalisation (lower case, no punctuation, no articles)."""
+    s = re.sub(r"[^\w\s]", " ", (s or "").lower().replace(",", ""))
+    s = re.sub(r"\b(a|an|the)\b", " ", s)
+    return " ".join(s.split())
+
+
+def label_text_answer(response: str, answerable: bool, gold_aliases: list[str] | None) -> dict:
+    """Exp 6: the answer is free text (a name, a place, a year...). A reply that does not refuse and
+    says something in its answer part COMMITS to an answer."""
+    info = refusal_info(response)
+    part = info["answer_part"]
+    out = {"refusal": info["refusal"], "hedged": info["hedged"], "answer_part": part,
+           "answer_source": info["source"], "first_refuses": info["first_refuses"]}
+    if info["empty"]:
+        out.update(label="other", outcome="other", values=[])
+        return out
+    refuses = says_not_found(part) and not has_hedge(part)
+    committed = "" if refuses else part.strip()
+    out["values"] = [committed] if committed else []
+    if answerable:
+        hit = any(f" {_norm_qa(g)} " in f" {_norm_qa(part)} " for g in (gold_aliases or []) if _norm_qa(g))
+        lab = "correct" if hit else ("wrong_refusal" if refuses else ("wrong" if committed else "other"))
+        out.update(label=lab, outcome={"correct": "correct", "wrong": "made_up"}.get(lab, "other"))
+    else:
+        lab = "refused" if refuses else ("made_up" if committed else "other")
+        out.update(label=lab, outcome={"refused": "correct", "made_up": "made_up"}.get(lab, "other"))
+    return out
+
+
 def label_row(row: dict) -> dict:
     """Label one saved answer in the agreed format (README.md)."""
+    if KIND.get(row["field"]) == "text":
+        return label_text_answer(row.get("response") or "", bool(row["answerable"]), row.get("gold_aliases"))
     return label_answer(row.get("response") or "", row["field"], bool(row["answerable"]),
                         row.get("gold_aliases"), row.get("gold"))
 

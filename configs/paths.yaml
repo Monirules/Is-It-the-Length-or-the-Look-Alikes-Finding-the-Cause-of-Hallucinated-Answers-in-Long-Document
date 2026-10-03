@@ -28,13 +28,15 @@ profiles:
       figures: ${PROJECT_ROOT}/outputs/figures # small, goes into the paper -> keep in the synced folder
     logs: ${PROJECT_ROOT}/logs
 
-  # --- UC ARCC2 cluster (Slurm) ---------------------------------------------------------
-  # TODO(Monirul): confirm the scratch/project filesystem path on ARCC2 and the GPU type
-  # (H200 or A100) before the first cluster run. The weights alone need ~420 GB.
+  # --- UC ARCC2 cluster (Slurm; https://arc.uc.edu) -------------------------------------
+  # GPU partition gpu-h200: 8 x H200 (141 GB each). Project folder /N/lustre/project/proj-606 has a
+  # 2 TB quota shared by the whole project (1.7 TB used on 2026-10-03), so only ~300 GB are free.
+  # All 7 models need ~400 GB. Either use a scratch folder (set hf_home below; `run_h200.sh check` looks for
+  # one), or run in two waves and free each model's weights after its runs (`run_h200.sh submit --cleanup`).
   cluster:
-    gpu: "TODO: H200 (141 GB) or A100 (80 GB)"
-    work_root: /scratch/${USER}/nullscale      # TODO: replace with the real ARCC2 scratch path
-    hf_home: ${WORK_ROOT}/hf_cache             # all 7 models + helpers, ~420 GB
+    gpu: "H200, 141 GB (partition gpu-h200, 8 GPUs)"
+    work_root: /N/lustre/project/proj-606/${USER}/nullscale
+    hf_home: ${WORK_ROOT}/hf_cache             # move to a scratch folder if one exists (models ~400 GB)
     data:
       riker2: ${WORK_ROOT}/data/riker2
       nullscale: ${WORK_ROOT}/data/nullscale
@@ -46,7 +48,9 @@ profiles:
       figures: ${WORK_ROOT}/outputs/figures
     logs: ${WORK_ROOT}/logs
     slurm:
-      qos: proj-606                            # PPMS project 606
-      partition: TODO                          # the GPU partition name on ARCC2
-      gpu_type: TODO                           # e.g. h200 or a100, as written in --gres
-      max_hours_per_job: 24
+      partition: gpu-h200
+      gpu_type: h200                           # selects tp_h200 in models.yaml
+      account: proj-606                        # --account; set to "" if sbatch says the account is invalid
+      qos: ""                                  # --qos; leave "" unless ARC gave you a QOS name
+      max_hours_per_job: 24                    # check the partition limit: sinfo -p gpu-h200 -o "%l"
+      max_gpus_per_job: 4                      # GPUs on one node a single job may ask for

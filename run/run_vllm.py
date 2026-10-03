@@ -24,6 +24,9 @@ Usage (Ubuntu, nullscale env, project folder). Needs the GPU; the dataset must b
   python -m run.run_vllm --model qwen3_4b --exp exp2 --n-docs 20 --balanced
   python -m run.run_vllm --model qwen3_4b --exp exp7 --prompt batch12
   python -m run.run_vllm --model qwen3_4b --exp exp2 --n-docs 2 --dry-run    # no GPU: show what would run
+  # several GPUs at once (data parallel): one process per GPU, each answers every 4th document
+  CUDA_VISIBLE_DEVICES=0 python -m run.run_vllm --model qwen3_4b --exp exp3 --shard 0 --num-shards 4 &
+  ...  then:  python -m run.merge_shards --exp exp3 --model qwen3_4b
 """
 from __future__ import annotations
 
@@ -37,11 +40,12 @@ import time
 from collections import OrderedDict, defaultdict
 from pathlib import Path
 
-from nullscale.config import load_models, load_paths
-from run.prompts import PROMPT_VERSION, build_batch_messages, build_messages, parse_batch_answer
+from nullscale.config import load_experiments, load_models, load_paths
+from run.prompts import build_batch_messages, build_messages, parse_batch_answer, prompt_version
 
 COPY_FIELDS = ("qid", "exp", "doc_id", "probe_id", "question", "answerable", "field", "ladder", "level",
                "copies", "filler", "length_k", "gold", "gold_aliases", "lookalike_values")
+EXP6_FIELDS = ("source", "setting", "nq_id", "true_answers")      # Exp 6 only (Wikipedia documents)
 
 
 # ----------------------------------------------------------------------------- data
@@ -115,7 +119,10 @@ def engine_settings(model_key: str, profile: str, max_model_len: int, gpu_mem: f
             kw["attention_backend"] = backend
         quant = f"{m['pc']['quantization']} (PC)"
     else:
-        tp = m["cluster"].get("tp_h200", 1)
+        gpu_type = (os.environ.get("NULLSCALE_GPU_TYPE") or "h200").lower()
+        tp = m["cluster"].get(f"tp_{gpu_type}", m["cluster"].get("tp_h200", 1))
+        if os.environ.get("NULLSCALE_TP"):
+            tp = int(os.environ["NULLSCALE_TP"])
         kw["tensor_parallel_size"] = tp
         kw["gpu_memory_utilization"] = gpu_mem or 0.90
         if eager:
@@ -181,6 +188,8 @@ def _row(q: dict, base: dict, out, response: str, call: dict, batch_index=None) 
     fin = getattr(o, "finish_reason", None)
     row = {"run_id": base["run_id"]}
     row.update({k: q.get(k) for k in COPY_FIELDS})
+    if q.get("source") == "wikipedia":
+        row.update({k: q.get(k) for k in EXP6_FIELDS})
     row.update({k: base[k] for k in ("model", "hf_id", "profile", "quantization", "prompt_style", "prompt_version",
                                      "temperature", "top_p", "seed", "max_tokens", "vllm_version")})
     row.update({
@@ -213,7 +222,7 @@ def answer_document(llm, doc_text: str, qs: list[dict], style: str, params, chat
             rows.append(r)
         return rows, {"first_seconds": sec, "rest_seconds": 0.0}
 
-    msgs = [build_messages(doc_text, q["question"], style) for q in qs]
+    msgs = [build_messages(doc_text, q["question"], style, q.get("source", "records")) for q in qs]
     # 1) first question alone: computes and caches the document
     t = time.perf_counter()
     first = run_chat(llm, [msgs[0]], params, chat_kwargs)
@@ -258,11 +267,16 @@ def main(argv=None) -> dict:
     ap.add_argument("--out", default=None, help="answers root (default: paths.yaml outputs.answers)")
     ap.add_argument("--fresh", action="store_true", help="start a new file instead of resuming")
     ap.add_argument("--dry-run", action="store_true", help="show what would run; no model is loaded")
+    ap.add_argument("--shard", type=int, default=0, help="data parallel: which part this process answers (0-based)")
+    ap.add_argument("--num-shards", type=int, default=1, help="data parallel: number of parts (one per GPU group); "
+                    "merge afterwards with python -m run.merge_shards")
     a = ap.parse_args(argv)
 
     paths = load_paths(a.profile)
     profile = paths["profile"]
-    data_root = Path(a.data or paths["data"]["nullscale"])
+    exp_type = (load_experiments().get("experiments", {}).get(a.exp) or {}).get("type")
+    default_root = paths["data"]["nq"] if exp_type == "realdata" else paths["data"]["nullscale"]
+    data_root = Path(a.data or default_root)
     answers_root = Path(a.out or paths["outputs"]["answers"])
     max_tokens = a.max_tokens or (1024 if a.prompt == "batch12" else 256)
     lengths = {int(x) for x in a.lengths.split(",")} if a.lengths else None
@@ -271,11 +285,22 @@ def main(argv=None) -> dict:
     docs = select_documents(load_questions(data_root, a.exp), a.n_docs, a.balanced, lengths, levels)
     if not docs:
         sys.exit("no documents match the filters")
-    out_path = output_path(answers_root, a.exp, a.model, a.prompt, a.temperature, a.seed)
+    main_path = output_path(answers_root, a.exp, a.model, a.prompt, a.temperature, a.seed)
+    out_path = main_path
+    if a.num_shards > 1:
+        # data parallel: this process answers every num_shards-th document (stable split of the full list)
+        if not 0 <= a.shard < a.num_shards:
+            sys.exit("--shard must be between 0 and --num-shards - 1")
+        docs = OrderedDict(list(docs.items())[a.shard::a.num_shards])
+        out_path = main_path.with_name(f"{main_path.stem}.part{a.shard}of{a.num_shards}.jsonl")
     done = set()
-    if out_path.exists() and not a.fresh:
-        with open(out_path, encoding="utf-8") as f:
-            done = {json.loads(line)["qid"] for line in f if line.strip()}
+    if not a.fresh:
+        # answers already saved in the main file or in ANY shard file of this run (resume across splits)
+        for p in [main_path, *main_path.parent.glob(f"{main_path.stem}.part*of*.jsonl"),
+                  *(main_path.parent / "parts").glob(f"{main_path.stem}.part*of*.jsonl")]:
+            if p.exists():
+                with open(p, encoding="utf-8") as f:
+                    done |= {json.loads(line)["qid"] for line in f if line.strip()}
     todo = OrderedDict((d, qs) for d, qs in docs.items() if not all(q["qid"] in done for q in qs))
     n_q = sum(len(v) for v in docs.values())
     print(f"model {a.model} | profile {profile} | {a.exp} | prompt {a.prompt} | T={a.temperature} seed={a.seed}")
@@ -292,7 +317,7 @@ def main(argv=None) -> dict:
         first_doc, qs = next(iter(todo.items()))
         text = read_document(data_root, qs[0])
         msg = (build_batch_messages(text, [q["question"] for q in qs]) if a.prompt == "batch12"
-               else build_messages(text, qs[0]["question"], a.prompt))[0]["content"]
+               else build_messages(text, qs[0]["question"], a.prompt, qs[0].get("source", "records")))[0]["content"]
         print(f"\n[dry run] first document {first_doc}: {len(text):,} characters; prompt tail:\n"
               + msg[-600:])
         print(f"\n[dry run] questions of that document:")
@@ -311,15 +336,31 @@ def main(argv=None) -> dict:
     tok = AutoTokenizer.from_pretrained(m_cfg["hf_id"])
     chat_kwargs = m_cfg.get("chat_template_kwargs") or {}
     need = 0
-    for qs in todo.values():
+    limit = m_cfg["pc"]["max_len"] if profile == "pc" else m_cfg["max_model_len"]
+    skipped = []
+    for doc_id, qs in list(todo.items()):
         text = read_document(data_root, qs[0])
         if a.prompt == "batch12":
             m = build_batch_messages(text, [q["question"] for q in qs])
         else:
-            m = build_messages(text, max(qs, key=lambda q: len(q["question"]))["question"], a.prompt)
-        need = max(need, count_prompt_tokens(tok, m, chat_kwargs))
+            m = build_messages(text, max(qs, key=lambda q: len(q["question"]))["question"], a.prompt,
+                               qs[0].get("source", "records"))
+        n_tok = count_prompt_tokens(tok, m, chat_kwargs)
+        if n_tok + max_tokens + 64 > limit and profile != "pc":
+            # cluster: a document longer than the model's window is skipped and listed, never cut
+            skipped.append({"doc_id": doc_id, "length_k": qs[0]["length_k"], "prompt_tokens": n_tok, "limit": limit})
+            del todo[doc_id]
+            continue
+        need = max(need, n_tok)
+    if skipped:
+        print(f"SKIPPED {len(skipped)} documents that do not fit {a.model}'s {limit:,}-token window "
+              f"(lengths {sorted({s['length_k'] for s in skipped})}K); listed in the .meta.json and .skipped.json")
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+        out_path.with_suffix(".skipped.json").write_text(json.dumps(skipped, indent=1), encoding="utf-8")
+    if not todo:
+        print("nothing left to run")
+        return {"out_path": str(out_path), "docs": 0, "skipped": skipped}
     max_len = need + max_tokens + 64
-    limit = m_cfg["pc"]["max_len"] if profile == "pc" else m_cfg["max_model_len"]
     if max_len > limit and profile == "pc":
         sys.exit(f"the longest prompt needs {max_len:,} tokens but the PC limit for {a.model} is {limit:,}.")
     max_len = min(max_len, m_cfg["max_model_len"])
@@ -334,7 +375,8 @@ def main(argv=None) -> dict:
 
     run_id = f"{a.model}-{a.exp}-{a.prompt}-t{a.temperature:g}-s{a.seed}-{dt.datetime.now():%Y%m%d%H%M%S}"
     base = {"run_id": run_id, "model": a.model, "hf_id": info["hf_id"], "profile": profile,
-            "quantization": info["quantization"], "prompt_style": a.prompt, "prompt_version": PROMPT_VERSION,
+            "quantization": info["quantization"], "prompt_style": a.prompt,
+            "prompt_version": prompt_version(next(iter(todo.values()))[0].get("source", "records")),
             "temperature": a.temperature, "top_p": a.top_p, "seed": a.seed, "max_tokens": max_tokens,
             "vllm_version": getattr(vllm, "__version__", "?")}
     out_path.parent.mkdir(parents=True, exist_ok=True)
@@ -358,6 +400,7 @@ def main(argv=None) -> dict:
     meta = {"run_id": run_id, "argv": sys.argv, "settings": {k: v for k, v in kw.items()},
             "base": base, "load_seconds": load_s, "run_seconds": time.perf_counter() - t_run,
             "n_documents": len(per_doc), "n_answers": sum(d["n_questions"] for d in per_doc),
+            "skipped_too_long": skipped,
             "per_document": per_doc, "host": platform.node(), "python": sys.version.split()[0],
             "finished": dt.datetime.now().isoformat(timespec="seconds")}
     try:

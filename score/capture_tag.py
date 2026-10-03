@@ -14,6 +14,8 @@ Tags for every answer to a question with no answer
                         other_record    the value is written somewhere else in the document
                         not_in_document the value is nowhere in the document (invented)
                         unknown         the document text was not available
+                        Exp 6 (free text): true_answer_from_memory (the real answer, which the document
+                        does not contain) or not_the_true_answer
                         -               not made up
 
 Usage
@@ -33,6 +35,14 @@ def capture_tags(row: dict, label: str, values: list | None = None, document_tex
     la_vals = [v for v in (row.get("lookalike_values") or []) if v]
     out = {"captured": False, "mentions_lookalike": False, "source": "-"}
     if row.get("answerable"):
+        return out
+    if kind == "text":                                     # Exp 6: no look-alike value; did it answer from memory?
+        if label == "made_up":
+            from score.match_answer import _norm_qa
+            part = " ".join(values or [])
+            truth = [t for t in (row.get("true_answers") or []) if _norm_qa(t)]
+            out["source"] = ("true_answer_from_memory" if any(f" {_norm_qa(t)} " in f" {_norm_qa(part)} " for t in truth)
+                             else "not_the_true_answer")
         return out
     out["mentions_lookalike"] = any(contains_value(response, v, kind) for v in la_vals)
     if label != "made_up":

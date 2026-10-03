@@ -27,6 +27,7 @@ import argparse
 import csv
 import json
 import math
+import re
 import sys
 from collections import Counter, defaultdict
 from pathlib import Path
@@ -175,17 +176,32 @@ def write_file_summary(scored: list[dict], out: Path, title: str) -> None:
          f"{len(scored)} answers from {len({r['doc_id'] for r in scored})} documents: "
          f"{len(un)} with no answer, {len(an)} with an answer.", "",
          "## Questions with no answer: made-up answer rate (95% Wilson interval)", "",
-         "| level | name ladder | role ladder | both |", "|---|---|---|---|"]
-    for lv in LEVELS:
-        cells = []
-        for lad in ("name", "role", None):
-            s = [r for r in un if r.get("level") == lv and (lad is None or r.get("ladder") == lad)]
-            cells.append(pct(sum(r["label"] == "made_up" for r in s), len(s)))
-        L.append(f"| {lv} | " + " | ".join(cells) + " |")
+         ]
+    present = {r.get("level") for r in scored}
+    levels = [lv for lv in LEVELS if lv in present] + sorted(x for x in present - set(LEVELS) if x)
+    if present <= set(LEVELS):
+        L += ["| level | name ladder | role ladder | both |", "|---|---|---|---|"]
+        for lv in levels:
+            cells = []
+            for lad in ("name", "role", None):
+                s = [r for r in un if r.get("level") == lv and (lad is None or r.get("ladder") == lad)]
+                cells.append(pct(sum(r["label"] == "made_up" for r in s), len(s)))
+            L.append(f"| {lv} | " + " | ".join(cells) + " |")
+    else:                                     # e.g. Exp 6: filler kind x length
+        lens = sorted({r.get("length_k") for r in scored})
+        L += ["| filler | " + " | ".join(f"{k}K" for k in lens) + " |", "|---|" + "---|" * len(lens)]
+        for lv in levels:
+            if not any(r.get("level") == lv for r in un):
+                continue
+            cells = []
+            for k in lens:
+                s = [r for r in un if r.get("level") == lv and r.get("length_k") == k]
+                cells.append(pct(sum(r["label"] == "made_up" for r in s), len(s)) if s else "-")
+            L.append(f"| {lv} | " + " | ".join(cells) + " |")
     strict = [r for r in un if r["label"] == "made_up" or (r["label"] == "refused" and r["mentions_lookalike"])]
     L += ["", "Strict reading (made up, or refused but quoted the look-alike's value): " +
           ", ".join(f"{lv} {pct(sum(r in strict for r in un if r.get('level') == lv), sum(r.get('level') == lv for r in un))}"
-                    for lv in LEVELS)]
+                    for lv in levels if any(r.get('level') == lv for r in un))]
     mu = [r for r in un if r["label"] == "made_up"]
     L += ["", "## Where the made-up answers came from", "",
           f"Copied the look-alike record's value: {pct(sum(r['captured'] for r in mu), len(mu))}", "",
@@ -237,7 +253,8 @@ def compare_with_provisional(scored: list[dict], out: Path) -> None:
 
 def find_answer_files(root: Path, exp: str | None, model: str | None) -> list[Path]:
     pat = f"{exp or '*'}/{model or '*'}/*.jsonl"
-    return sorted(p for p in root.glob(pat) if not p.name.endswith(".scored.jsonl"))
+    return sorted(p for p in root.glob(pat)
+                  if not p.name.endswith(".scored.jsonl") and not re.search(r"\.part\d+of\d+\.jsonl$", p.name))
 
 
 def main(argv=None) -> list[dict]:
@@ -302,7 +319,7 @@ def main(argv=None) -> list[dict]:
                  f"{'/'.join(sorted({str(r.get('length_k')) + 'K' for r in scored}))}. Official scoring.")
         write_file_summary(scored, out, title)
         compare_with_provisional(scored, out)
-        if not a.no_figures and any(r.get("level") for r in scored):
+        if not a.no_figures and all(r.get("level") in LEVELS for r in scored):
             try:
                 from first_look import figures
                 figures(scored, out, title, a.dpi)
