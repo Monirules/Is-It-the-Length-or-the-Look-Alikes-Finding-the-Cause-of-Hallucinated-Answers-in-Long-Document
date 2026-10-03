@@ -94,7 +94,7 @@ _TYPED = {
     "floor": re.compile(r"(?:\bfloor(?: number)?(?: is)?\s*#?\s*(\d{1,3})\b|^\s*(\d{1,3})\s*\.?\s*$|\b(\d{1,3})(?:st|nd|rd|th) floor)", re.I | re.M),
 }
 _KIND = {"monthly_rent": "money", "deposit": "money", "start_date": "date", "end_date": "date", "floor": "floor"}
-_HEDGE = re.compile(r"\b(maybe|perhaps|probably|likely|approximately|around|about|could be|might be|possibly|presumably|I (?:would )?guess|estimate)\b", re.I)
+_HEDGE = re.compile(r"\b(maybe|perhaps|probably|likely|approximately|roughly|could be|might be|possibly|presumably|I (?:would )?guess|my best guess|estimated?)\b", re.I)
 
 
 def final_answer(text: str) -> str:

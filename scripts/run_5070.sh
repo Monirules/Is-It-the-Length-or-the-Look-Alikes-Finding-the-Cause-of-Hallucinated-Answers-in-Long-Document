@@ -14,7 +14,7 @@
 #   2. makes sure the Exp 2 and Exp 3 documents exist (reuses them if already built)
 #   3. timing test: one test cell at 8K and 32K -> outputs/timing/  (skip with --skip-timing)
 #   4. the 20-document run -> answers in ~/nullscale_work/outputs/answers/exp2/qwen3_4b/
-#   5. first look: provisional scoring, figures, 20 answers to read -> outputs/first_run/
+#   5. first look (provisional) -> outputs/first_run/, then official scoring -> outputs/results/
 # Everything is also logged to logs/run_5070_<time>.txt.
 #
 # Run from the project folder, in Ubuntu (WSL), inside the nullscale env:
@@ -66,10 +66,12 @@ fi
 step "4/5 Answer $N_DOCS documents at 32K, one question per call"
 python -m run.run_vllm --model "$MODEL" --exp "$EXP" --n-docs "$N_DOCS" --balanced --lengths 32 --prompt normal
 
-step "5/5 First look: provisional scoring, figures, 20 answers to read"
+step "5/5 Scoring: provisional first look, then the official rules (score/score_all.py)"
 python scripts/first_look.py --model "$MODEL" --exp "$EXP"
+python -m score.score_all --exp "$EXP" --model "$MODEL"
 
 step "Done"
 echo "Log:      $LOG"
 echo "Figures:  $PROJECT_ROOT/outputs/first_run/  and  $PROJECT_ROOT/outputs/timing/"
+echo "Official: $PROJECT_ROOT/outputs/results/results_table.md"
 echo "Answers:  $(python -m nullscale.config --get outputs.answers)/$EXP/$MODEL/"

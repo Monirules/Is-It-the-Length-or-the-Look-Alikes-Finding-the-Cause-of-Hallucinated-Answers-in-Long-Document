@@ -1,0 +1,127 @@
+{
+  "source": "https://research.kamiwaza.ai/HowMuchDoLLMsHallucinateInDocQA/",
+  "downloaded": "2026-10-03 12:33",
+  "zips": {
+    "RIKER2_corpora_groundtruth_testsets.zip": {
+      "bytes": 632830,
+      "sha256": "c6d2c376850dfa7f54c50193c5febbfac332fb271d2cb9f59aa858ff739bd2b3"
+    },
+    "RIKER2_March2026.zip": {
+      "bytes": 4651426373,
+      "sha256": "51e344921a2d9bfc2a5af39813be3ccbd3891cdf9f3935954edc74c07b93a17c"
+    }
+  },
+  "groundtruth": {
+    "files": [
+      {
+        "name": "32K_riker_2025-12-12_195725_concatenated.md",
+        "bytes": 115226
+      },
+      {
+        "name": "32K_riker_2025-12-12_195725.db",
+        "bytes": 454656
+      },
+      {
+        "name": "32K_riker_2025-12-12_195725.yaml",
+        "bytes": 134081
+      },
+      {
+        "name": "128K_riker_2025-12-12_211037_concatenated.md",
+        "bytes": 411298
+      },
+      {
+        "name": "128K_riker_2025-12-12_211037.db",
+        "bytes": 630784
+      },
+      {
+        "name": "128K_riker_2025-12-12_211037.yaml",
+        "bytes": 195794
+      },
+      {
+        "name": "200K_riker_2025-12-12_204529_concatenated.md",
+        "bytes": 728066
+      },
+      {
+        "name": "200K_riker_2025-12-12_204529.db",
+        "bytes": 868352
+      },
+      {
+        "name": "200K_riker_2025-12-12_204529.yaml",
+        "bytes": 255295
+      }
+    ]
+  },
+  "outputs": {
+    "entries_in_zip": 3698330,
+    "runs": 3696,
+    "runs_ok": 3696,
+    "answer_rows": 1800599,
+    "models": 35,
+    "platforms": [
+      "gaudi3_s1",
+      "h200_s1",
+      "h200_s2",
+      "mi300x_s1",
+      "mi300x_s2",
+      "mi300x_s3",
+      "mi300x_s4"
+    ],
+    "contexts": {
+      "128": 1345,
+      "200": 632,
+      "32": 1719
+    },
+    "temperatures": {
+      "1.0": 1167,
+      "0.0": 835,
+      "0.4": 840,
+      "0.7": 854
+    },
+    "problems": {},
+    "summary_csvs": [
+      "200k_best_temp_truncation.csv",
+      "128k_summary.csv",
+      "200k_best_temp_grounding.csv",
+      "32k_variance_analysis.csv",
+      "200k_summary.csv",
+      "32k_best_temp_overall_acc.csv",
+      "200k_variance_analysis.csv",
+      "truncation_temperature_analysis.csv",
+      "128k_best_temp_fabrication.csv",
+      "analysis.csv",
+      "200k_best_temp_fabrication.csv",
+      "128k_variance_analysis.csv",
+      "128k_best_temp_truncation.csv",
+      "128k_variance_analysis_by_metric.csv",
+      "incoherence.csv",
+      "truncation_by_context_and_temperature.csv",
+      "32k_best_temp_truncation.csv",
+      "32k_summary.csv",
+      "200k_best_temp_overall_acc.csv",
+      "128k_best_temp_overall_acc.csv",
+      "fidelity.csv",
+      "32k_best_temp_fabrication.csv",
+      "200k_fabrication_by_temp.csv",
+      "32k_variance_analysis_by_metric.csv",
+      "temperature_preference_by_metric.csv",
+      "32k_best_temp_grounding.csv",
+      "200k_truncation_by_temp.csv",
+      "128k_grounding_by_temp.csv",
+      "128k_fabrication_by_temp.csv",
+      "temperature_preference_analysis.csv",
+      "model_summary.csv",
+      "32k_grounding_by_temp.csv",
+      "128k_truncation_by_temp.csv",
+      "128k_best_temp_aggregation.csv",
+      "200k_grounding_by_temp.csv",
+      "200k_best_temp_aggregation.csv",
+      "failed_h200_s2_tokens.csv",
+      "32k_fabrication_by_temp.csv",
+      "128k_best_temp_grounding.csv",
+      "tokens.csv",
+      "32k_truncation_by_temp.csv",
+      "32k_best_temp_aggregation.csv",
+      "200k_variance_analysis_by_metric.csv"
+    ]
+  }
+}
