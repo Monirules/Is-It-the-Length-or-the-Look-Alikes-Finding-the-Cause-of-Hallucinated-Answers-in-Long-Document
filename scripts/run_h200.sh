@@ -205,6 +205,20 @@ cmd_job() {
   need_env
   export HF_HOME="$(cfg hf_home)"
   export NULLSCALE_GPU_TYPE="$(gpu_type)"
+  # vLLM's FlashInfer parts compile small GPU programs on first use and need nvcc (the CUDA compiler),
+  # which is not on the GPU nodes by default. 1) use PyTorch's own sampler instead of FlashInfer's;
+  # 2) load the cluster's CUDA module so nvcc exists for anything else that needs it (MoE models).
+  export VLLM_USE_FLASHINFER_SAMPLER=0
+  if ! command -v nvcc >/dev/null 2>&1; then
+    type module >/dev/null 2>&1 || source /etc/profile.d/lmod.sh 2>/dev/null || source /usr/share/lmod/lmod/init/bash 2>/dev/null || true
+    module load cuda 2>/dev/null || true
+  fi
+  if command -v nvcc >/dev/null 2>&1; then
+    export CUDA_HOME="${CUDA_HOME:-$(dirname "$(dirname "$(command -v nvcc)")")}"
+    echo "nvcc: $(command -v nvcc)  CUDA_HOME=$CUDA_HOME"
+  else
+    echo "WARNING: nvcc not found; FlashInfer sampler disabled, other FlashInfer kernels may fail"
+  fi
   local tp; tp="$(tp_for "$model")"
   # GPUs given to this job
   local vis="${CUDA_VISIBLE_DEVICES:-}"
