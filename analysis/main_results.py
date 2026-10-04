@@ -47,14 +47,15 @@ def load(results: Path) -> list[dict]:
         name = f.parent.name
         exp = name.split("_")[0]
         rest = name[len(exp) + 1:]
-        if "_normal_" not in rest:
+        prompt = next((pr for pr in ("normal", "strict", "batch12") if f"_{pr}_" in rest), None)
+        if prompt is None:
             continue
-        model, run = rest.split("_normal_")
+        model, run = rest.split(f"_{prompt}_")
         if model not in MODELS:
             continue
         with open(f, encoding="utf-8") as fh:
             for r in csv.DictReader(fh):
-                r.update(exp=exp, model=model, run=run, answerable=r["answerable"] == "True",
+                r.update(exp=exp, model=model, run=run, prompt=prompt, answerable=r["answerable"] == "True",
                          made_up=r["label"] == "made_up", captured=r.get("captured") == "True",
                          length=int(r["length_k"]), copies_n=int(r["copies"] or 0))
                 rows.append(r)
@@ -251,6 +252,35 @@ def fig_filler(rows, models, out, dpi):
 
 # ----------------------------------------------------------------------------- report
 
+def fig_exp6(rows, models, out, dpi):
+    import matplotlib.pyplot as plt
+    FULL_W, GRID, INK2, SURFACE, save = _style()
+    from make_figures import BLUE, ORANGE
+    ms = [m for m in models if any(r["exp"] == "exp6" and r["model"] == m for r in rows)]
+    if not ms:
+        return
+    fig, axes = plt.subplots(1, 2, figsize=(FULL_W, 2.5), sharey=True, gridspec_kw={"wspace": 0.06})
+    x = list(range(len(ms)))
+    for ax, Lk in zip(axes, (8, 32)):
+        for off, lv, col, lab in ((-0.19, "lookalike", ORANGE, "look-alike passages"), (0.19, "random", BLUE, "random passages")):
+            vals, lo, hi = [], [], []
+            for m in ms:
+                p, l_, h_, n = rate([r for r in rows if r["exp"] == "exp6" and r["model"] == m and r["level"] == lv
+                                     and r["length"] == Lk])
+                vals.append(100 * p if n else 0), lo.append(100 * (p - l_) if n else 0), hi.append(100 * (h_ - p) if n else 0)
+            ax.bar([i + off for i in x], vals, width=0.36, color=col, edgecolor=SURFACE, linewidth=1, label=lab, zorder=2)
+            ax.errorbar([i + off for i in x], vals, yerr=[lo, hi], fmt="none", ecolor=INK2, elinewidth=0.7, capsize=1.5, zorder=3)
+        ax.set_xticks(x, [NAMES[m].replace(" ", "\n", 1) for m in ms], fontsize=6)
+        ax.set_title(f"({'a' if Lk == 8 else 'b'}) {Lk}K, answer passage removed", loc="left")
+        ax.yaxis.grid(True, color=GRID, lw=0.6)
+        ax.set_axisbelow(True)
+        ax.set_ylim(0, 100)
+    axes[0].set_ylabel("made-up answers (%)")
+    axes[0].legend(loc="upper left", fontsize=6.4)
+    fig.text(0.01, 1.0, "Exp 6: 300 Natural Questions per bar; bars: 95% Wilson interval", fontsize=6.4, color=INK2)
+    save(fig, out, "fig12_exp6_wikipedia", dpi)
+
+
 def report(rows, models, out):
     L = ["# Main results (official scoring)", "",
          f"Models with results: {', '.join(NAMES[m] for m in models)}.", "",
@@ -308,6 +338,43 @@ def report(rows, models, out):
         e4 = [r for r in rows if r["exp"] == "exp4" and r["model"] == m]
         L.append(f"| {NAMES[m]} | " + " | ".join(pct([r for r in e4 if r["copies_n"] == c]) for c in COPIES) + " |")
 
+    # ---------------- Exp 6
+    e6m = [m for m in models if any(r["exp"] == "exp6" and r["model"] == m for r in rows)]
+    if e6m:
+        sets = [("lookalike", 8), ("random", 8), ("lookalike", 32), ("random", 32)]
+        L += ["", "## Exp 6: real Wikipedia text (Natural Questions, gold passage removed)", "",
+              "Made-up rate on questions whose answer was removed; 300 questions per cell. 'From memory' = made-up answers "
+              "that are in fact the true answer (the model knew it without the document).", "",
+              "| model | look-alike 8K | random 8K | look-alike 32K | random 32K | from memory | control: correct with gold passage (8K) |",
+              "|---|---|---|---|---|---|---|"]
+        for m in e6m:
+            e6 = [r for r in rows if r["exp"] == "exp6" and r["model"] == m]
+            cells = [pct([r for r in e6 if r["level"] == lv and r["length"] == Lk]) for lv, Lk in sets]
+            mu = [r for r in e6 if r["made_up"]]
+            mem = f"{100 * sum(r.get('source') == 'true_answer_from_memory' for r in mu) / len(mu):.0f}%" if mu else "-"
+            g = [r for r in e6 if r["level"] == "gold"]
+            acc = f"{100 * sum(r['label'] == 'correct' for r in g) / len(g):.1f}%" if g else "-"
+            L.append(f"| {NAMES[m]} | " + " | ".join(cells) + f" | {mem} | {acc} |")
+            for lv, Lk in sets:
+                p, lo, hi, n = rate([r for r in e6 if r["level"] == lv and r["length"] == Lk])
+                if n:
+                    table.append({"exp": "exp6", "model": m, "condition": f"{lv}_{Lk}k", "made_up": round(p, 4),
+                                  "lo": round(lo, 4), "hi": round(hi, 4), "n": n})
+    # ---------------- Exp 7
+    e7m = [m for m in models if any(r["exp"] == "exp7" and r["model"] == m for r in rows)]
+    if e7m:
+        L += ["", "## Exp 7: one question per call vs 12 questions in one call (32K, strong look-alike)", "",
+              "| model | made up: one per call | made up: 12 in one call | correct (with answer): one per call | correct: 12 in one call |",
+              "|---|---|---|---|---|"]
+        for m in e7m:
+            cells = []
+            for pr in ("normal", "batch12"):
+                cells.append(pct([r for r in rows if r["exp"] == "exp7" and r["model"] == m and r["prompt"] == pr]))
+            for pr in ("normal", "batch12"):
+                an = [r for r in rows if r["exp"] == "exp7" and r["model"] == m and r["prompt"] == pr and r["answerable"]]
+                cells.append(f"{100 * sum(r['label'] == 'correct' for r in an) / len(an):.1f}%" if an else "-")
+            L.append(f"| {NAMES[m]} | " + " | ".join(cells) + " |")
+
     try:
         reg = exchange_rate(rows, models)
         reg_x = exchange_rate(rows, models, exclude=lambda r: r["model"] == "llama33_70b" and r["length"] == 128)
@@ -355,6 +422,7 @@ def main(argv=None) -> None:
     fig_exp3(rows, models, out, a.dpi)
     fig_exp4(rows, models, out, a.dpi)
     fig_filler(rows, models, out, a.dpi)
+    fig_exp6(rows, models, out, a.dpi)
     print(f"\nsaved to {out}")
 
 
