@@ -209,7 +209,10 @@ def build_cache(zpath: Path, root: Path, limit_runs: int | None) -> dict:
                 q = parse_qid(qid)
                 det_d = d.get("details") or {}
                 text = det_d.get("actual_cleaned") or det_d.get("actual_raw") or ""
-                failed = bool(d.get("error_message")) or not str(text).strip()
+                # failed = the model produced no reply (crash, timeout, context too long). RIKER2 also fills
+                # error_message for ordinary wrong answers ("expected X, got Y"), so it is NOT a failure signal.
+                raw = det_d.get("actual_raw") or det_d.get("actual_cleaned") or ""
+                failed = not str(raw).strip()
                 yield {
                     "platform": platform, "run_name": run_name, "model": meta["model"],
                     "temperature": meta["temperature"], "context_k": meta["context_k"], "run": meta["run"],

@@ -101,6 +101,8 @@ def answer_part(text: str) -> tuple[str, str]:
         tail = re.split(r"\n\s*\n", tail)[0].strip()                 # stop at the next paragraph
         return tail.strip(" []"), "final_line"
     sents = sentences(t)
+    if not sents:                                      # only separators / unusual whitespace
+        return t, "first_sentence"
     concl = [s for s in sents[1:] if _CONCLUDE.match(s)]
     if concl:
         return concl[-1], "conclusion"

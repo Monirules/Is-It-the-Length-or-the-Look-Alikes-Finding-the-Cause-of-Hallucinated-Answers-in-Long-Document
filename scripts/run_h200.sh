@@ -28,6 +28,7 @@
 #   --gpus N                       GPUs per job (default: 2 copies of the model = 2 GPUs, 4 for GLM-4.5-Air)
 #   --hours H                      wall-time limit per job (default by model size, capped by max_hours_per_job)
 #   --no-repeats                   skip the three T=0.7 repeats of Exp 2
+#   --prompts normal,batch12       prompt styles to run (default normal; Exp 7 uses normal,batch12)
 #   --cleanup                      delete the model's weights when all its answers are saved (saves disk)
 #   --chain                        each job starts after the previous one ends
 # Inside an interactive GPU session (salloc -p gpu-h200 --gres=gpu:2 ...) you can run one model directly:
@@ -163,7 +164,7 @@ PY
 cmd_build() {
   need_env
   export HF_HOME="$(cfg hf_home)"
-  python -m nullscale.build_dataset --exp exp2,exp3,exp4 --workers "${SLURM_CPUS_ON_NODE:-8}"
+  python -m nullscale.build_dataset --exp "${1:-exp2,exp3,exp4}" --workers "${SLURM_CPUS_ON_NODE:-8}"
   echo "Next: bash scripts/run_h200.sh submit --dry-run"
 }
 
@@ -171,12 +172,13 @@ cmd_build() {
 run_sharded() {   # run_sharded <model> <exp> <tp> <ncopies> <gpu groups...> -- <extra run_vllm args>
   local model="$1" exp="$2" tp="$3" n="$4"; shift 4
   local groups=(); while [[ "$1" != "--" ]]; do groups+=("$1"); shift; done; shift
-  local extra=("$@") temp=0 seed=0 k
+  local extra=("$@") temp=0 seed=0 prompt=normal k
   for (( k = 0; k < ${#extra[@]}; k++ )); do
     [[ "${extra[$k]}" == "--temperature" ]] && temp="${extra[$((k+1))]}"
     [[ "${extra[$k]}" == "--seed" ]] && seed="${extra[$((k+1))]}"
+    [[ "${extra[$k]}" == "--prompt" ]] && prompt="${extra[$((k+1))]}"
   done
-  local stem; stem="normal_t$(python -c "print(f'{float($temp):g}')")_s$seed"
+  local stem; stem="${prompt}_t$(python -c "print(f'{float($temp):g}')")_s$seed"
   if (( n == 1 )); then
     CUDA_VISIBLE_DEVICES="${groups[0]}" python -m run.run_vllm --model "$model" --exp "$exp" --profile cluster "${extra[@]}"
     return
@@ -201,7 +203,7 @@ run_sharded() {   # run_sharded <model> <exp> <tp> <ncopies> <gpu groups...> -- 
 }
 
 cmd_job() {
-  local model="$1" exps="${2:-exp2,exp3,exp4}" repeats="${3:-1}" cleanup="${4:-0}"
+  local model="$1" exps="${2:-exp2,exp3,exp4}" repeats="${3:-1}" cleanup="${4:-0}" prompts="${5:-normal}"
   need_env
   export HF_HOME="$(cfg hf_home)"
   export NULLSCALE_GPU_TYPE="$(gpu_type)"
@@ -242,8 +244,10 @@ cmd_job() {
 
   local status=0
   for e in ${exps//,/ }; do
-    echo; echo "---- $e (T=0, seed 0) ----  $(date '+%T')"
-    run_sharded "$model" "$e" "$tp" "$n" "${groups[@]}" -- --prompt normal || status=1
+    for pr in ${prompts//,/ }; do
+      echo; echo "---- $e (prompt $pr, T=0, seed 0) ----  $(date '+%T')"
+      run_sharded "$model" "$e" "$tp" "$n" "${groups[@]}" -- --prompt "$pr" || status=1
+    done
   done
   if [[ ",$exps," == *",exp2,"* && "$repeats" == "1" ]]; then
     for s in 1 2 3; do
@@ -282,13 +286,14 @@ PY
 # ----------------------------------------------------------------------------- submit
 cmd_submit() {
   need_env
-  local models="$ALL_MODELS" exps="exp2,exp3,exp4" repeats=1 chain=0 dry=0 gpus="" hours="" cleanup=0
+  local models="$ALL_MODELS" exps="exp2,exp3,exp4" repeats=1 chain=0 dry=0 gpus="" hours="" cleanup=0 prompts="normal"
   while [[ $# -gt 0 ]]; do
     case "$1" in
       --models) models="${2//,/ }"; shift ;;
       --exps) exps="$2"; shift ;;
       --gpus) gpus="$2"; shift ;;
       --hours) hours="$2"; shift ;;
+      --prompts) prompts="$2"; shift ;;
       --no-repeats) repeats=0 ;;
       --cleanup) cleanup=1 ;;
       --chain) chain=1 ;;
@@ -313,7 +318,7 @@ cmd_submit() {
     [[ -n "$acct" ]] && args+=(--account="$acct")
     [[ -n "$qos" ]] && args+=(--qos="$qos")
     [[ $chain == 1 && -n "$prev" ]] && args+=(--dependency="afterany:$prev")
-    args+=(--wrap="cd '$PROJECT_ROOT' && source \"\$(conda info --base)/etc/profile.d/conda.sh\" && conda activate nullscale && bash scripts/run_h200.sh job $m $exps $repeats $cleanup")
+    args+=(--wrap="cd '$PROJECT_ROOT' && source \"\$(conda info --base)/etc/profile.d/conda.sh\" && conda activate nullscale && bash scripts/run_h200.sh job $m $exps $repeats $cleanup $prompts")
     total_gpuh=$(( total_gpuh + g * h ))
     if [[ $dry == 1 ]]; then
       echo "# $m: $g x H200 = $copies copies x tp $tp, up to ${h}h (at most $(( g * h )) GPU-hours)"
@@ -353,7 +358,7 @@ case "${1:-}" in
   check) cmd_check ;;
   download) shift; cmd_download "${1:-}" ;;
   cleanup) shift; need_env; for m in ${1//,/ }; do cmd_cleanup "$m"; done ;;
-  build) cmd_build ;;
+  build) shift; cmd_build "${1:-}" ;;
   submit) shift; cmd_submit "$@" ;;
   job) shift; cmd_job "$@" ;;
   status) cmd_status ;;
