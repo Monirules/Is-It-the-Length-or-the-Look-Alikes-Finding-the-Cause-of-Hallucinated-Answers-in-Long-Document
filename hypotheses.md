@@ -59,9 +59,21 @@ We fixed the meaning of every result before running, so the paper has a clear me
 ## Sign-off
 
 - Written by: Jayden's part, prepared by M. I. Mahmud on 3 October 2026 (Jayden was ill)
-- Reviewed by Monirul: ______________________  Date: __________
-- Seen by Jayden: ______________________  Date: __________
+- Reviewed by Monirul: M. I. Mahmud  Date: 6 October 2026. Content unchanged since commit 5a968ce 2026-10-03 12:40:45 -0400, before the first H200 run (3 October 2026, 16:25).
+- Seen by Jayden: not signed. Jayden left the project before sign-off; his remaining tasks were done by M. I. Mahmud (noted 6 October 2026).
 
 ## Change log
 
-(none)
+### Change log entry of 6 October 2026
+
+Nothing above the sign-off lines was edited. Each change and its reason:
+
+1. Hand check of 300 answers dropped for time. It is replaced by the agreement between our scoring rules and RIKER2's official scorer: 99.21%, Cohen's kappa 0.981, on 605,948 answers (outputs/riker/refusal_rules_on_riker.md). The unit tests in tests/test_scoring.py also support the rules. The 'scorer agreement' metric above is reported from this comparison, not from human checkers.
+2. Exp 5 dropped (no time). RQ4 is answered only from the sibling filler result in Exp 3. The cost comparison against standard fixes is not done.
+3. The optional API model (Claude Haiku 4.5) was not run.
+4. The regression without Llama 3.3 70B at 128K was added after seeing the data. It is a sensitivity check only, not the main result. The main result is the regression on all Exp 3 answers.
+5. Gemma 3 27B was not run at 128K. Its window is 131,072 tokens, which cannot hold a 128K document plus the prompt (Gemma's tokenizer needs about 156K tokens for it). GLM-4.5-Air could hold only 40 of the 80 Exp 3 documents at 128K.
+6. GLM-4.5-Air was not in the first Exp 6 run; its Exp 6 run was submitted on 6 October 2026.
+7. Added after seeing the data (Step 9, exploratory): the breaking-length table (first length whose no-look-alike interval lies fully above the 8K interval), the answer-accuracy check of sibling vs unrelated filler, and a document-bootstrap interval for the exchange rate.
+8. Jayden left the project. His remaining tasks (this change log, the Exp 1 summary, the results summary) were done by M. I. Mahmud.
+9. Added (exploratory, not pre-registered): a strict-prompt run on the Exp 2 documents with a strong look-alike, as a baseline to compare with sibling filler.
