@@ -5,6 +5,15 @@ Exp 3 (length with and without a strong look-alike), Exp 4 (copies), sibling fil
 stability, and a logistic regression that gives the exchange rate (doublings of length that equal one
 strong look-alike).
 
+Step 9 additions (6 October 2026, after seeing the data; listed in the hypotheses.md change log)
+  * the full-data regression is the MAIN result, with a 95% document-bootstrap interval for the exchange rate;
+    the version without Llama 3.3 70B at 128K is shown only as a labeled SENSITIVITY CHECK
+  * breaking length: the first length whose no-look-alike made-up rate is clearly above 8K (Wilson intervals
+    do not overlap), with answer accuracy at the same length
+  * prediction 4: answer accuracy, wrong refusals and wrong values for sibling vs unrelated filler
+  * strict-prompt runs (exp2_<model>_strict_t0_s0) are kept out of every table above and get their own table
+  * main_results.json: the headline numbers, read by analysis/results_summary.py
+
 Input   the per-run folders written by score/score_all.py, each with a scored.csv:
             <results>/<exp>_<model>_normal_t<T>_s<seed>/scored.csv
         (on the cluster: outputs/results; on the PC after copying: outputs/results_cluster)
@@ -13,6 +22,7 @@ Output  outputs/figures_main/   fig8_exp2_ladder, fig9_exp3_length, fig10_exp4_c
 
 Usage (any machine, no GPU; seconds)
   python -m analysis.main_results --results outputs/results_cluster
+  python -m analysis.main_results --results outputs/results_cluster --boot 200    # faster bootstrap
 """
 from __future__ import annotations
 
@@ -20,6 +30,7 @@ import argparse
 import csv
 import math
 import sys
+import json
 from collections import defaultdict
 from pathlib import Path
 
@@ -57,7 +68,7 @@ def load(results: Path) -> list[dict]:
             for r in csv.DictReader(fh):
                 r.update(exp=exp, model=model, run=run, prompt=prompt, answerable=r["answerable"] == "True",
                          made_up=r["label"] == "made_up", captured=r.get("captured") == "True",
-                         length=int(r["length_k"]), copies_n=int(r["copies"] or 0))
+                         length=int(r["length_k"]), copies_n=int(r["copies"] or 0), doc=r["qid"].split("/")[0])
                 rows.append(r)
     return rows
 
@@ -137,6 +148,62 @@ def exchange_rate(rows, models, exclude=lambda r: False):
     return out
 
 
+def exchange_boot(rows, models, B=500, seed=0, exclude=lambda r: False):
+    """95% interval for the exchange rate: documents resampled within each model, B times."""
+    import numpy as np
+    rs = [r for r in rows if r["exp"] == "exp3" and not r["answerable"] and r["model"] in models and not exclude(r)]
+    if not rs or B <= 0:
+        return float("nan"), float("nan")
+    ms = [m for m in models if any(r["model"] == m for r in rs)]
+    X, y, keys = [], [], []
+    for r in rs:
+        x = [1.0, math.log2(r["length"] / 8), 1.0 if r["level"] == "strong" else 0.0,
+             1.0 if r["ladder"] == "role" else 0.0, 1.0 if r["filler"] == "sibling" else 0.0]
+        X.append(x + [x[1] * x[2]] + [1.0 if r["model"] == m else 0.0 for m in ms[1:]])
+        y.append(1.0 if r["made_up"] else 0.0)
+        keys.append((r["model"], r["doc"]))
+    X, y = np.asarray(X), np.asarray(y)
+    uniq = sorted(set(keys))
+    pos = {k: i for i, k in enumerate(uniq)}
+    gi = np.array([pos[k] for k in keys])
+    by_model = defaultdict(list)
+    for k in uniq:
+        by_model[k[0]].append(pos[k])
+    rng = np.random.default_rng(seed)
+    est = []
+    for _ in range(B):
+        counts = np.zeros(len(uniq))
+        for ids in by_model.values():
+            np.add.at(counts, rng.choice(ids, size=len(ids), replace=True), 1)
+        b, _ = logit(X, y, counts[gi])
+        if b[1] > 0:
+            est.append(b[2] / b[1])
+    if len(est) < 0.9 * B:
+        return float("nan"), float("nan")
+    return float(np.quantile(est, 0.025)), float(np.quantile(est, 0.975))
+
+
+def accuracy(rs):
+    """(rate, lo, hi, n) over questions WITH an answer."""
+    rs = [r for r in rs if r["answerable"]]
+    return wilson(sum(r["label"] == "correct" for r in rs), len(rs)) + (len(rs),)
+
+
+def breaking_lengths(rows, models):
+    """Exp 3, no look-alike, fillers pooled. Break = first length > 8K whose Wilson interval lies fully above
+    the 8K interval. Accuracy drop = first length whose accuracy interval lies fully below 8K's (>= 10 points)."""
+    out = []
+    for m in models:
+        e3 = [r for r in rows if r["exp"] == "exp3" and r["model"] == m]
+        none = {L: rate([r for r in e3 if r["level"] == "none" and r["length"] == L]) for L in LENGTHS}
+        acc = {L: accuracy([r for r in e3 if r["length"] == L]) for L in LENGTHS}
+        docs = {L: len({r["doc"] for r in e3 if r["length"] == L}) for L in LENGTHS}
+        brk = next((L for L in LENGTHS[1:] if none[L][3] and none[L][1] > none[8][2]), None)
+        drop = next((L for L in LENGTHS[1:] if acc[L][3] and acc[L][2] < acc[8][1] and acc[8][0] - acc[L][0] >= 0.10), None)
+        out.append({"model": m, "none": none, "acc": acc, "docs": docs, "break": brk, "drop": drop})
+    return out
+
+
 # ----------------------------------------------------------------------------- figures
 
 def _style():
@@ -203,8 +270,8 @@ def fig_exp3(rows, models, out, dpi):
         axes[0].annotate("Llama 3.3 70B at 128K:\nanswer accuracy also\ncollapses (see text)",
                          xy=(2.95, 74), xytext=(0.9, 60), fontsize=6, color=INK2,
                          arrowprops={"arrowstyle": "-", "color": INK2, "lw": 0.6})
-    fig.text(0.01, 1.0, "Exp 3: fillers pooled; 640 no-answer questions per point; Gemma 3 27B and GLM-4.5-Air "
-             "cannot read 128K", fontsize=6.4, color=INK2)
+    fig.text(0.01, 1.0, "Exp 3: fillers pooled; 640 no-answer questions per point; Gemma 3 27B not run at 128K; "
+             "GLM-4.5-Air: half of the 128K documents fit its window", fontsize=6.4, color=INK2)
     save(fig, out, "fig9_exp3_length", dpi)
 
 
@@ -281,7 +348,7 @@ def fig_exp6(rows, models, out, dpi):
     save(fig, out, "fig12_exp6_wikipedia", dpi)
 
 
-def report(rows, models, out):
+def report(rows, models, out, strict=(), boot=500):
     L = ["# Main results (official scoring)", "",
          f"Models with results: {', '.join(NAMES[m] for m in models)}.", "",
          "Made-up rate = share of questions with no answer where the model gave a value; 95% Wilson interval in brackets.", "",
@@ -375,27 +442,121 @@ def report(rows, models, out):
                 cells.append(f"{100 * sum(r['label'] == 'correct' for r in an) / len(an):.1f}%" if an else "-")
             L.append(f"| {NAMES[m]} | " + " | ".join(cells) + " |")
 
+    # ---------------- Step 9: breaking length
+    BL = breaking_lengths(rows, models)
+    L += ["", "## Exp 3: breaking length (no look-alike, fillers pooled)", "",
+          "Break = first length whose 95% interval lies fully above the 8K interval. Accuracy drop = first length whose "
+          "accuracy interval lies fully below the 8K interval and is at least 10 points lower. Documents = documents run "
+          "at that length (fewer than 80 = only part fit the model's window). Defined on 6 Oct 2026, after seeing the data.", "",
+          "| model | made up, no look-alike: 8K / 32K / 64K / 128K | answer accuracy: 8K / 32K / 64K / 128K | documents | "
+          "breaking length | made up there | accuracy there | accuracy drop starts |", "|---|---|---|---|---|---|---|---|"]
+    for b in BL:
+        f1 = lambda v: "-" if v[3] == 0 else f"{100 * v[0]:.1f}"
+        brk = b["break"]
+        L.append(f"| {NAMES[b['model']]} | " + " / ".join(f1(b["none"][x]) for x in LENGTHS) + " | "
+                 + " / ".join(f1(b["acc"][x]) for x in LENGTHS) + " | " + " / ".join(str(b["docs"][x]) for x in LENGTHS)
+                 + f" | {f'{brk}K' if brk else 'none up to 128K'} | {f"{100 * b['none'][brk][0]:.1f} [{100 * b['none'][brk][1]:.0f}-{100 * b['none'][brk][2]:.0f}]" if brk else '-'}"
+                 + f" | {f'{100 * b['acc'][brk][0]:.1f}%' if brk else '-'} | {f'{b['drop']}K' if b['drop'] else 'none'} |")
+    # ---------------- Step 9: prediction 4, filler type and answer accuracy
+    L += ["", "## Exp 3: filler type and answer accuracy (pre-registered prediction 4)", "",
+          "Questions WITH an answer, all lengths: accuracy, wrong refusals (said not found) and wrong values, in %.", "",
+          "| model | made up (strong): unrelated | sibling | accuracy: unrelated | sibling | change (points) | "
+          "wrong refusals: unrelated / sibling | wrong values: unrelated / sibling |", "|---|---|---|---|---|---|---|---|"]
+    acc_changes, fill_lower = [], 0
+    for m in models:
+        e3 = [r for r in rows if r["exp"] == "exp3" and r["model"] == m]
+        u_rows = [r for r in e3 if r["level"] == "strong" and r["filler"] == "unrelated"]
+        sb_rows = [r for r in e3 if r["level"] == "strong" and r["filler"] == "sibling"]
+        u, sb = rate(u_rows), rate(sb_rows)
+        au, asb = (accuracy([r for r in e3 if r["filler"] == f]) for f in ("unrelated", "sibling"))
+        share = lambda f, lab: 100 * sum(r["label"] == lab for r in e3 if r["answerable"] and r["filler"] == f) / max(
+            1, sum(r["answerable"] and r["filler"] == f for r in e3))
+        acc_changes.append(asb[0] - au[0])
+        fill_lower += sb[0] < u[0]
+        L.append(f"| {NAMES[m]} | {pct(u_rows)} | {pct(sb_rows)} | {100 * au[0]:.1f} | {100 * asb[0]:.1f} | {100 * (asb[0] - au[0]):+.1f} | "
+                 f"{share('unrelated', 'wrong_refusal'):.1f} / {share('sibling', 'wrong_refusal'):.1f} | "
+                 f"{share('unrelated', 'wrong'):.1f} / {share('sibling', 'wrong'):.1f} |")
+    p4 = ("partly supported" if fill_lower == len(models) else "not supported")
+    L += ["", f"**Prediction 4: {p4}.** Sibling filler lowers made-up answers in {fill_lower} of {len(models)} models, but "
+          f"answer accuracy changes by {100 * min(acc_changes):+.1f} to {100 * max(acc_changes):+.1f} points"
+          + (" (accuracy does NOT hold)." if min(acc_changes) < -0.02 else " (accuracy holds).")]
+    # ---------------- strict prompt (only if run)
+    if strict:
+        sm = [m for m in models if any(r["model"] == m for r in strict)]
+        L += ["", "## Exp 2, strong look-alike: normal prompt vs strict prompt (32K)", "",
+              "| model | made up: normal | strict | accuracy: normal | strict |", "|---|---|---|---|---|"]
+        for m in sm:
+            nr = [r for r in rows if r["exp"] == "exp2" and r["model"] == m and r["run"] == "t0_s0" and r["level"] == "strong"]
+            sr = [r for r in strict if r["model"] == m and r["level"] == "strong"]
+            L.append(f"| {NAMES[m]} | {pct(nr)} | {pct(sr)} | {100 * accuracy(nr)[0]:.1f} | "
+                     f"{100 * accuracy(sr)[0]:.1f} |" if accuracy(sr)[3] else
+                     f"| {NAMES[m]} | {pct(nr)} | {pct(sr)} | {100 * accuracy(nr)[0]:.1f} | - |")
+    # ---------------- Step 9: regression, main result + sensitivity check
+    summary = {"models": [NAMES[m] for m in models]}
     try:
         reg = exchange_rate(rows, models)
-        reg_x = exchange_rate(rows, models, exclude=lambda r: r["model"] == "llama33_70b" and r["length"] == 128)
+        excl = lambda r: r["model"] == "llama33_70b" and r["length"] == 128
+        reg_x = exchange_rate(rows, models, exclude=excl)
+        ci = exchange_boot(rows, models, boot)
+        ci_x = exchange_boot(rows, models, boot, exclude=excl)
     except Exception as e:                  # numpy missing
         reg = reg_x = None
         L += ["", f"(regression skipped: {e})"]
-    for title, rg in (("all Exp 3 answers", reg), ("without Llama 3.3 70B at 128K (its reading collapses there)", reg_x)):
+    for title, rg, cc in (("MAIN RESULT: all Exp 3 answers", reg, ci if reg else None),
+                          ("SENSITIVITY CHECK (added after seeing the data, not the main result): without Llama 3.3 70B "
+                           "at 128K, where its reading collapses", reg_x, ci_x if reg_x else None)):
         if not rg:
             continue
-        L += ["", f"## Logistic regression, Exp 3 ({title}), {rg['n']:,} no-answer questions", "",
+        L += ["", f"## Logistic regression, Exp 3, {title} ({rg['n']:,} no-answer questions)", "",
               "made_up ~ log2(length / 8K) + strong look-alike + ladder + filler + model", "",
               "| term | log-odds | SE | odds ratio |", "|---|---|---|---|",
               f"| one doubling of length | {rg['b_len']:.3f} | {rg['se_len']:.3f} | {math.exp(rg['b_len']):.2f} |",
               f"| strong look-alike | {rg['b_strong']:.3f} | {rg['se_strong']:.3f} | {math.exp(rg['b_strong']):.1f} |",
               f"| sibling filler | {rg['b_sibling']:.3f} | {rg['se_sibling']:.3f} | {math.exp(rg['b_sibling']):.2f} |", "",
               (f"**Exchange rate:** one strong look-alike adds as much as **{rg['exchange']:.1f} doublings of length** "
-               f"(log-odds {rg['b_strong_8k']:.2f} for the look-alike at 8K / {rg['b_len_none']:.2f} per doubling without a "
-               f"look-alike); i.e. a document {2 ** rg['exchange']:,.0f}x longer." if math.isfinite(rg["exchange"]) else
+               f"(95% document-bootstrap interval {cc[0]:.1f} to {cc[1]:.1f}, {boot} draws); i.e. a document "
+               f"{2 ** rg['exchange']:,.0f}x longer (log-odds {rg['b_strong_8k']:.2f} for the look-alike at 8K / "
+               f"{rg['b_len_none']:.2f} per doubling without a look-alike)." if math.isfinite(rg["exchange"]) else
                "**Exchange rate:** not defined, because length has no clearly positive effect."),
               f"With an interaction term: one doubling raises the log-odds by {rg['b_len_none']:.3f} (SE {rg['se_len_none']:.3f}) "
               f"without a look-alike and by {rg['b_len_strong']:.3f} with a strong one."]
+    if reg:
+        summary.update(exchange=reg["exchange"], exchange_lo=ci[0], exchange_hi=ci[1],
+                       exchange_sens=reg_x["exchange"] if reg_x else None, or_strong=math.exp(reg["b_strong"]),
+                       or_doubling=math.exp(reg["b_len"]), or_sibling=math.exp(reg["b_sibling"]), n_reg=reg["n"],
+                       b_len_none=reg["b_len_none"], b_len_strong=reg["b_len_strong"])
+    gaps = []
+    for m in models:
+        e2 = [r for r in rows if r["exp"] == "exp2" and r["model"] == m and r["run"] == "t0_s0"]
+        sv, nv = rate([r for r in e2 if r["level"] == "strong"]), rate([r for r in e2 if r["level"] == "none"])
+        mu = [r for r in e2 if r["made_up"]]
+        gaps.append({"model": NAMES[m], "none": nv[0], "strong": sv[0], "separate": sv[1] > nv[2],
+                     "captured": sum(r["captured"] for r in mu) / len(mu) if mu else None})
+    summary.update(exp2=gaps, breaking=[{"model": NAMES[b["model"]], "break_k": b["break"], "drop_k": b["drop"],
+                                         "made_up_at_break": b["none"][b["break"]][0] if b["break"] else None,
+                                         "acc_8k": b["acc"][8][0], "acc_at_break": b["acc"][b["break"]][0] if b["break"] else None,
+                                         "made_up_128k": b["none"][128][0] if b["none"][128][3] else None,
+                                         "made_up_max": max(b["none"][x][0] for x in LENGTHS if b["none"][x][3]),
+                                         "max_at_k": max((x for x in LENGTHS if b["none"][x][3]), key=lambda x: b["none"][x][0]),
+                                         "acc_at_max": b["acc"][max((x for x in LENGTHS if b["none"][x][3]),
+                                                                    key=lambda x: b["none"][x][0])][0]}
+                                        for b in BL],
+                   filler_lower_in=fill_lower, filler_acc_change_min=min(acc_changes), filler_acc_change_max=max(acc_changes),
+                   p4=p4)
+    e7 = {}
+    for m in models:
+        one = [r for r in rows if r["exp"] == "exp7" and r["model"] == m and r["prompt"] == "normal"]
+        b12 = [r for r in rows if r["exp"] == "exp7" and r["model"] == m and r["prompt"] == "batch12"]
+        if one and b12:
+            e7[NAMES[m]] = {"one": rate(one)[0], "twelve": rate(b12)[0]}
+    e6 = {}
+    for m in models:
+        e6r = [r for r in rows if r["exp"] == "exp6" and r["model"] == m]
+        if e6r:
+            e6[NAMES[m]] = {"lookalike_32k": rate([r for r in e6r if r["level"] == "lookalike" and r["length"] == 32])[0],
+                            "random_32k": rate([r for r in e6r if r["level"] == "random" and r["length"] == 32])[0]}
+    summary.update(exp7=e7, exp6=e6, exp6_missing=[NAMES[m] for m in models if NAMES[m] not in e6])
+    (out / "main_results.json").write_text(json.dumps(summary, indent=1), encoding="utf-8")
     (out / "main_results.md").write_text("\n".join(L) + "\n", encoding="utf-8")
     with open(out / "main_results.csv", "w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=list(table[0]))
@@ -409,6 +570,7 @@ def main(argv=None) -> None:
     ap.add_argument("--results", default=str(PROJECT_ROOT / "outputs" / "results"))
     ap.add_argument("--out", default=str(PROJECT_ROOT / "outputs" / "figures_main"))
     ap.add_argument("--dpi", type=int, default=900)
+    ap.add_argument("--boot", type=int, default=500, help="bootstrap draws for the exchange-rate interval (0 = skip)")
     a = ap.parse_args(argv)
     rows = load(Path(a.results))
     if not rows:
@@ -416,8 +578,10 @@ def main(argv=None) -> None:
     models = [m for m in MODELS if any(r["model"] == m for r in rows)]
     out = Path(a.out)
     out.mkdir(parents=True, exist_ok=True)
-    print(f"{len(rows):,} scored answers from {len(models)} models\n")
-    report(rows, models, out)
+    strict = [r for r in rows if r["prompt"] == "strict"]
+    rows = [r for r in rows if r["prompt"] != "strict"]      # strict runs never mix into the main tables
+    print(f"{len(rows):,} scored answers from {len(models)} models ({len(strict):,} strict-prompt answers kept apart)\n")
+    report(rows, models, out, strict, a.boot)
     fig_exp2(rows, models, out, a.dpi)
     fig_exp3(rows, models, out, a.dpi)
     fig_exp4(rows, models, out, a.dpi)
