@@ -88,6 +88,19 @@ open_models:
     cluster: {dtype: fp8, tp_h200: 1, tp_a100: 2}
     vllm_args: {}
 
+  llama33_70b_bf16:              # overnight audit: same model as llama33_70b, full bf16 weights, 2 x H200
+    family: llama
+    hf_id: meta-llama/Llama-3.3-70B-Instruct
+    base_hf_id: meta-llama/Llama-3.3-70B-Instruct
+    gated: true
+    params_b: 70
+    active_params_b: 70
+    max_model_len: 131072
+    roig_fab_32k: 41.67
+    pc:     {runnable: false}
+    cluster: {dtype: bfloat16, tp_h200: 2, tp_a100: 4}
+    vllm_args: {}
+
   qwen3_next_80b:
     family: qwen
     hf_id: Qwen/Qwen3-Next-80B-A3B-Instruct-FP8

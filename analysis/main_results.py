@@ -189,6 +189,14 @@ def accuracy(rs):
     return wilson(sum(r["label"] == "correct" for r in rs), len(rs)) + (len(rs),)
 
 
+
+def _pct1(x):
+    return "%.1f" % (100 * x)
+
+
+def _brk_rate(v):
+    return "%.1f [%.0f-%.0f]" % (100 * v[0], 100 * v[1], 100 * v[2])
+
 def breaking_lengths(rows, models):
     """Exp 3, no look-alike, fillers pooled. Break = first length > 8K whose Wilson interval lies fully above
     the 8K interval. Accuracy drop = first length whose accuracy interval lies fully below 8K's (>= 10 points)."""
@@ -455,8 +463,10 @@ def report(rows, models, out, strict=(), boot=500):
         brk = b["break"]
         L.append(f"| {NAMES[b['model']]} | " + " / ".join(f1(b["none"][x]) for x in LENGTHS) + " | "
                  + " / ".join(f1(b["acc"][x]) for x in LENGTHS) + " | " + " / ".join(str(b["docs"][x]) for x in LENGTHS)
-                 + f" | {f'{brk}K' if brk else 'none up to 128K'} | {f"{100 * b['none'][brk][0]:.1f} [{100 * b['none'][brk][1]:.0f}-{100 * b['none'][brk][2]:.0f}]" if brk else '-'}"
-                 + f" | {f'{100 * b['acc'][brk][0]:.1f}%' if brk else '-'} | {f'{b['drop']}K' if b['drop'] else 'none'} |")
+                 + " | " + (f"{brk}K" if brk else "none up to 128K")
+                 + " | " + (_brk_rate(b["none"][brk]) if brk else "-")
+                 + " | " + (_pct1(b["acc"][brk][0]) + "%" if brk else "-")
+                 + " | " + (str(b["drop"]) + "K" if b["drop"] else "none") + " |")
     # ---------------- Step 9: prediction 4, filler type and answer accuracy
     L += ["", "## Exp 3: filler type and answer accuracy (pre-registered prediction 4)", "",
           "Questions WITH an answer, all lengths: accuracy, wrong refusals (said not found) and wrong values, in %.", "",

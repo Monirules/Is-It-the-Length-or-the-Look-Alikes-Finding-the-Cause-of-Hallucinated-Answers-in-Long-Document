@@ -1,0 +1,4 @@
+term,log_odds,se,z
+look-alike present,1.307,0.025,52.28
+log2(length/32K),0.751,0.007,107.29
+present x log2(length/32K),-0.681,0.012,-56.75

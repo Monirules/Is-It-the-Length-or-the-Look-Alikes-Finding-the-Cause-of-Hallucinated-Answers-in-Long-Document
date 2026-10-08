@@ -1,0 +1,33 @@
+fit,kind,exchange_doublings,length_factor,slope_no_lookalike,or_doubling_main,n
+"all models, all cells",full,5.85,57.9,1.826,1.122,16960
+without Qwen3 4B,leave one model out,5.79,55.3,1.854,1.164,14400
+without Llama 3.1 8B,leave one model out,5.91,60.3,1.79,1.133,14400
+without Gemma 3 27B,leave one model out,5.38,41.7,2.484,1.115,15040
+without Qwen3 30B A3B,leave one model out,5.49,44.9,2.157,1.14,14400
+without Llama 3.3 70B,leave one model out,8.17,288.3,1.02,0.997,14400
+without Qwen3 Next 80B,leave one model out,5.58,47.7,1.924,1.167,14400
+without GLM 4.5 Air 106B,leave one model out,5.88,58.8,1.761,1.145,14720
+without GLM family,leave one family out,5.88,58.8,1.761,1.145,14720
+without Gemma family,leave one family out,5.38,41.7,2.484,1.115,15040
+without Llama family,leave one family out,8.78,440.5,0.922,0.973,11840
+without Qwen family,leave one family out,4.98,31.6,2.507,1.297,9280
+without Qwen3 4B at 32K,leave one cell out,5.88,58.9,1.814,1.12,16320
+without Qwen3 4B at 64K,leave one cell out,5.86,58.1,1.825,1.119,16320
+without Qwen3 4B at 128K,leave one cell out,5.77,54.5,1.873,1.141,16320
+without Llama 3.1 8B at 32K,leave one cell out,5.87,58.5,1.811,1.12,16320
+without Llama 3.1 8B at 64K,leave one cell out,5.87,58.4,1.806,1.124,16320
+without Llama 3.1 8B at 128K,leave one cell out,5.88,58.7,1.823,1.117,16320
+without Gemma 3 27B at 32K,leave one cell out,5.68,51.3,2.012,1.124,16320
+without Gemma 3 27B at 64K,leave one cell out,5.72,52.8,1.999,1.116,16320
+without Qwen3 30B A3B at 32K,leave one cell out,5.74,53.5,1.932,1.122,16320
+without Qwen3 30B A3B at 64K,leave one cell out,5.86,57.9,1.833,1.129,16320
+without Qwen3 30B A3B at 128K,leave one cell out,5.65,50.2,1.957,1.122,16320
+without Llama 3.3 70B at 32K,leave one cell out,6.0,63.8,1.736,1.115,16320
+without Llama 3.3 70B at 64K,leave one cell out,6.16,71.5,1.612,1.145,16320
+without Llama 3.3 70B at 128K,leave one cell out,7.94,245.1,1.099,0.992,16320
+without Qwen3 Next 80B at 32K,leave one cell out,5.85,57.9,1.813,1.122,16320
+without Qwen3 Next 80B at 64K,leave one cell out,5.89,59.2,1.784,1.125,16320
+without Qwen3 Next 80B at 128K,leave one cell out,5.53,46.3,2.014,1.146,16320
+without GLM 4.5 Air 106B at 32K,leave one cell out,5.85,57.6,1.818,1.12,16320
+without GLM 4.5 Air 106B at 64K,leave one cell out,5.91,60.1,1.767,1.127,16320
+without GLM 4.5 Air 106B at 128K,leave one cell out,5.8,55.9,1.86,1.135,16640
