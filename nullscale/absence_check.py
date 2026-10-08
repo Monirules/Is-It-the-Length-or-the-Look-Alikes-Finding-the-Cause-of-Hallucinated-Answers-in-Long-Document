@@ -1,4 +1,4 @@
-"""nullscale/absence_check.py  (owner: Monirul)
+"""nullscale/absence_check.py
 
 Proves, for every question with no answer, that the answer is not anywhere in the document;
 and, for every question with an answer, that exactly one record answers it.

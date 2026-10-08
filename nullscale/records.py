@@ -1,4 +1,4 @@
-"""nullscale/records.py  (owner: Monirul)
+"""nullscale/records.py
 
 Creates fake records with random names, dates and values, with one hard guarantee:
 no two names in a document are accidentally similar.

@@ -1,4 +1,4 @@
-"""scripts/make_figures.py  (owner: Monirul)
+"""scripts/make_figures.py
 
 Figures that can be made before any model runs, from the generator and the built dataset.
 

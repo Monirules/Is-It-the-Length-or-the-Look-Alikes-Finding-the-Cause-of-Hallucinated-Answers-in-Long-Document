@@ -1,4 +1,4 @@
-"""score/refusal_rules.py  (owner: Jayden; written for the team by M. I. Mahmud)
+"""score/refusal_rules.py
 
 Decides whether a model said "not found". Fixed written rules, no AI judge.
 

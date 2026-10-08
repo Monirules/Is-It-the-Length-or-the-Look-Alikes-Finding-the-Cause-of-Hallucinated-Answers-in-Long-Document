@@ -1,4 +1,4 @@
-"""realdata/nq_build.py  (owner: Jayden; written for the team by M. I. Mahmud)
+"""realdata/nq_build.py
 
 Exp 6, part 1: takes 300 Natural Questions items, removes EVERY passage that holds the answer, and saves
 the questions.

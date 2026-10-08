@@ -1,4 +1,4 @@
-"""riker/inspect_riker.py  (owner: Jayden; written for the team by M. I. Mahmud)
+"""riker/inspect_riker.py
 
 Opens the RIKER2 files and writes a short report on what is inside. The most important question:
 is the FULL DOCUMENT TEXT included, or only the ground truth? (Answer from the files themselves.)

@@ -1,4 +1,4 @@
-"""riker/reanalyze_riker.py  (owner: Jayden; written for the team by M. I. Mahmud)
+"""riker/reanalyze_riker.py
 
 Exp 1 (RQ3): Roig's made-up answer rate, computed SEPARATELY for trap questions with a look-alike
 record and without one, at 32K, 128K and 200K. No new model runs: only RIKER2's released answers.

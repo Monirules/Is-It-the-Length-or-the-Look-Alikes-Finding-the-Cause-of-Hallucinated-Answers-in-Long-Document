@@ -1,4 +1,4 @@
-"""scripts/check_token_lengths.py  (owner: Monirul)
+"""scripts/check_token_lengths.py
 
 Document lengths are defined in Llama 3.1 tokens (configs/experiments.yaml, reference_tokenizer).
 Other models split text differently. Qwen, for example, splits every digit into its own token, so

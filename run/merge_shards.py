@@ -1,4 +1,4 @@
-"""run/merge_shards.py  (owner: Monirul)
+"""run/merge_shards.py
 
 Joins the answer files written by several GPUs at once (run_vllm.py --shard K --num-shards N) into the
 one answers file every other script reads:

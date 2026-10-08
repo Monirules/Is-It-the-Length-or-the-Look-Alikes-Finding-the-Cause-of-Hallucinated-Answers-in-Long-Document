@@ -1,6 +1,6 @@
 # First look: qwen3_4b (fp8 (PC)), exp2, normal prompt, T=0, 20 documents at 32K. Provisional scoring.
 
-PROVISIONAL scoring (see scripts/first_look.py); official scoring is Jayden's score/.
+PROVISIONAL scoring (see scripts/first_look.py); official scoring is score/.
 
 240 answers from 20 documents: 160 with no answer, 80 with an answer.
 

@@ -1,4 +1,4 @@
-"""tests/test_absence.py  (owner: Monirul)
+"""tests/test_absence.py
 
 1. Builds 100 random documents (every ladder, level, filler kind and copy count; mostly 8K for
    speed, some 32K) and runs the absence check on each. Every one must pass.

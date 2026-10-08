@@ -1,4 +1,4 @@
-"""run/timing_test.py  (owner: Monirul)
+"""run/timing_test.py
 
 Times one test cell and turns it into a GPU-hour plan.
 

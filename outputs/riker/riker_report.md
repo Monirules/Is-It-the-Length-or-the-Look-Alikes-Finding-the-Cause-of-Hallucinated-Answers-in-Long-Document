@@ -1,6 +1,6 @@
 # What is inside RIKER2
 
-Folder: `/home/monirul/nullscale_work/data/riker2`. Made by riker/inspect_riker.py.
+Folder: `~/nullscale_work/data/riker2`. Made by riker/inspect_riker.py.
 
 ## Answer to the main question
 

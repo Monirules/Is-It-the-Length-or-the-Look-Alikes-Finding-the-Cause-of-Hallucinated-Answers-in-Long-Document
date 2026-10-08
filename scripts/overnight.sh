@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# scripts/overnight.sh  (owner: Monirul)
+# scripts/overnight.sh
 #
 # One overnight pipeline on the cluster for the professor's most important to-do items.
 #   1. preflight  adds the llama33_70b_bf16 entry to configs/models.yaml (once), checks the HF login,

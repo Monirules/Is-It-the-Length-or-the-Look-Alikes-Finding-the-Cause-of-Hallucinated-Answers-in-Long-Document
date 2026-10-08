@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# scripts/demo_step5.sh  (owner: Monirul)
+# scripts/demo_step5.sh
 # Step 5 in one go: question bank, absence tests, full dataset build, and a re-check of every saved
 # document. Output is also saved to logs/step5_demo_<time>.txt.
 # Run from the project folder, inside the nullscale conda env (Ubuntu/WSL). No GPU needed.

@@ -1,6 +1,6 @@
 # Exp 6 data, part 2: documents with look-alike or random Wikipedia passages
 
-300 questions x 5 settings = **1500 documents**, in `/home/monirul/nullscale_work/data/nq/exp6`.
+300 questions x 5 settings = **1500 documents**, in `~/nullscale_work/data/nq/exp6`.
 
 Every no-gold document was checked: no answer string, no passage of the gold article. Every control document contains its answer. Every length is within 1% of its target.
 

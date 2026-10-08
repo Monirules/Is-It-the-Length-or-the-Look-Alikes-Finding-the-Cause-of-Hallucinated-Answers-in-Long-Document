@@ -1,4 +1,4 @@
-"""nullscale/schema.py  (owner: Monirul)
+"""nullscale/schema.py
 
 The fake world NullScale documents are written about.
 

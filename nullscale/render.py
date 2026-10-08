@@ -1,4 +1,4 @@
-"""nullscale/render.py  (owner: Monirul)
+"""nullscale/render.py
 
 Turns each record into ordinary written text.
 

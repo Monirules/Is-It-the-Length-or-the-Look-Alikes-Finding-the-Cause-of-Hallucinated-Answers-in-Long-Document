@@ -1,4 +1,4 @@
-"""analysis/results_summary.py  (owner: Monirul; was a joint Monirul + Jayden task)
+"""analysis/results_summary.py
 
 Step 9: the one-page results summary. One final claim per research question, each with its exact numbers,
 plus the supporting checks and what changed from the plan. Writing starts from this page.

@@ -1,4 +1,4 @@
-"""realdata/retrieve.py  (owner: Jayden; written for the team by M. I. Mahmud)
+"""realdata/retrieve.py
 
 Exp 6, part 2: for each of the 300 questions, finds Wikipedia passages that look like the answer's
 passage (look-alikes) and random passages, and fills documents to exactly 8K and 32K tokens. The result
@@ -29,7 +29,7 @@ Final checks on every finished document (a failure stops the script):
   the control contains the answer; every length is within the tolerance.
 
 Output (paths.yaml data.nq; PC: ~/nullscale_work/data/nq/exp6/)
-  questions.jsonl, docs/<doc_id>.txt, manifest.json      -> Monirul runs:  python -m run.run_vllm --exp exp6 ...
+  questions.jsonl, docs/<doc_id>.txt, manifest.json      -> then run:  python -m run.run_vllm --exp exp6 ...
   outputs/realdata/exp6_build_report.md                   (project folder) checks, similarity, examples
 
 Usage (Ubuntu/WSL, nullscale env, project folder; after nq_build.py; no GPU; 5-15 minutes)
@@ -267,7 +267,7 @@ def main(argv=None) -> None:
     (OUT_DIR / "exp6_build_report.md").write_text("\n".join(L) + "\n", encoding="utf-8")
     print("\n".join(L))
     print(f"\nsaved {out / 'questions.jsonl'}, {len(rows)} documents, and {OUT_DIR / 'exp6_build_report.md'}")
-    print("Next (Monirul):  python -m run.run_vllm --model qwen3_4b --exp exp6 --n-docs 10 --balanced")
+    print("Next:  python -m run.run_vllm --model qwen3_4b --exp exp6 --n-docs 10 --balanced")
 
 
 if __name__ == "__main__":

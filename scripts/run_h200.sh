@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# scripts/run_h200.sh  (owner: Monirul)
+# scripts/run_h200.sh
 #
-# Step 7: the main runs on the UC ARC cluster's H200 GPUs (partition gpu-h200, 8 x H200 141 GB).
+# Step 7: the main runs on a Slurm cluster's H200 GPUs (partition gpu-h200, 8 x H200 141 GB).
 # Exp 2, Exp 3 and Exp 4 for all 7 open models, smallest model first.
 #
 # How the GPUs are used (two kinds of parallel work)
@@ -96,10 +96,10 @@ cmd_check() {
     echo "  sinfo not found: run this on the cluster login node"
   fi
   echo; echo "== storage (models need ~400 GB; data + answers ~30 GB) =="
-  for d in "$(cfg work_root)" "$(cfg hf_home)" "/N/lustre/scratch/$USER" "/N/scratch/$USER" "/scratch/$USER" "$HOME"; do
+  for d in "$(cfg work_root)" "$(cfg hf_home)" "/scratch/$USER" "$HOME"; do
     [[ -d "$d" ]] && printf "  %-55s free %s\n" "$d" "$(df -h --output=avail "$d" 2>/dev/null | tail -1 | tr -d ' ')"
   done
-  command -v lfs >/dev/null && lfs quota -h -p proj-606 /N/lustre 2>/dev/null | sed 's/^/  /' || true
+  command -v lfs >/dev/null && lfs quota -h -u "$USER" "$(cfg work_root)" 2>/dev/null | sed 's/^/  /' || true
   echo "  If a scratch folder above has more room, set hf_home in configs/paths.yaml to it."
   echo; echo "== data =="
   local data; data="$(cfg data.nullscale)"

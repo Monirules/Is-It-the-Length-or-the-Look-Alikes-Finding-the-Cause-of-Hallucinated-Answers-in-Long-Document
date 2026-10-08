@@ -1,4 +1,4 @@
-"""score/match_answer.py  (owner: Jayden; written for the team by M. I. Mahmud)
+"""score/match_answer.py
 
 Labels each answer, after cleaning spaces, capital letters, "$", commas and date formats.
 

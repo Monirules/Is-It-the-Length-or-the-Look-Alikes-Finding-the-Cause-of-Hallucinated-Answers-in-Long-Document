@@ -1,4 +1,4 @@
-"""riker/exp1_summary.py  (owner: Monirul; was Jayden's task)
+"""riker/exp1_summary.py
 
 Step 9: the Exp 1 summary rewritten as "Hypothesis 3 not supported". No RIKER2 download needed: it reads the
 files riker/reanalyze_riker.py already wrote.

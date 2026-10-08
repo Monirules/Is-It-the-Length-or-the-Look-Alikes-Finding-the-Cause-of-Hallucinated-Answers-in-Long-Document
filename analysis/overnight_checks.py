@@ -1,4 +1,4 @@
-"""analysis/overnight_checks.py  (owner: Monirul)
+"""analysis/overnight_checks.py
 
 All CPU checks requested in the professor's to-do list that can be answered from files we already have,
 plus the Llama 3.3 70B bf16 comparison once that run exists. No GPU. About 2 to 5 minutes.

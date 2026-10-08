@@ -1,4 +1,4 @@
-"""tests/test_scoring.py  (owner: Jayden; written for the team by M. I. Mahmud)
+"""tests/test_scoring.py
 
 Tricky example answers with the label a careful human would give. The scoring rules
 (score/refusal_rules.py, score/match_answer.py, score/capture_tag.py) must label every one correctly.

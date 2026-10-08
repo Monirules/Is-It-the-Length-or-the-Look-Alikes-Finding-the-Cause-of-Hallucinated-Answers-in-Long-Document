@@ -1,4 +1,4 @@
-"""nullscale/filler.py  (owner: Monirul)
+"""nullscale/filler.py
 
 Builds the records that fill a document around the question-relevant records.
 

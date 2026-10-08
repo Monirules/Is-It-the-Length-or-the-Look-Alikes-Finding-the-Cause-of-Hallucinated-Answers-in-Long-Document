@@ -1,8 +1,8 @@
-"""scripts/first_look.py  (owner: Monirul)
+"""scripts/first_look.py
 
 A first look at real model answers, for the Step 6 check and for showing the professor.
 
-PROVISIONAL SCORING. The official rules are Jayden's score/refusal_rules.py, match_answer.py and
+PROVISIONAL SCORING. The official rules are score/refusal_rules.py, match_answer.py and
 capture_tag.py; when those exist, score_all.py replaces the scoring below. These rules are simple and
 written down so anyone can check them:
   final answer the text after the last "Answer:" if the model wrote one, else the whole reply
@@ -163,7 +163,7 @@ def write_summary(rows: list[dict], out: Path, title: str) -> None:
     un = [r for r in rows if not r["answerable"]]
     an = [r for r in rows if r["answerable"]]
     lines = [f"# First look: {title}", "",
-             "PROVISIONAL scoring (see scripts/first_look.py); official scoring is Jayden's score/.", "",
+             "PROVISIONAL scoring (see scripts/first_look.py); official scoring is score/.", "",
              f"{len(rows)} answers from {len({r['doc_id'] for r in rows})} documents: "
              f"{len(un)} with no answer, {len(an)} with an answer.", "",
              "## Questions with no answer: made-up answer rate (95% Wilson interval)", "",

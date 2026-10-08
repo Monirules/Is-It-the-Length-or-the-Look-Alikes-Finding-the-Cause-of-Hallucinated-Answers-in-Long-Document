@@ -1,4 +1,4 @@
-"""run/run_vllm.py  (owner: Monirul)
+"""run/run_vllm.py
 
 Loads one model with vLLM, asks every question of the chosen documents ONE QUESTION PER CALL, and
 saves every answer in the agreed format. Works the same on the PC (RTX 5070, FP8) and the cluster.

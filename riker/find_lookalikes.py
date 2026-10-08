@@ -1,4 +1,4 @@
-"""riker/find_lookalikes.py  (owner: Jayden; written for the team by M. I. Mahmud)
+"""riker/find_lookalikes.py
 
 For every RIKER2 trap question (L11, L12) at 32K, 128K and 200K, searches its document for records that
 look like the asked item, and marks the question "look alike present" or "no look alike".

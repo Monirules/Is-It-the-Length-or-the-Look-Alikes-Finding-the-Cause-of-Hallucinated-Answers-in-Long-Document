@@ -1,4 +1,4 @@
-"""run/prompts.py  (owner: Monirul)
+"""run/prompts.py
 
 The three fixed prompts. They never change between models or conditions; PROMPT_VERSION goes into
 every saved answer so a later change can never be mixed up with an earlier run.

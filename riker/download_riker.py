@@ -1,4 +1,4 @@
-"""riker/download_riker.py  (owner: Jayden; written for the team by M. I. Mahmud)
+"""riker/download_riker.py
 
 Downloads both RIKER2 zip files, checks that nothing is broken, unpacks the small one, and turns the
 big one into one compact answers cache (it holds 3.7 million files; we never unpack all of them).

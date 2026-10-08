@@ -1,4 +1,4 @@
-"""nullscale/lookalike.py  (owner: Monirul)
+"""nullscale/lookalike.py
 
 Builds the look-alike records for one unanswerable question, at four levels on two ladders.
 The question always asks about a lease fact that is NOT in the document; the look-alike is a

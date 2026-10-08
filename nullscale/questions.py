@@ -1,4 +1,4 @@
-"""nullscale/questions.py  (owner: Monirul)
+"""nullscale/questions.py
 
 Question templates, and the 12 questions each document gets: 8 with no answer, 4 with an answer.
 

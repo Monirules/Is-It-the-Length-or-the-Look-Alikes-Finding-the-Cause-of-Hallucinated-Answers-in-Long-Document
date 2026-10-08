@@ -1,4 +1,4 @@
-# configs/experiments.yaml  (owner: Monirul)
+# configs/experiments.yaml
 #
 # Every experiment in the proposal, with its grid. nullscale/build_dataset.py builds the data from this file
 # and run/run_vllm.py runs it. Check that it adds up with:   python -m nullscale.config
@@ -38,7 +38,6 @@ experiments:
     split_by: [lookalike_present, no_lookalike]
     model_runs: false
     runs_on: [pc]                        # laptop/PC is enough, no GPU needed
-    owner: Jayden
 
   exp2:
     rq: RQ1
@@ -128,7 +127,6 @@ experiments:
       - no_gold_random_32k
     models: all_open
     runs_on: [pc, cluster]
-    data_owner: Jayden
 
   exp7:
     rq: protocol check

@@ -1,27 +1,0 @@
-
-================ 1/5 Checks ================
-NVIDIA GeForce RTX 5070, 1473 MiB, 12227 MiB
-profile: pc   model: qwen3_4b   documents: 4
-
-================ 2/5 Dataset (reuses documents that already exist) ================
-tokenizer: meta-llama/Llama-3.1-8B-Instruct   output: /home/monirul/nullscale_work/data/nullscale   workers: 6
-
-=== exp2: Look-alike ladder at fixed length  (120 documents) ===
-  6/120 documents  0s elapsed, ~3s left     12/120 documents  0s elapsed, ~2s left     18/120 documents  0s elapsed, ~2s left     24/120 documents  0s elapsed, ~2s left     30/120 documents  1s elapsed, ~2s left     36/120 documents  1s elapsed, ~1s left     42/120 documents  1s elapsed, ~1s left     48/120 documents  1s elapsed, ~1s left     54/120 documents  1s elapsed, ~1s left     60/120 documents  1s elapsed, ~1s left     66/120 documents  1s elapsed, ~1s left     72/120 documents  1s elapsed, ~1s left     78/120 documents  1s elapsed, ~1s left     84/120 documents  1s elapsed, ~0s left     90/120 documents  1s elapsed, ~0s left     96/120 documents  1s elapsed, ~0s left     102/120 documents  1s elapsed, ~0s left     108/120 documents  1s elapsed, ~0s left     114/120 documents  1s elapsed, ~0s left     120/120 documents  1s elapsed, ~0s left   
-  documents 120  questions 1440 (960 no answer + 480 with answer)  rebuilt 0  reused 120  length deviation -0.10% .. +0.07%  [1s]
-  saved: /home/monirul/nullscale_work/data/nullscale/exp2/questions.jsonl
-
-=== exp3: Length with and without a strong look-alike, two filler types  (320 documents) ===
-  16/320 documents  0s elapsed, ~3s left     32/320 documents  0s elapsed, ~3s left     48/320 documents  0s elapsed, ~2s left     64/320 documents  0s elapsed, ~1s left     80/320 documents  0s elapsed, ~1s left     96/320 documents  1s elapsed, ~2s left     112/320 documents  1s elapsed, ~2s left     128/320 documents  1s elapsed, ~2s left     144/320 documents  1s elapsed, ~1s left     160/320 documents  1s elapsed, ~1s left     176/320 documents  2s elapsed, ~1s left     192/320 documents  2s elapsed, ~1s left     208/320 documents  3s elapsed, ~1s left     224/320 documents  3s elapsed, ~1s left     240/320 documents  3s elapsed, ~1s left     256/320 documents  4s elapsed, ~1s left     272/320 documents  5s elapsed, ~1s left     288/320 documents  5s elapsed, ~1s left     304/320 documents  5s elapsed, ~0s left     320/320 documents  5s elapsed, ~0s left   
-  documents 320  questions 3840 (2560 no answer + 1280 with answer)  rebuilt 0  reused 320  length deviation -0.10% .. +0.10%  [5s]
-  saved: /home/monirul/nullscale_work/data/nullscale/exp3/questions.jsonl
-
-Done.
-
-================ 3/5 Timing test skipped ================
-
-================ 4/5 Answer 4 documents at 32K, one question per call ================
-the longest prompt needs 39,269 tokens but the PC limit for qwen3_4b is 34,816.
-model qwen3_4b | profile pc | exp2 | prompt normal | T=0.0 seed=0
-4 documents, 48 questions; 0 documents already answered
-answers -> /home/monirul/nullscale_work/outputs/answers/exp2/qwen3_4b/normal_t0_s0.jsonl

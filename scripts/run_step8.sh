@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# scripts/run_step8.sh  (owner: Monirul)
+# scripts/run_step8.sh
 #
 # Step 8 cluster runs, using the existing runner (run/run_vllm.py) and scorer (score/score_all.py).
 #   glm6     GLM-4.5-Air on Exp 6 (the only model missing there): 1,500 answers, 4 x H200, about 2-3 h

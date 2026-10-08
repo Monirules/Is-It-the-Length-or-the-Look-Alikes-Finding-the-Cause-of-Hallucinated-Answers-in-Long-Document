@@ -1,4 +1,4 @@
-"""score/score_all.py  (owner: Jayden; written for the team by M. I. Mahmud)
+"""score/score_all.py
 
 Runs all scoring rules (refusal_rules, match_answer, capture_tag) on saved answers and makes ONE
 results table. This is the official scoring; it replaces the provisional rules in scripts/first_look.py.

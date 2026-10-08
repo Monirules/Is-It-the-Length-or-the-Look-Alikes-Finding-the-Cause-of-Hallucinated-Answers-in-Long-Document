@@ -1,4 +1,4 @@
-"""analysis/main_results.py  (owner: Monirul)
+"""analysis/main_results.py
 
 Main results for the paper from the official scores of every model: Exp 2 (look-alike ladder),
 Exp 3 (length with and without a strong look-alike), Exp 4 (copies), sibling filler, temperature

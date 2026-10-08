@@ -1,4 +1,4 @@
-"""riker/common.py  (shared helpers for the RIKER2 scripts; written by M. I. Mahmud)
+"""riker/common.py  (shared helpers for the RIKER2 scripts)
 
 What RIKER2 contains (checked on 2026-10-03 by reading both zip files' directories directly):
 

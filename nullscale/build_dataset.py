@@ -1,4 +1,4 @@
-"""nullscale/build_dataset.py  (owner: Monirul)
+"""nullscale/build_dataset.py
 
 Builds every NullScale document and question for the experiments in configs/experiments.yaml,
 proves absence for each document, and saves the final dataset.
@@ -7,7 +7,7 @@ proves absence for each document, and saves the final dataset.
   exp5               25 documents at 32K with strong look-alikes (200 + 100 questions); the
                      retrieval pool of 5,000 records for the fixes is built later, in fixes/
   exp7               20 documents at 32K with strong look-alikes
-  exp1, exp6         not NullScale (RIKER2 and Natural Questions, Jayden) -> skipped
+  exp1, exp6         not NullScale (RIKER2 and Natural Questions) -> skipped
 
 For every document: build -> absence_check -> if it fails, rebuild with a new seed (up to 5 tries)
 -> save. A document that still fails stops the run with an error, so nothing unproven is saved.

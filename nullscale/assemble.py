@@ -1,4 +1,4 @@
-"""nullscale/assemble.py  (owner: Monirul)
+"""nullscale/assemble.py
 
 Joins records into one document of exactly 8K, 32K, 64K or 128K tokens (within 1%), with the
 look-alike record(s) placed in the middle.

@@ -1,4 +1,4 @@
-"""score/capture_tag.py  (owner: Jayden; written for the team by M. I. Mahmud)
+"""score/capture_tag.py
 
 Checks whether a made-up answer COPIED the look-alike record's value. This is the "look-alike capture
 rate" in the proposal (Section 9): it shows the cause directly.

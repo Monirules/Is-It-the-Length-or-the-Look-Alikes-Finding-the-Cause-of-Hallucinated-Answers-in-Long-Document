@@ -1,4 +1,4 @@
-"""realdata/common.py  (shared helpers for Exp 6; written by M. I. Mahmud)
+"""realdata/common.py  (shared helpers for Exp 6)
 
 Answer matching (does a passage HOLD the answer?) and a small, fast BM25 index.
 

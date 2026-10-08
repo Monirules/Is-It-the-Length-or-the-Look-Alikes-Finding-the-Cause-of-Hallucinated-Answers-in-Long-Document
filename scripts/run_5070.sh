@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# scripts/run_5070.sh  (owner: Monirul)
+# scripts/run_5070.sh
 #
 # Step 6: the first end-to-end test on the RTX 5070 PC.
 #   Qwen3 4B Instruct 2507, 20 documents at 32K from Exp 2 (spread over every ladder x level cell),

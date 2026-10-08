@@ -7,3 +7,6 @@ hf_cache/
 __pycache__/
 *.pyc
 .ipynb_checkpoints/
+
+# private material kept out of the anonymous release
+_private/

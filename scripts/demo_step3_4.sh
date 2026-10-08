@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# scripts/demo_step3_4.sh  (owner: Monirul)
+# scripts/demo_step3_4.sh
 # Runs every Step 3-4 generator check in order and saves all output to logs/step3_4_demo_<time>.txt.
 # Run from the project folder, inside the nullscale conda env (WSL on the PC). No GPU needed.
 #   bash scripts/demo_step3_4.sh

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# scripts/setup_env.sh  (owner: Monirul)
+# scripts/setup_env.sh
 #
 # Creates the conda env "nullscale" (Python 3.11, vLLM, PyTorch, Transformers, pandas, statsmodels,
 # rank_bm25, ...) and checks that the GPU, vLLM and Hugging Face access all work.
@@ -12,7 +12,7 @@
 #
 # Safe to run again: an existing env is reused, packages are only upgraded if missing.
 # Every run writes a log to logs/setup_<profile>_<time>.log and the exact package versions
-# to logs/pip_freeze_<profile>.txt (put that file in git so Jayden's env matches).
+# to logs/pip_freeze_<profile>.txt (put that file in git so every machine's env matches).
 
 set -euo pipefail
 
@@ -65,7 +65,7 @@ python -m pip freeze > "$PROJECT_ROOT/logs/pip_freeze_${PROFILE}.txt"
 echo "package versions saved to logs/pip_freeze_${PROFILE}.txt"
 
 step "4/6 Link the project and set env variables"
-# A .pth file makes 'import nullscale' work from anywhere (safe with the spaces in the OneDrive path).
+# A .pth file makes 'import nullscale' work from anywhere (safe with spaces in the project path).
 SITE="$(python -c 'import site; print(site.getsitepackages()[0])')"
 echo "$PROJECT_ROOT" > "$SITE/nullscale_project.pth"
 HF_HOME_DIR="$(python -m nullscale.config --profile "$PROFILE" --get hf_home)"

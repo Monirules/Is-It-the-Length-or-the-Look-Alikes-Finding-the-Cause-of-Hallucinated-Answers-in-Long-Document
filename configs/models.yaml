@@ -1,4 +1,4 @@
-# configs/models.yaml  (owner: Monirul)
+# configs/models.yaml
 #
 # Every model the project uses. Keys (llama31_8b, ...) are the names used everywhere else
 # (experiments.yaml, answer files, figures).
@@ -128,7 +128,7 @@ open_models:
     vllm_args: {}
     chat_template_kwargs: {enable_thinking: false}   # GLM-4.5 thinks by default; we want direct answers
 
-# Optional: only if Prof. Zhan approves the ~$50 budget. Exp 2 only.
+# Optional API model (not used in the paper). Exp 2 only.
 api_models:
   claude_haiku45:
     family: anthropic
