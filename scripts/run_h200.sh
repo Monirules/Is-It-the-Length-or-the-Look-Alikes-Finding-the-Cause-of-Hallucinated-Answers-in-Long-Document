@@ -42,7 +42,7 @@ export TOKENIZERS_PARALLELISM=false
 export PYTHONUNBUFFERED=1
 
 ALL_MODELS="qwen3_4b llama31_8b gemma3_27b qwen3_30b_a3b llama33_70b qwen3_next_80b glm45_air"   # smallest first
-EXPECTED_exp2=1440; EXPECTED_exp3=3840; EXPECTED_exp4=960; EXPECTED_exp6=1500
+EXPECTED_exp2=1440; EXPECTED_exp3=3840; EXPECTED_exp4=960; EXPECTED_exp6=1500; EXPECTED_exp8=1080
 
 cfg() { python -m nullscale.config --profile cluster --get "$1" 2>/dev/null || true; }
 mcfg() { python - "$1" "$2" <<'PY'
@@ -270,7 +270,7 @@ complete() {   # all expected answers saved (or listed as skipped) for this mode
 import json, sys
 from pathlib import Path
 model, exps, root = sys.argv[1], sys.argv[2].split(","), Path(sys.argv[3])
-exp_n = {"exp2": 1440, "exp3": 3840, "exp4": 960, "exp6": 1500}
+exp_n = {"exp2": 1440, "exp3": 3840, "exp4": 960, "exp6": 1500, "exp8": 1080}
 ok = True
 for e in exps:
     f = root / e / model / "normal_t0_s0.jsonl"

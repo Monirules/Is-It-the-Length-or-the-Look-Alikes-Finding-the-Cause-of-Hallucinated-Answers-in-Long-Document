@@ -32,7 +32,7 @@ from dataclasses import dataclass, field
 from nullscale import schema as S
 from nullscale.records import Record, World, edit_distance
 
-LEVELS = ("none", "weak", "medium", "strong")
+LEVELS = ("none", "weak", "medium", "strong", "decoy")
 LADDERS = ("name", "role")
 
 QUESTION = {
@@ -68,10 +68,14 @@ class Case:
     target: dict                                          # what is asked (does not exist)
     lookalikes: list[Record] = field(default_factory=list)
     entities: list[Record] = field(default_factory=list)  # records that must be in the document
+    decoys: list[Record] = field(default_factory=list)
 
     def lookalike_values(self) -> list:
         """Value of the asked field in each look-alike (what a 'captured' wrong answer would copy)."""
-        return [r.get(self.field) for r in self.lookalikes]
+        return [] if self.level == "decoy" else [r.get(self.field) for r in self.lookalikes]
+
+    def decoy_values(self) -> list:
+        return [r.get(self.field) for r in self.decoys]
 
 
 def one_edit_variants(stem: str, rng: random.Random, k: int, avoid: list[str] = ()) -> list[str]:
@@ -104,6 +108,8 @@ def make_case(world: World, ladder: str, level: str, copies: int = 1,
     if field not in QUESTION[ladder]:
         raise ValueError(f"field {field} not supported on the {ladder} ladder")
     rng = world.rng
+    if level == "decoy":
+        return make_decoy_case(world, ladder, copies, field, probe_id, generic)
     k = 0 if level == "none" else copies
     las: list[Record] = []
 
@@ -155,6 +161,22 @@ def make_case(world: World, ladder: str, level: str, copies: int = 1,
         if field == "deposit" and field not in r.fields:     # asked optional field must exist in the look-alike
             r.fields[field] = world.money(r.get("monthly_rent"), r.get("monthly_rent") * 3)
     return Case(ladder, level, copies, field, question, target, las, entities)
+
+
+def make_decoy_case(world: World, ladder: str, copies: int, field: str, probe_id: str,
+                    generic: str | None) -> Case:
+    case = make_case(world, ladder, "none", copies, field, probe_id, generic)
+    other_generic = None
+    if ladder == "name":
+        other_generic = world.rng.choice([g for g in S.COMPANY_GENERICS if g not in world.reserved_generics])
+    other = make_case(world, ladder, "strong", copies, field, probe_id, other_generic)
+    case.level = "decoy"
+    case.decoys = other.lookalikes
+    for r in other.lookalikes:
+        r.role = "lookalike"
+        r.tags = {"ladder": ladder, "level": "decoy", "probe_id": probe_id, "decoy_for": other.target}
+    case.lookalikes = list(other.lookalikes)
+    return case
 
 
 def main() -> None:

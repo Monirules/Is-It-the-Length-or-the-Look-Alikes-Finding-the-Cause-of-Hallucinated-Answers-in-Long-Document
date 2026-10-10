@@ -184,8 +184,10 @@ def plan_document(world: World, ladder: str, level: str, copies: int,
         questions.append({
             "probe_id": pid, "answerable": False, "field": field, "template_id": tid, "question": text,
             "gold": None, "gold_aliases": [], "target": case.target,
-            "lookalike_rids": [r.rid for r in case.lookalikes],
+            "lookalike_rids": [] if case.level == "decoy" else [r.rid for r in case.lookalikes],
             "lookalike_values": [fmt_value(field, v) for v in case.lookalike_values()],
+            "decoy_rids": [r.rid for r in case.decoys],
+            "decoy_values": [fmt_value(field, v) for v in case.decoy_values()],
         })
     for i, field in enumerate(plan_fields(ladder, n_answerable, rng)):
         aid = f"a{i}"

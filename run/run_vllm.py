@@ -44,7 +44,7 @@ from nullscale.config import load_experiments, load_models, load_paths
 from run.prompts import build_batch_messages, build_messages, parse_batch_answer, prompt_version
 
 COPY_FIELDS = ("qid", "exp", "doc_id", "probe_id", "question", "answerable", "field", "ladder", "level",
-               "copies", "filler", "length_k", "gold", "gold_aliases", "lookalike_values")
+               "copies", "filler", "length_k", "gold", "gold_aliases", "lookalike_values", "decoy_values")
 EXP6_FIELDS = ("source", "setting", "nq_id", "true_answers")      # Exp 6 only (Wikipedia documents)
 
 
@@ -78,7 +78,7 @@ def select_documents(questions: list[dict], n_docs: int | None, balanced: bool,
         # order the cells so that any partial round is spread out: cells whose (ladder + level + ...)
         # index sum is even come first, e.g. name-none, role-weak, name-medium, role-strong, then the rest.
         # 20 documents over 8 cells then give every level 5 documents and every ladder 10.
-        order = {"name": 0, "role": 1, "none": 0, "weak": 1, "medium": 2, "strong": 3, "unrelated": 0, "sibling": 1}
+        order = {"name": 0, "role": 1, "none": 0, "weak": 1, "medium": 2, "strong": 3, "decoy": 1, "unrelated": 0, "sibling": 1}
         def parity(key):
             return sum(order.get(v, v if isinstance(v, int) else 0) for v in key[1:]) % 2
         cells = OrderedDict(sorted(cells.items(), key=lambda kv: (parity(kv[0]), kv[0][0],

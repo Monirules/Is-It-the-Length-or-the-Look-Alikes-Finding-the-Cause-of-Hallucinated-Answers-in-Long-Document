@@ -24,7 +24,7 @@ defaults:
   base_seed: 20261012                    # every experiment derives its seeds from this plus its own offset
   allowed:
     ladders: [name, role]
-    lookalike_levels: [none, weak, medium, strong]
+    lookalike_levels: [none, weak, medium, strong, decoy]
     filler: [unrelated, sibling]
 
 experiments:
@@ -141,4 +141,18 @@ experiments:
     filler: [unrelated]
     modes: [one_per_call, batch12]
     models: [qwen3_4b, llama31_8b]       # two models, small enough to also test on the PC
+    runs_on: [pc, cluster]
+
+  exp8:
+    rq: control
+    title: "Same eight extra records, but none matches the asked key"
+    type: nullscale
+    seed_offset: 8000
+    lengths: [32]
+    ladders: [name, role]
+    lookalike_levels: [none, decoy, strong]
+    lookalike_copies: [1]
+    filler: [unrelated]
+    contexts_per_cell: 15
+    models: all_open
     runs_on: [pc, cluster]
