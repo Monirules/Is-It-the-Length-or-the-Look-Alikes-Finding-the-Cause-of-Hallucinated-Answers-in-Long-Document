@@ -1,0 +1,19 @@
+{
+ "level": "L12",
+ "models": [
+  "glm_4_6",
+  "glm_4_7",
+  "llama_4_maverick_17b_128e_instruct",
+  "llama_4_scout_17b_16e_instruct",
+  "qwen3_235b_a22b_instruct_2507",
+  "qwen3_235b_a22b_instruct_2507_fp8",
+  "qwen3_30b_a3b_instruct_2507",
+  "qwen3_4b_instruct_2507",
+  "qwen3_coder_30b_a3b_instruct",
+  "qwen3_coder_480b_a35b_instruct",
+  "qwen3_next_80b_a3b_instruct"
+ ],
+ "n_models": 11,
+ "questions": 270,
+ "answers": 171711
+}
