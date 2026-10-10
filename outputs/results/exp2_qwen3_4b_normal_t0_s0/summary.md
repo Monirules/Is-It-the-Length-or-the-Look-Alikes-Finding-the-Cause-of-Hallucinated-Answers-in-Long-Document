@@ -1,40 +1,41 @@
-# Official scoring: qwen3_4b (fp8 (PC)), exp2, normal prompt, T=0, 20 documents at 32K. Official scoring.
+# Official scoring: qwen3_4b (bfloat16), exp2, normal prompt, T=0, 120 documents at 32K. Official scoring.
 
 Scoring rules: score/refusal_rules.py, score/match_answer.py, score/capture_tag.py (score-v1).
 
-240 answers from 20 documents: 160 with no answer, 80 with an answer.
+1440 answers from 120 documents: 960 with no answer, 480 with an answer.
 
 ## Questions with no answer: made-up answer rate (95% Wilson interval)
 
 | level | name ladder | role ladder | both |
 |---|---|---|---|
-| none | 0.0% [0.0, 19.4] (0/16) | 0.0% [0.0, 13.8] (0/24) | 0.0% [0.0, 8.8] (0/40) |
-| weak | 0.0% [0.0, 13.8] (0/24) | 0.0% [0.0, 19.4] (0/16) | 0.0% [0.0, 8.8] (0/40) |
-| medium | 25.0% [10.2, 49.5] (4/16) | 0.0% [0.0, 13.8] (0/24) | 10.0% [4.0, 23.1] (4/40) |
-| strong | 70.8% [50.8, 85.1] (17/24) | 43.8% [23.1, 66.8] (7/16) | 60.0% [44.6, 73.7] (24/40) |
+| none | 0.0% [0.0, 3.1] (0/120) | 0.0% [0.0, 3.1] (0/120) | 0.0% [0.0, 1.6] (0/240) |
+| weak | 0.8% [0.1, 4.6] (1/120) | 0.0% [0.0, 3.1] (0/120) | 0.4% [0.1, 2.3] (1/240) |
+| medium | 30.8% [23.3, 39.6] (37/120) | 0.8% [0.1, 4.6] (1/120) | 15.8% [11.8, 21.0] (38/240) |
+| strong | 80.8% [72.9, 86.9] (97/120) | 49.2% [40.4, 58.0] (59/120) | 65.0% [58.8, 70.8] (156/240) |
 
-Strict reading (made up, or refused but quoted the look-alike's value): none 0.0% [0.0, 8.8] (0/40), weak 0.0% [0.0, 8.8] (0/40), medium 15.0% [7.1, 29.1] (6/40), strong 75.0% [59.8, 85.8] (30/40)
+Strict reading (made up, or refused but quoted the look-alike's value): none 0.0% [0.0, 1.6] (0/240), weak 0.4% [0.1, 2.3] (1/240), medium 28.3% [23.0, 34.3] (68/240), strong 76.2% [70.5, 81.2] (183/240)
 
 ## Where the made-up answers came from
 
-Copied the look-alike record's value: 100.0% [87.9, 100.0] (28/28)
+Copied the look-alike record's value: 99.5% [97.2, 99.9] (194/195)
 
 | source | count |
 |---|---|
-| lookalike | 28 |
+| lookalike | 194 |
+| not_in_document | 1 |
 
 ## Questions with an answer
 
-Correct: 83.8% [74.2, 90.3] (67/80)  
-Wrongly refused: 16.2% [9.7, 25.8] (13/80)  
-Wrong value: 0.0% [0.0, 4.6] (0/80)  
-Other: 0.0% [0.0, 4.6] (0/80)
+Correct: 94.6% [92.2, 96.3] (454/480)  
+Wrongly refused: 5.0% [3.4, 7.3] (24/480)  
+Wrong value: 0.0% [0.0, 0.8] (0/480)  
+Other: 0.4% [0.1, 1.5] (2/480)
 
 ## Health checks
 
-- labels: {'refused': 132, 'correct': 67, 'wrong_refusal': 13, 'made_up': 28}
-- three-way outcome (plan): {'correct': 199, 'other': 13, 'made_up': 28}
-- answer part taken from: {'conclusion': 119, 'first_sentence': 111, 'final_line': 10}
-- refused first, then gave a value anyway: 5
+- labels: {'correct': 454, 'refused': 762, 'wrong_refusal': 24, 'made_up': 195, 'other': 5}
+- three-way outcome (plan): {'correct': 1216, 'other': 29, 'made_up': 195}
+- answer part taken from: {'first_sentence': 661, 'conclusion': 714, 'final_line': 65}
+- refused first, then gave a value anyway: 29
 - truncated at max_tokens: 0
 - empty responses: 0

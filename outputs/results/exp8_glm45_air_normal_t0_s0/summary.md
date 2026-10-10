@@ -2,39 +2,39 @@
 
 Scoring rules: score/refusal_rules.py, score/match_answer.py, score/capture_tag.py (score-v1).
 
-2160 answers from 90 documents: 1440 with no answer, 720 with an answer.
+1080 answers from 90 documents: 720 with no answer, 360 with an answer.
 
 ## Questions with no answer: made-up answer rate (95% Wilson interval)
 
 | filler | 32K |
 |---|---|
-| none | 0.6% [0.2, 1.8] (3/480) |
-| strong | 94.8% [92.4, 96.4] (455/480) |
-| decoy | 0.4% [0.1, 1.5] (2/480) |
+| none | 0.4% [0.1, 2.3] (1/240) |
+| strong | 95.0% [91.5, 97.1] (228/240) |
+| decoy | 0.4% [0.1, 2.3] (1/240) |
 
-Strict reading (made up, or refused but quoted the look-alike's value): none 0.6% [0.2, 1.8] (3/480), strong 94.8% [92.4, 96.4] (455/480), decoy 0.4% [0.1, 1.5] (2/480)
+Strict reading (made up, or refused but quoted the look-alike's value): none 0.4% [0.1, 2.3] (1/240), strong 95.0% [91.5, 97.1] (228/240), decoy 0.4% [0.1, 2.3] (1/240)
 
 ## Where the made-up answers came from
 
-Copied the look-alike record's value: 98.5% [96.9, 99.3] (453/460)
+Copied the look-alike record's value: 98.7% [96.2, 99.6] (227/230)
 
 | source | count |
 |---|---|
-| lookalike | 453 |
-| other_record | 7 |
+| lookalike | 227 |
+| other_record | 3 |
 
 ## Questions with an answer
 
-Correct: 99.7% [99.0, 99.9] (718/720)  
-Wrongly refused: 0.0% [0.0, 0.5] (0/720)  
-Wrong value: 0.3% [0.1, 1.0] (2/720)  
-Other: 0.0% [0.0, 0.5] (0/720)
+Correct: 99.7% [98.4, 100.0] (359/360)  
+Wrongly refused: 0.0% [0.0, 1.1] (0/360)  
+Wrong value: 0.3% [0.0, 1.6] (1/360)  
+Other: 0.0% [0.0, 1.1] (0/360)
 
 ## Health checks
 
-- labels: {'refused': 979, 'correct': 718, 'made_up': 460, 'wrong': 2, 'other': 1}
-- three-way outcome (plan): {'correct': 1697, 'made_up': 462, 'other': 1}
-- answer part taken from: {'first_sentence': 2160}
+- labels: {'refused': 490, 'correct': 359, 'made_up': 230, 'wrong': 1}
+- three-way outcome (plan): {'correct': 849, 'made_up': 231}
+- answer part taken from: {'first_sentence': 1080}
 - refused first, then gave a value anyway: 0
 - truncated at max_tokens: 0
 - empty responses: 0
