@@ -14,7 +14,7 @@ What it writes
   release/MANIFEST.csv                              one row per file: experiment, model, run, answers, sha256
 
 <E> is the experiment number used in the paper (code folder in brackets):
-  E1_lookalike_level [exp2]  E2_length_filler [exp3]  E3_copies [exp4]  E4_wikipedia [exp6]  E5_protocol [exp7]
+  E1_lookalike_level [exp2]  E2_length_filler [exp3]  E3_copies [exp4]  E4_wikipedia [exp6]  E5_protocol [exp7]  E6_decoy_control [exp8]
 
 Anonymity: absolute paths are cut to their file name, and the host name and the command line are dropped
 from the .meta.json files. No other field is changed.
@@ -34,7 +34,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT_ROOT))
 
 PAPER_EXP = {"exp2": "E1_lookalike_level", "exp3": "E2_length_filler", "exp4": "E3_copies",
-             "exp6": "E4_wikipedia", "exp7": "E5_protocol"}
+             "exp6": "E4_wikipedia", "exp7": "E5_protocol", "exp8": "E6_decoy_control"}
 ABS_PATH = re.compile(r"(?:/home|/N|/mnt|/scratch|/Users|/sessions|/tmp|[A-Za-z]:\\)[^\s\"']*[/\\]([^/\\\s\"']+)")
 DROP_META = {"argv", "host"}
 
