@@ -1,17 +1,17 @@
 """score/score_all.py
 
 Runs all scoring rules (refusal_rules, match_answer, capture_tag) on saved answers and makes ONE
-results table. This is the official scoring; it replaces the provisional rules in scripts/first_look.py.
+results table. This is the official scoring; it replaces the provisional rules in scripts/provisional_scoring.py.
 
 Input   every answers file in the agreed format, by default all of
         <paths.outputs.answers>/<exp>/<model>/<prompt>_t<temp>_s<seed>.jsonl
 Output  per answers file (large, in the work folder):
           <paths.outputs.scores>/<exp>/<model>/<prompt>_t<temp>_s<seed>.scored.jsonl
         shared and small (project folder, goes to git):
-          outputs/results/results_table.md / .csv   one row per condition, all files together
-          outputs/results/<exp>_<model>_<prompt>_t<temp>_s<seed>/
-              summary.md, scored.csv, fig5_first_run.png/.pdf, fig6_capture.png/.pdf,
-              changed_vs_provisional.md  (answers whose label differs from scripts/first_look.py)
+          outputs/scored_runs/results_table.md / .csv   one row per condition, all files together
+          outputs/scored_runs/<exp>_<model>_<prompt>_t<temp>_s<seed>/
+              summary.md, scored.csv, fig5_pilot_run.png/.pdf, fig6_capture.png/.pdf,
+              changed_vs_provisional.md  (answers whose label differs from scripts/provisional_scoring.py)
 
 Rates come with 95% Wilson intervals. "made up" = share of no-answer questions with label made_up.
 
@@ -225,17 +225,17 @@ def write_file_summary(scored: list[dict], out: Path, title: str) -> None:
 
 
 def compare_with_provisional(scored: list[dict], out: Path) -> None:
-    """List answers whose official label differs from the provisional first_look label."""
+    """List answers whose official label differs from the provisional provisional_scoring label."""
     try:
-        from first_look import label as provisional
-    except Exception:                                   # first_look not available: skip quietly
+        from provisional_scoring import label as provisional
+    except Exception:                                   # provisional_scoring not available: skip quietly
         return
     diff = []
     for r in scored:
         old = provisional(r)["label"]
         if old != r["label"]:
             diff.append((old, r))
-    L = ["# Answers whose label changed (provisional scripts/first_look.py -> official score/)", "",
+    L = ["# Answers whose label changed (provisional scripts/provisional_scoring.py -> official score/)", "",
          f"{len(diff)} of {len(scored)} answers changed: "
          + ", ".join(f"{a}->{b} {n}" for (a, b), n in Counter((o, r['label']) for o, r in diff).most_common()), ""]
     for old, r in diff:
@@ -264,7 +264,7 @@ def main(argv=None) -> list[dict]:
     ap.add_argument("--model")
     ap.add_argument("--data", help="NullScale data root (default: paths.yaml data.nullscale)")
     ap.add_argument("--scores-out", help="where .scored.jsonl go (default: paths.yaml outputs.scores)")
-    ap.add_argument("--results-out", default=str(PROJECT_ROOT / "outputs" / "results"))
+    ap.add_argument("--results-out", default=str(PROJECT_ROOT / "outputs" / "scored_runs"))
     ap.add_argument("--no-figures", action="store_true")
     ap.add_argument("--dpi", type=int, default=900)
     a = ap.parse_args(argv)
@@ -282,7 +282,7 @@ def main(argv=None) -> list[dict]:
             sys.exit("give --answers")
         files = find_answer_files(Path(paths["outputs"]["answers"]), a.exp, a.model)
     if not files:
-        sys.exit("no answers files found. Run run/run_vllm.py (or scripts/run_5070.sh) first.")
+        sys.exit("no answers files found. Run run/run_vllm.py (or scripts/run_single_gpu.sh) first.")
     data_root = Path(a.data) if a.data else (Path(paths["data"]["nullscale"]) if paths else None)
     scores_root = Path(a.scores_out) if a.scores_out else (Path(paths["outputs"]["scores"]) if paths else None)
     results_root = Path(a.results_out)
@@ -321,7 +321,7 @@ def main(argv=None) -> list[dict]:
         compare_with_provisional(scored, out)
         if not a.no_figures and all(r.get("level") in LEVELS for r in scored):
             try:
-                from first_look import figures
+                from provisional_scoring import figures
                 figures(scored, out, title, a.dpi)
             except Exception as e:
                 print(f"(figures skipped: {e})")

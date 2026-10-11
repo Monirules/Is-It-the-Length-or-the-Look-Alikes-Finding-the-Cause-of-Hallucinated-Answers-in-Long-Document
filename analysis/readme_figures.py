@@ -10,7 +10,7 @@ the paper (code folder names in brackets):
   Table 2                                         -> docs/figures/headline.png
 
 Usage (any machine, no GPU, a few seconds)
-  python -m analysis.readme_figures --results outputs/results_cluster --out docs/figures
+  python -m analysis.readme_figures --results outputs/scored_runs --out docs/figures
 """
 from __future__ import annotations
 
@@ -216,7 +216,7 @@ def fig_exp4(rows, out):
 
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--results", default=str(PROJECT_ROOT / "outputs" / "results_cluster"))
+    ap.add_argument("--results", default=str(PROJECT_ROOT / "outputs" / "scored_runs"))
     ap.add_argument("--out", default=str(PROJECT_ROOT / "docs" / "figures"))
     a = ap.parse_args(argv)
     rows = [r for r in load(Path(a.results)) if r["prompt"] == "normal"]

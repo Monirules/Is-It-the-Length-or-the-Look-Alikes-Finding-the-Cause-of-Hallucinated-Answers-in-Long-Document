@@ -1,0 +1,8 @@
+model,wilson,doc_bootstrap
+Qwen3 4B,128K,128K
+Llama 3.1 8B,128K,128K
+Gemma 3 27B,32K,32K
+Qwen3 30B A3B,128K,128K
+Llama 3.3 70B,128K,128K
+Qwen3 Next 80B,none,none
+GLM 4.5 Air 106B,128K,64K

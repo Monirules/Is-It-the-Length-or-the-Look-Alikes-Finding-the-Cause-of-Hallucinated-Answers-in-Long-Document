@@ -198,7 +198,7 @@ Each document is a set of records from an invented company archive, about compan
 
 ## 📊 Results
 
-All rates are made up answers on unanswerable questions (%) at temperature 0. Intervals resample whole documents (2,000 draws). Full tables are in [`outputs/figures_main/main_results.md`](outputs/figures_main/main_results.md) and [`outputs/review2/report.md`](outputs/review2/report.md).
+All rates are made up answers on unanswerable questions (%) at temperature 0. Intervals resample whole documents (2,000 draws). Full tables are in [`outputs/paper_figures/main_results.md`](outputs/paper_figures/main_results.md) and [`outputs/model_effects/report.md`](outputs/model_effects/report.md).
 
 ### 🟧 Exp 1 · One look-alike at a fixed length
 
@@ -238,7 +238,7 @@ All rates are made up answers on unanswerable questions (%) at temperature 0. In
 | GLM 4.5 Air 106B | name | 0.0 | 4.2 | 9.2 | 100.0 | +100.0 |
 | GLM 4.5 Air 106B | role | 0.8 | 16.7 | 39.2 | 86.7 | +85.8 |
 
-Source: [`B_ladder_exp1.csv`](outputs/overnight/B_ladder_exp1.csv).
+Source: [`B_ladder_exp1.csv`](outputs/robustness/B_ladder_exp1.csv).
 </details>
 
 ### 🟩 Exp 6 · Same records, no matching key
@@ -284,7 +284,7 @@ The **breaking length** (bold) is the first length whose 95% interval lies fully
 <summary><b>Per model fits and the length × look-alike interaction</b></summary>
 <br>
 
-One logistic regression per model on Exp 2, errors clustered by document, pooled with DerSimonian and Laird random effects ([`B_per_model_logit.csv`](outputs/review2/B_per_model_logit.csv), [`B_random_effects_pooled.csv`](outputs/review2/B_random_effects_pooled.csv)).
+One logistic regression per model on Exp 2, errors clustered by document, pooled with DerSimonian and Laird random effects ([`B_per_model_logit.csv`](outputs/model_effects/B_per_model_logit.csv), [`B_random_effects_pooled.csv`](outputs/model_effects/B_random_effects_pooled.csv)).
 
 | Term (log odds) | Pooled | 95% interval | Spread between models |
 |---|---:|---|---:|
@@ -293,7 +293,7 @@ One logistic regression per model on Exp 2, errors clustered by document, pooled
 | Length × strong look-alike | −1.57 | −3.01 to −0.14 | 1.92 |
 | Length × strong, without Qwen3 Next 80B | −2.00 | −2.99 to −1.02 | |
 
-The length slope is not positive in 25% of draws from the pooled distribution, so a single exchange rate between length and look-alikes is **not identified** and is no longer reported. On the probability scale, the change in the look-alike effect from 8K to the longest length has an interval that includes zero in five models with unrelated filler and is negative in six models with sibling filler ([`A_per_model_effects.csv`](outputs/review2/A_per_model_effects.csv)).
+The length slope is not positive in 25% of draws from the pooled distribution, so a single exchange rate between length and look-alikes is **not identified** and is no longer reported. On the probability scale, the change in the look-alike effect from 8K to the longest length has an interval that includes zero in five models with unrelated filler and is negative in six models with sibling filler ([`A_per_model_effects.csv`](outputs/model_effects/A_per_model_effects.csv)).
 </details>
 
 ### 🟨 Sibling padding as a context intervention
@@ -376,7 +376,7 @@ Our reading of the released RIKER2 answers reproduces the published fabrication 
 | 128K | 62% | 0.78 | 15.0% | 6.07 | 37.5 | 40.2 | −2.7 |
 | 200K | 61% | 0.76 | 14.6% | 8.64 | 45.4 | 53.7 | −8.3 |
 
-Look-alikes do not grow with length, but weaker near matches that share only part of the key do. The look-alike effect shrinks with length by −0.68 log odds per doubling, with a standard error of **0.15** when clustered by both question and model (question bootstrap −0.93 to −0.46, [`F_riker_clustered.csv`](outputs/review2/F_riker_clustered.csv)).
+Look-alikes do not grow with length, but weaker near matches that share only part of the key do. The look-alike effect shrinks with length by −0.68 log odds per doubling, with a standard error of **0.15** when clustered by both question and model (question bootstrap −0.93 to −0.46, [`F_riker_clustered.csv`](outputs/model_effects/F_riker_clustered.csv)).
 
 ### 🌡️ Temperature stability
 
@@ -441,7 +441,7 @@ python -m realdata.retrieve                   # Exp 4: similar and random Wikipe
 
 ```bash
 python -m run.run_vllm --model qwen3_4b --exp exp2      # one model, one experiment (code numbering)
-bash scripts/run_h200.sh submit                         # all models and experiments as Slurm jobs
+bash scripts/run_slurm.sh submit                         # all models and experiments as Slurm jobs
 python -m run.merge_shards --exp exp2 --model qwen3_4b  # merge data parallel shards
 ```
 </details>
@@ -451,9 +451,9 @@ python -m run.merge_shards --exp exp2 --model qwen3_4b  # merge data parallel sh
 
 ```bash
 python -m score.score_all                                              # scores and summary.md per run
-python -m analysis.main_results    --results outputs/results_cluster   # main tables and figures
-python -m analysis.overnight_checks --results outputs/results_cluster  # robustness checks
-python -m analysis.review2_checks                                      # per model fits, interaction, Exp 6, heuristic fit
+python -m analysis.main_results    --results outputs/scored_runs   # main tables and figures
+python -m analysis.robustness_checks --results outputs/scored_runs  # robustness checks
+python -m analysis.model_effects                                      # per model fits, interaction, Exp 6, heuristic fit
 python -m analysis.annotation_kit kappa                                # annotator agreement
 ```
 </details>
@@ -463,7 +463,7 @@ python -m analysis.annotation_kit kappa                                # annotat
 
 ```bash
 python -m riker.download_riker && python -m riker.find_lookalikes && python -m riker.reanalyze_riker
-python -m riker.riker_clustered --boot 500   # clustered errors for the length × look-alike term
+python -m riker.clustered_tests --boot 500   # clustered errors for the length × look-alike term
 python -m score.refusal_rules --riker        # agreement with RIKER2's scorer (99.21%, κ 0.981)
 ```
 </details>
@@ -482,26 +482,40 @@ python scripts/make_release.py
 
 ```text
 .
-├── nullscale/              the generator: world, records, templates, ladders, decoy control, fillers, absence proof
-├── run/                    prompts.py, run_vllm.py (sharded vLLM runner), merge_shards.py
-├── score/                  refusal_rules.py, match_answer.py, capture_tag.py, score_all.py
-├── riker/                  RIKER2 download, look-alike labels, reanalysis, clustered tests
-├── realdata/               Natural Questions build and BM25 or random retrieval
-├── analysis/               main_results, overnight_checks, review2_checks, annotation_kit, figures
-├── scripts/                setup, Slurm runner, make_release.py, release_to_results.py
-├── tests/                  absence proof and scoring rule tests
-├── configs/                paths.yaml, models.yaml, experiments.yaml
+├── nullscale/                 generator: world, records, templates, ladders, decoy control, fillers, absence proof
+├── run/                       prompts, sharded vLLM runner, shard merging, prefix cache timing
+├── score/                     refusal rules, answer matching, look-alike capture tag, scoring of all runs
+├── realdata/                  Natural Questions build and BM25 or random Wikipedia retrieval
+├── riker/                     RIKER2 download, look-alike labels, reanalysis, clustered tests
+├── analysis/
+│   ├── main_results.py        main tables and figures
+│   ├── model_effects.py       per model fits, interaction test, Exp 6 control, heuristic fit
+│   ├── robustness_checks.py   bf16 audit, ladder split, bootstraps, signal detection
+│   ├── document_stats.py      document level intervals, permutation and paired tests
+│   ├── annotation_kit.py      annotation sheets and Cohen's kappa
+│   └── readme_figures.py      figures in this README
+├── scripts/
+│   ├── setup_env.sh           environment setup
+│   ├── run_single_gpu.sh      full pipeline on one GPU
+│   ├── run_slurm.sh           all models and experiments as Slurm jobs
+│   ├── make_release.py        packs release/
+│   └── release_to_results.py  rebuilds scored tables from release/
+├── tests/                     absence proof and scoring rule tests
+├── configs/                   paths, models and experiments
+├── environment/               pinned package versions
 ├── outputs/
-│   ├── results_cluster/    one folder per run, scored.csv and summary.md
-│   ├── figures_main/       main figures and main_results.md
-│   ├── overnight/          robustness checks
-│   ├── review2/            per model fits, interaction, Exp 6, RIKER2 near matches and clustered tests
-│   ├── annotation/         two annotators, guide and agreement report
-│   ├── riker/              RIKER2 look-alike labels and reanalysis
-│   └── figures/            generator figures
-├── release/                raw responses and scored answers (.jsonl.gz) for E1 to E6, MANIFEST.csv
-├── docs/figures/           figures in this README
-└── hypotheses.md           pre-registered research questions and change log
+│   ├── scored_runs/           one folder per run, scored.csv and summary.md
+│   ├── paper_figures/         main figures and main_results.md
+│   ├── model_effects/         per model fits, interaction, Exp 6, RIKER2 near matches and clustered tests
+│   ├── robustness/            robustness checks
+│   ├── document_stats/        document level tests behind every interval in the paper
+│   ├── annotation/            two annotators, guide and agreement report
+│   ├── riker/                 RIKER2 look-alike labels and reanalysis
+│   ├── pilot_run/             first pilot run with provisional scoring
+│   └── figures/               generator figures
+├── release/                   raw responses and scored answers (.jsonl.gz) for E1 to E6, MANIFEST.csv
+├── docs/figures/              figures in this README
+└── hypotheses.md              pre-registered research questions and change log
 ```
 
 ---

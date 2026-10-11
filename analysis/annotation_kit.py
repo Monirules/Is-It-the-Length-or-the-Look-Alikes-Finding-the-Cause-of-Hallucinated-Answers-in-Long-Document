@@ -12,9 +12,9 @@ import pandas as pd
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from analysis.revision_checks import MODELS, load
+from analysis.document_stats import MODELS, load
 
-REV = PROJECT_ROOT / "outputs" / "revision"
+REV = PROJECT_ROOT / "outputs" / "document_stats"
 OUT = PROJECT_ROOT / "outputs" / "annotation"
 N_LABELS = ["R", "W", "U", "O"]
 W_LABELS = ["yes", "no", "unsure"]
@@ -34,7 +34,7 @@ def nq_true_answers(release: Path) -> pd.DataFrame:
 def make(n_null: int, n_wiki: int, release: Path, seed: int):
     OUT.mkdir(parents=True, exist_ok=True)
     rng = np.random.default_rng(seed)
-    df = load(PROJECT_ROOT / "outputs" / "results_cluster")
+    df = load(PROJECT_ROOT / "outputs" / "scored_runs")
 
     key_n = pd.read_csv(REV / "audit_nullscale_key.csv", dtype=str)
     ver_n = pd.read_csv(REV / "audit_nullscale_prelabeled.csv", dtype=str, keep_default_na=False)

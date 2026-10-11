@@ -1,0 +1,212 @@
+item,question,lookalike_values,response,label,confidence,reason,verified,notes
+N001,Which floor does Skeadror Studios lease?,21,Floor 21 of Ruhais Plaza.,U,high,look-alike value stated without warning,y,
+N002,What is the end date of Faistse Systems' lease?,2-Jun-21,"The end date of Faistse Systems' lease is June 2, 2021.",U,medium,a value is stated that is not the look-alike value,y,
+N003,On what floor of Skinheack Plaza is the space Skairtdel Outfitters leased starting in 2016?,21,Floor 21.,U,high,look-alike value stated without warning,y,
+N004,What is the end date of Bouszer Pharma's lease?,3-Jun-24,3-Jun-24,U,high,look-alike value stated without warning,y,
+N005,On what date did Brealban Outfitters' lease begin?,3-Apr-15,3-Apr-15,U,high,look-alike value stated without warning,y,
+N006,On what floor is the space leased by Cainweal Interiors?,29,Floor 29.,U,high,look-alike value stated without warning,y,
+N007,"According to the records, what is the monthly rent on Rurtpeand Consulting's lease?","$6,050 ","The monthly rent on Rurtpeand Consulting's lease is $6,050.",U,high,look-alike value stated without warning,y,
+N008,What is the start date of the lease held by Wiedien Interiors?,31-Jul-22,31-Jul-22,U,high,look-alike value stated without warning,y,
+N009,What floor number appears on Thierttart Pharma's lease?,10,10,U,high,look-alike value stated without warning,y,
+N010,What is the end date of Staicklel Optics' lease?,4-Dec-21,"December 4, 2021.",U,medium,a value is stated that is not the look-alike value,y,
+N011,How much rent per month did Naistshex Ventures pay at Noulstean Court under the lease that began in 2022?,"$44,550 ","$44,550 per month.",U,high,look-alike value stated without warning,y,
+N012,How much is Brevern Supply charged in rent each month?,"$47,650 ","$47,650 ",U,high,look-alike value stated without warning,y,
+N013,"For the lease between Brumga Supply and Mortsum Square that started in 2017, what is the monthly rent?","$22,100 ","The records do not contain information about a lease between Brumga Supply and Mortsum Square that started in 2017. The lease mentioned started on December 7, 2018, with a monthly rent of $22,100.",W,medium,refusal phrase and look-alike value both present,y,
+N014,When did Naisprarn Robotics start its lease?,6-Oct-13,"October 6, 2013.",U,medium,a value is stated that is not the look-alike value,y,
+N015,What is the end date of the lease Laindhan Media signed at Miestirtce Plaza starting in 2021?,28-Jan-27,28-Jan-27,U,high,look-alike value stated without warning,y,
+N016,What is the end date of the lease Skourtnand Printworks signed at Coagrairt Place starting in 2020?,14-Aug-24,"The lease for Skourtnand Printworks at Coagrairt Place started on August 14, 2021, and ends on August 14, 2024. 
+
+Answer: August 14, 2024.",U,medium,a value is stated that is not the look-alike value,y,Borderline: mentions a different start year than asked but never flags the mismatch; kept U
+N017,"For the lease between Cloakur Pharma and Tiexthun Plaza that started in 2020, what is the monthly rent?","$19,100 ","$19,100.00 ",U,high,look-alike value stated without warning,y,
+N018,On what floor of Briemsast Commons is the space Queartwoul Optics leased starting in 2015?,5,5,U,high,look-alike value stated without warning,y,
+N019,How much is Poaxteas Laboratories charged in rent each month?,"$9,200 ",The records do not contain information about Poaxteas Laboratories' monthly rent.,R,high,"refusal phrase, look-alike value not stated",y,
+N020,On what date does the 2017 lease between Skoarveart Interiors and Loszier Hall expire?,6-Apr-18,6-Apr-18,U,high,look-alike value stated without warning,y,
+N021,"According to the records, what is the monthly rent on Wainser Holdings' lease?","$38,800 ","The monthly rent on Waonser Holdings' lease is $38,800.",U,high,look-alike value stated without warning,y,"Response silently uses a slightly different company name; no warning, so U"
+N022,"For the lease between Prelgre Interiors and Chustkas Plaza that started in 2014, what was the deposit?","$13,300 ",The deposit for the lease between Prelgre Interiors and Chustkas Plaza that started in 2014 is not in the records.,R,high,"refusal phrase, look-alike value not stated",y,
+N023,When did Vonbeast Outfitters start its lease?,14-Jul-19,"Vonnbeast Outfitters started its lease on July 14, 2019.",U,medium,a value is stated that is not the look-alike value,y,"Response silently uses a slightly different company name; no warning, so U"
+N024,"For the lease between Vixviest Traders and Trouxpor Tower that started in 2020, which floor is it on?",25,It is on floor 25.,U,high,look-alike value stated without warning,y,
+N025,"For the lease between Thounquer Dynamics and Stemshoar Yard that started in 2018, what is the monthly rent?","$45,750 ","$45,750 ",U,high,look-alike value stated without warning,y,
+N026,On what date does the 2014 lease between Skoaxrearn Interiors and Skuxcha Tower expire?,28-Jan-17,"The records do not mention a lease between Skoaxrearn Interiors and Skuxcha Tower in 2014. The only lease mentioned for Skoaxrearn Interiors is from January 30, 2015, to January 28, 2017. Therefore, the 2014 lease does not exist in the records.",W,high,"refusal phrase, look-alike value not stated",n,Gives the 2015 lease end date (28-Jan-17) and explicitly says no 2014 lease exists
+N027,On what floor of Stulchea Yard is the space Flarnshien Partners leased starting in 2018?,24,Floor 24,U,high,look-alike value stated without warning,y,
+N028,How much rent per month did Skockdoarn Consulting pay at Sindcim Yard under the lease that began in 2019?,"$2,900 ",Not in the records.,R,high,"refusal phrase, look-alike value not stated",y,
+N029,"For the lease between Drulgream Printworks and Fiesttren Place that started in 2021, which floor is it on?",17,Not in the records.,R,high,"refusal phrase, look-alike value not stated",y,
+N030,When does the lease held by Hoarnchea Ventures expire?,26-Dec-23,"The lease held by Hoarncha Ventures expires on December 26, 2023.",U,medium,a value is stated that is not the look-alike value,y,"Response silently uses a slightly different company name; no warning, so U"
+N031,On what date did Tarstest Optics' lease begin?,20-Dec-21,"December 20, 2021.",U,high,look-alike value stated without warning,y,
+N032,What is the end date of the lease Clansha Networks signed at Dremcloul Commons starting in 2021?,5-Apr-27,5-Apr-27,U,high,look-alike value stated without warning,y,
+N033,What was the monthly rent of Treasrair Foods' lease at Stundviex Center that started in 2021?,"$35,350 ","The monthly rent of Treasrair Foods' lease at Stundviex Center that started in 2021 was $35,350.",U,high,look-alike value stated without warning,y,
+N034,What was the monthly rent of Fackquoax Traders' lease at Stunkaick Place that started in 2018?,"$42,500 ",It is not in the records.,R,high,"refusal phrase, look-alike value not stated",y,
+N035,What deposit did Baixstam Analytics pay for its lease?,"$90,950 ",The records do not contain information about the deposit paid by Baixstam Analytics for its lease.,R,high,"refusal phrase, look-alike value not stated",y,
+N036,What is the end date of Bouszer Pharma's lease?,3-Jun-24,3-Jun-24,U,high,look-alike value stated without warning,y,
+N037,On what floor of Biernstiex Square is the space Flounbreas Systems leased starting in 2020?,29,The space Flounbreas Systems leased at Biernstiex Square starting in 2020 is on floor 29.,U,high,look-alike value stated without warning,y,
+N038,How large was the security deposit on Zosbast Networks' lease?,"$28,500 ",The security deposit on Zosbest Networks' lease is not mentioned in the records.,R,high,"refusal phrase, look-alike value not stated",y,
+N039,What deposit did Trouxquund Pharma pay for its 2017 lease at Quiquairt Exchange?,"$40,900 ","$40,900.00 ",U,high,look-alike value stated without warning,y,
+N040,On what date does Naimskail Ventures' lease end?,10-Oct-26,"Naimskail Ventures' lease ends on October 10, 2026.",U,medium,a value is stated that is not the look-alike value,y,
+N041,What was the monthly rent of Viroulgrou Traders' lease at Wenlurn Court that started in 2017?,"$7,250 ","The monthly rent of Viroulgrou Traders' lease at Wenlurn Court that started in 2017 was $7,250.",U,high,look-alike value stated without warning,y,
+N042,"For the lease between Toulbeam Media and Soartpeas Yard that started in 2015, what is the monthly rent?","$21,050 ","The monthly rent for the lease between Toulbeam Media and Soartpeas Yard that started in 2015 is $21,050.",U,high,look-alike value stated without warning,y,
+N043,What deposit did Destfiex Media pay for its lease?,"$99,950 ","$99,950.00 ",U,high,look-alike value stated without warning,y,
+N044,Which floor does Wirnroam Analytics lease?,10,Wirnroam Analytics leases floor 10.,U,high,look-alike value stated without warning,y,
+N045,How much rent per month did Skockdoarn Consulting pay at Sindcim Yard under the lease that began in 2019?,"$2,900 ",It is not in the records.,R,high,"refusal phrase, look-alike value not stated",y,
+N046,How large was the security deposit on Skestam Pharma's lease at Shailcoack House that started in 2017?,"$96,300 ","$96,300 ",U,high,look-alike value stated without warning,y,
+N047,"For the lease between Gucklairn Systems and Driesskoa Yard that started in 2021, which floor is it on?",15,floor 25,U,medium,a value is stated that is not the look-alike value,y,"Value differs from look-alike; still a value with no warning, so U"
+N048,How large was the security deposit on Vouxflear Optics' lease at Pristpunla House that started in 2014?,"$43,300 ","The security deposit on Vouxflear Optics' lease at Pristpunla House was $43,300.",U,high,look-alike value stated without warning,y,
+N049,What is the start date of the lease held by Fliergind Holdings?,14-Dec-22,14-Dec-22,U,high,look-alike value stated without warning,y,
+N050,How large was the security deposit on Rockcil Analytics' lease?,"$44,350 ","The records do not contain information about Rockcil Analytics' lease or any security deposit related to it. Therefore, the answer is not in the records.",R,high,"refusal phrase, look-alike value not stated",y,
+N051,What floor number appears on Grortdairt Engineering's lease?,2,2,U,high,look-alike value stated without warning,y,
+N052,On what date does the 2021 lease between Rernbeart Robotics and Hostdres Court expire?,28-Jul-24,"December 31, 2028.",U,medium,a value is stated that is not the look-alike value,y,"Value differs from look-alike; still a value with no warning, so U"
+N053,When does the lease held by Londsheal Traders expire?,1-Apr-17,"The lease held by Londsheal Traders expires on April 1, 2017.",U,medium,a value is stated that is not the look-alike value,y,
+N054,"For the lease between Goartveam Pharma and Ceanand Hall that started in 2017, which floor is it on?",26,It is on floor 26.,U,high,look-alike value stated without warning,y,
+N055,On what date does the 2019 lease between Goandbail Printworks and Lockbiend House expire?,14-Aug-21,"The 2019 lease between Goandbail Printworks and Lockbiend House expires on August 14, 2021.",U,medium,a value is stated that is not the look-alike value,y,
+N056,"According to the records, what is the monthly rent on Rurtpeand Consulting's lease?","$6,050 ","$6,050 ",U,high,look-alike value stated without warning,y,
+N057,On what floor of Grartthi Tower is the space Foamclie Robotics leased starting in 2014?,3,Floor 2.,U,medium,a value is stated that is not the look-alike value,y,"Value differs from look-alike; still a value with no warning, so U"
+N058,On what date did Brealban Outfitters' lease begin?,3-Apr-15,"The records do not mention ""Brealban Outfitters."" However, there is a lease record for ""Brealben Outfitters"" which began on April 3, 2015.
+
+Answer: April 3, 2015.",W,high,"refusal phrase, look-alike value not stated",n,"Says name not in records, points to ""Brealben Outfitters"", then gives the date"
+N059,On what date does the 2016 lease between Grielruck Pharma and Nieckvoast Court expire?,23-Oct-22,"The 2016 lease between Grielruck Pharma and Nieckvoast Court expires on October 23, 2022.",U,medium,a value is stated that is not the look-alike value,y,
+N060,How large was the security deposit on Grersand Brewing's lease at Lousvox Center that started in 2015?,"$115,350 ","$115,350 ",U,high,look-alike value stated without warning,y,
+N061,"According to the records, what is the monthly rent on Praindwoux Outfitters' lease?","$6,050 ","$6,050 ",U,high,look-alike value stated without warning,y,
+N062,How large was the security deposit on Shurnclin Outfitters' lease?,"$39,650 ","$39,650.00 ",U,high,look-alike value stated without warning,y,
+N063,What floor number appears on Thierttart Pharma's lease?,10,The floor number on Thierttart Pharma's lease is 10.,U,high,look-alike value stated without warning,y,
+N064,What floor number appears on Gainwaist Consulting's lease?,22,The floor number that appears on Giinwaist Consulting's lease is 22.,U,high,look-alike value stated without warning,y,"Response silently uses a slightly different company name; no warning, so U"
+N065,On what date does Trocloas Pharma's lease end?,15-May-19,15-May-19,U,high,look-alike value stated without warning,y,
+N066,On what date does the 2020 lease between Toanshoast Outfitters and Vaindgro Exchange expire?,23-Feb-31,"The lease between Toanshoast Outfitters and Vaindgro Exchange (L-99007) expires on February 23, 2031.",U,medium,a value is stated that is not the look-alike value,y,
+N067,On what date does Shifom Dynamics' lease end?,24-May-27,24-May-27,U,high,look-alike value stated without warning,y,
+N068,On what date does the 2017 lease between Naxprarn Outfitters and Clustdir Court expire?,12-Apr-18,12-Apr-18,U,high,look-alike value stated without warning,y,
+N069,How much rent per month did Naistshex Ventures pay at Noulstean Court under the lease that began in 2022?,"$44,550 ","The records do not mention Naistshex Ventures paying rent at Noulstean Court under a lease that began in 2022. The only lease mentioned for Naistshex Ventures is at Noulstean Court from December 15, 2021, to December 15, 2024, with a monthly rent of $44,550. However, this lease began in 2021, not 2022.
+
+Therefore, the answer is not in the records.",W,medium,refusal phrase and look-alike value both present,y,
+N070,What was the monthly rent of Cliemtrirn Engineering's lease at Trurcliel Square that started in 2022?,"$10,700 ",The monthly rent of Cliemtrirn Engineering's lease at Trurcliel Square that started in 2022 is not in the records.,R,high,"refusal phrase, look-alike value not stated",y,
+N071,How large was the security deposit on Broultoart Studios' lease at Dostbroust House that started in 2018?,"$26,800 ",It is not in the records.,R,high,"refusal phrase, look-alike value not stated",y,
+N072,On what date did Grecktort Brewing's lease begin?,16-Jan-23,16-Jan-23,U,high,look-alike value stated without warning,y,
+N073,What security deposit is recorded for Gaicknend Analytics' lease?,"$22,300 ","$22,300 ",U,high,look-alike value stated without warning,y,
+N074,On what floor is the space leased by Beabarn Dynamics?,27,floor 27,U,high,look-alike value stated without warning,y,
+N075,"For the lease between Zundquirn Textiles and Ziexgear Hall that started in 2015, what was the deposit?","$76,050 ","The deposit for the lease between Zundquirn Textiles and Ziexgear Hall that started in 2015 was $76,050.",U,high,look-alike value stated without warning,y,
+N076,What was the monthly rent of Drirmoax Partners' lease at Noartmock Exchange that started in 2016?,"$14,100 ","$14,100 ",U,high,look-alike value stated without warning,y,
+N077,How large was the security deposit on Meartlea Robotics' lease at Sernkurt Tower that started in 2015?,"$28,200 ","$28,200 ",U,high,look-alike value stated without warning,y,
+N078,When does Taimquu Traders' lease at Bustkurt Commons that started in 2014 end?,16-Jul-16,"July 16, 2016.",U,medium,a value is stated that is not the look-alike value,y,
+N079,What monthly rent does Clirfoax Studios pay under its lease?,"$13,150 ","$45,050 ",U,medium,a value is stated that is not the look-alike value,y,"Value differs from look-alike; still a value with no warning, so U"
+N080,On what date does the 2019 lease between Goandbail Printworks and Lockbiend House expire?,14-Aug-21,"April 10, 2018.",U,medium,a value is stated that is not the look-alike value,y,"Value differs from look-alike; still a value with no warning, so U"
+N081,What was the monthly rent of Droumream Supply's lease at Rumoundsai Court that started in 2017?,"$42,900 ","The monthly rent of Droumream Supply's lease at Rumoundsai Court was $42,900.",U,high,look-alike value stated without warning,y,
+N082,How large was the security deposit on Stealcex Analytics' lease at Nesdroack Center that started in 2016?,"$114,750 ","The records do not mention a lease for Stealcex Analytics at Nesdroack Center that started in 2016. Therefore, the security deposit cannot be determined from the provided records.",R,high,"refusal phrase, look-alike value not stated",y,
+N083,What deposit did Noaproa Networks pay for its lease?,"$98,250 ",Not in the records.,R,high,"refusal phrase, look-alike value not stated",y,
+N084,What deposit did Thirstiex Analytics pay for its 2015 lease at Rostharn Square?,"$15,500 ","Thirstiex Analytics paid a deposit of $15,500 for its 2015 lease at Rostharn Square.",U,high,look-alike value stated without warning,y,
+N085,What deposit did Baixstam Analytics pay for its lease?,"$90,950 ","$90,950.00 ",U,high,look-alike value stated without warning,y,
+N086,What is the end date of Clartboas Analytics' lease?,11-Nov-17,"The end date of Clartboas Analytics' lease is November 11, 2017.",U,medium,a value is stated that is not the look-alike value,y,
+N087,What was the monthly rent of Riemfoar Robotics' lease at Broastbras Square that started in 2016?,"$22,350 ",It is not in the records.,R,high,"refusal phrase, look-alike value not stated",y,
+N088,What floor number appears on Stilgrais Holdings' lease?,20,Floor 20.,U,high,look-alike value stated without warning,y,
+N089,What is the end date of the lease Laindhan Media signed at Miestirtce Plaza starting in 2021?,28-Jan-27,"January 28, 2027.",U,medium,a value is stated that is not the look-alike value,y,
+N090,"For the lease between Skurpries Laboratories and Stuzairn Place that started in 2019, what is the monthly rent?","$45,350 ",The records do not contain a lease between Skurpries Laboratories and Stuzairn Place that started in 2019.,R,high,"refusal phrase, look-alike value not stated",y,
+N091,When did Cixwernes Logistics start its lease?,7-Sep-17,"Cixwernes Logistics started its lease on September 7, 2017.",U,medium,a value is stated that is not the look-alike value,y,
+N092,When does Gustort Systems' lease at Lurtgoust Place that started in 2015 end?,3-May-24,"The lease started on May 3, 2014, and ends on May 3, 2024.",U,medium,a value is stated that is not the look-alike value,y,Borderline: mentions a different start year than asked but never flags the mismatch; kept U
+N093,"According to the records, what is the monthly rent on Brertda Outfitters' lease?","$47,500 ","$47,500 ",U,high,look-alike value stated without warning,y,
+N094,On what floor is the space leased by Cainweal Interiors?,29,29,U,high,look-alike value stated without warning,y,
+N095,What deposit did Baixstam Analytics pay for its lease?,"$90,950 ","Baixstim Analytics paid a security deposit of $90,950.",U,high,look-alike value stated without warning,y,"Response silently uses a slightly different company name; no warning, so U"
+N096,When does Gustort Systems' lease at Lurtgoust Place that started in 2015 end?,3-May-24,Not in the records.,R,high,"refusal phrase, look-alike value not stated",y,
+N097,On what date does the 2016 lease between Grielruck Pharma and Nieckvoast Court expire?,23-Oct-22,"October 23, 2022.",U,medium,a value is stated that is not the look-alike value,y,
+N098,On what floor of Quortnoack Place is the space Trisquel Dynamics leased starting in 2020?,14,Floor 14,U,high,look-alike value stated without warning,y,
+N099,What deposit did Brirtbul Networks pay for its 2015 lease at Nithatai Exchange?,"$13,600 ",Not in the records.,R,high,"refusal phrase, look-alike value not stated",y,
+N100,What deposit did Voshurt Holdings pay for its lease?,"$64,200 ","$66,500 ",U,medium,a value is stated that is not the look-alike value,y,"Value differs from look-alike; still a value with no warning, so U"
+N101,On what date does the 2021 lease between Cagriern Supply and Sealbirt Yard expire?,28-Oct-29,28-Oct-29,U,high,look-alike value stated without warning,y,
+N102,"For the lease between Chundgourt Systems and Leclouck House that started in 2022, which floor is it on?",10,It is on floor 10.,U,high,look-alike value stated without warning,y,
+N103,How much is Waxtoar Laboratories charged in rent each month?,"$32,000 ",It is not in the records.,R,high,"refusal phrase, look-alike value not stated",y,
+N104,When does Gustort Systems' lease at Lurtgoust Place that started in 2015 end?,3-May-24,"The lease at Lurtgoust Place that started in 2015 ends on May 3, 2024.",U,medium,a value is stated that is not the look-alike value,y,
+N105,What monthly rent does Cierfoack Brewing pay under its lease?,"$45,350 ","$45,350 ",U,high,look-alike value stated without warning,y,
+N106,On what date did Tarstest Optics' lease begin?,20-Dec-21,20-Dec-21,U,high,look-alike value stated without warning,y,
+N107,Which floor does Cluskam Printworks lease?,27,floor 27,U,high,look-alike value stated without warning,y,
+N108,Which floor did Clostcleam Studios lease at Gienwailka Exchange under the lease that started in 2018?,6,Floor 6.,U,high,look-alike value stated without warning,y,
+N109,Which floor did Queswart Optics lease at Vaixzirt Place under the lease that started in 2021?,19,19,U,high,look-alike value stated without warning,y,
+N110,On what date does the 2017 lease between Manzoum Outfitters and Triestpoam Square expire?,28-Jan-19,"The lease between Manzoum Outfitters and Triestpoam Square expires on January 28, 2019.",U,medium,a value is stated that is not the look-alike value,y,
+N111,What is the start date of the lease held by Brornriest Optics?,25-Jan-22,"The start date of the lease held by Brornriest Optics is January 25, 2022.",U,medium,a value is stated that is not the look-alike value,y,
+N112,What was the monthly rent of Flainsost Printworks' lease at Souxquoar House that started in 2020?,"$22,550 ",The records do not contain the answer.,R,high,"refusal phrase, look-alike value not stated",y,
+N113,On what date did Tarstest Optics' lease begin?,20-Dec-21,20-Dec-21,U,high,look-alike value stated without warning,y,
+N114,"For the lease between Fonquedund Ventures and Stounlair Hall that started in 2017, which floor is it on?",6,The lease between Fonquedund Ventures and Stounlair Hall is on floor 6.,U,high,look-alike value stated without warning,y,
+N115,What was the monthly rent of Droumream Supply's lease at Rumoundsai Court that started in 2017?,"$42,900 ","$42,900 ",U,high,look-alike value stated without warning,y,
+N116,What is the end date of the lease Saxstert Foods signed at Dienfem Tower starting in 2022?,19-Aug-31,"The lease for Saxstert Foods at Dienfem Tower started on August 19, 2021, and ends on August 19, 2031. Therefore, the end date is August 19, 2031.",U,medium,a value is stated that is not the look-alike value,y,Borderline: mentions a different start year than asked but never flags the mismatch; kept U
+N117,On what floor of Woastniel Place is the space Weacktrur Logistics leased starting in 2022?,13,Floor 13,U,high,look-alike value stated without warning,y,
+N118,When does the lease held by Kiskal Dynamics expire?,5-Jan-25,The lease held by Kiskal Dynamics is not in the records.,R,high,"refusal phrase, look-alike value not stated",y,
+N119,On what date does Wenclourn Studios' lease end?,12-Apr-19,"April 12, 2019.",U,medium,a value is stated that is not the look-alike value,y,
+N120,When does Pieckpast Outfitters' lease at Ziexflorn Square that started in 2021 end?,25-Feb-29,"February 25, 2029.",U,medium,a value is stated that is not the look-alike value,y,
+N121,What deposit did Quairtchea Pharma pay for its 2014 lease at Zarflea Court?,"$22,450 ",The records do not contain the answer.,R,high,"refusal phrase, look-alike value not stated",y,
+N122,Which floor did Noxgist Supply lease at Feasgas Place under the lease that started in 2019?,9,Floor 9.,U,high,look-alike value stated without warning,y,
+N123,On what floor of Zaimou Commons is the space Shomquairt Consulting leased starting in 2021?,20,Floor 18.,U,medium,a value is stated that is not the look-alike value,y,"Value differs from look-alike; still a value with no warning, so U"
+N124,Which floor did Noxgist Supply lease at Feasgas Place under the lease that started in 2019?,9,"Noxgist Supply leased floor 9 at Feasgas Place under lease L-94508, which started on February 1, 2018, not in 2019. There is no lease starting in 2019 mentioned for Noxgist Supply at Feasgas Place.",W,medium,refusal phrase and look-alike value both present,y,
+N125,On what date does the 2020 lease between Toanshoast Outfitters and Vaindgro Exchange expire?,23-Feb-31,"The 2020 lease between Toanshoast Outfitters and Vaindgro Exchange expires on February 23, 2031.",U,medium,a value is stated that is not the look-alike value,y,
+N126,Which floor did Pindbrea Systems lease at Thirnhiend Square under the lease that started in 2019?,22,Floor 22.,U,high,look-alike value stated without warning,y,
+N127,What is the start date of the lease held by Gestcoa Outfitters?,5-Dec-21,23-Mar-18,U,medium,a value is stated that is not the look-alike value,y,"Value differs from look-alike; still a value with no warning, so U"
+N128,What is the end date of the lease Mivast Robotics signed at Nulir Square starting in 2017?,11-Jul-28,11-Jul-28,U,high,look-alike value stated without warning,y,
+N129,When does Pieckpast Outfitters' lease at Ziexflorn Square that started in 2021 end?,25-Feb-29,"February 25, 2029.",U,medium,a value is stated that is not the look-alike value,y,
+N130,"For the lease between Bartre Optics and Marzitrien House that started in 2014, what was the deposit?","$122,650 ","The lease between Bartre Optics and Marzitrien House started in 2015, not 2014. The deposit for this lease was $122,650.",W,medium,look-alike value stated with a warning word,y,
+N131,What is the start date of the lease held by Laigost Consulting?,17-Dec-16,"It is not in the records. The lease is held by Liigost Consulting, not Laigost Consulting. The start date for Liigost Consulting is December 17, 2016.",W,high,"refusal phrase, look-alike value not stated",n,"Says Laigost not in records, flags Liigost as the holder, then gives the date"
+N132,How large was the security deposit on Vouxflear Optics' lease at Pristpunla House that started in 2014?,"$43,300 ","$43,300 ",U,high,look-alike value stated without warning,y,
+N133,"For the lease between Flurdain Printworks and Dournqui Plaza that started in 2022, what is the monthly rent?","$28,750 ","$28,750 ",U,high,look-alike value stated without warning,y,
+N134,What deposit did Voshurt Holdings pay for its lease?,"$64,200 ","The records do not mention Voshurt Holdings. The correct name in the records is ""Voshort Holdings,"" and for that, the deposit paid is $64,200. 
+
+Answer: $64,200.",W,medium,refusal phrase and look-alike value both present,y,
+N135,When does the lease held by Kiskal Dynamics expire?,5-Jan-25,"The lease held by Kiskal Dynamics expires on January 5, 2025.",U,medium,a value is stated that is not the look-alike value,y,
+N136,"For the lease between Skolkem Engineering and Thommis Point that started in 2014, what is the monthly rent?","$6,700 ","$6,700 ",U,high,look-alike value stated without warning,y,
+N137,"For the lease between Toazeck Studios and Dristboa Center that started in 2015, what is the monthly rent?","$37,700 ","The monthly rent for the lease between Toazeck Studios and Dristboa Center that started in 2015 is $37,700.",U,high,look-alike value stated without warning,y,
+N138,Which floor did Noxgist Supply lease at Feasgas Place under the lease that started in 2019?,9,Noxgist Supply leased floor 9 at Feasgas Place under the lease that started in 2019.,U,high,look-alike value stated without warning,y,
+N139,What security deposit is recorded for Draiskiern Printworks' lease?,"$78,750 ","The security deposit recorded for Draiskiern Printworks' lease is $78,750.",U,high,look-alike value stated without warning,y,
+N140,Which floor did Zounskes Brewing lease at Palqueas Point under the lease that started in 2020?,22,Floor 22.,U,high,look-alike value stated without warning,y,
+N141,"According to the records, what is the monthly rent on Brertda Outfitters' lease?","$47,500 ","$47,500 ",U,high,look-alike value stated without warning,y,
+N142,Which floor does Cluskam Printworks lease?,27,Cluskam Printworks leases floor 27.,U,high,look-alike value stated without warning,y,
+N143,What is the end date of Clartboas Analytics' lease?,11-Nov-17,11-Nov-17,U,high,look-alike value stated without warning,y,
+N144,On what floor is the space leased by Trestwend Pharma?,22,The space leased by Trestwend Pharma is on floor 22 of Konrai Yard.,U,high,look-alike value stated without warning,y,
+N145,When does Peckthert Media's lease at Lournsox Exchange that started in 2016 end?,3-Dec-24,"Peckthert Media's lease at Lournsox Exchange that started in 2016 ends on December 3, 2024.",U,medium,a value is stated that is not the look-alike value,y,
+N146,How much rent per month did Domgoack Consulting pay at Naimkind House under the lease that began in 2014?,"$12,100 ",Not in the records.,R,high,"refusal phrase, look-alike value not stated",y,
+N147,How much is Meackwieck Engineering charged in rent each month?,"$5,400 ","Meackwieck Engineering is charged $5,400 per month in rent.",U,high,look-alike value stated without warning,y,
+N148,How large was the security deposit on Broultoart Studios' lease at Dostbroust House that started in 2018?,"$26,800 ","The security deposit on Broultoart Studios' lease at Dostbroust House was $26,800.",U,high,look-alike value stated without warning,y,
+N149,"For the lease between Roanquand Laboratories and Vailrack Hall that started in 2014, what was the deposit?","$75,750 ","$75,750 ",U,high,look-alike value stated without warning,y,
+N150,When did Bieckstom Analytics start its lease?,1-Aug-20,"Bieckstom Analytics started its lease on August 1, 2020.",U,high,look-alike value stated without warning,y,
+N151,When does Woaszurn Ventures' lease at Kostges Exchange that started in 2022 end?,4-Apr-30,"Woaszurn Ventures' lease at Kostges Exchange started in 2023, not 2022. The lease runs from April 4, 2023, to April 4, 2030. Therefore, it ends on April 4, 2030.",W,medium,a value is stated that is not the look-alike value,n,"Explicitly says lease started 2023 not 2022, then gives the end date"
+N152,What deposit did Giestboart Supply pay for its lease?,"$58,100 ","The deposit paid by Gestboart Supply for its lease is $58,100.",U,high,look-alike value stated without warning,y,"Response silently uses a slightly different company name; no warning, so U"
+N153,On what date does Trocloas Pharma's lease end?,15-May-19,"May 15, 2019.",U,medium,a value is stated that is not the look-alike value,y,
+N154,What monthly rent does Clirfoax Studios pay under its lease?,"$13,150 ","$13,150 ",U,high,look-alike value stated without warning,y,
+N155,On what floor is the space leased by Biestso Systems?,9,Floor 18.,U,medium,a value is stated that is not the look-alike value,y,"Value differs from look-alike; still a value with no warning, so U"
+N156,On what floor of Biernstiex Square is the space Flounbreas Systems leased starting in 2020?,29,Flounbreas Systems leases floor 29 at Biernstiex Square.,U,high,look-alike value stated without warning,y,
+N157,"For the lease between Thounquer Dynamics and Stemshoar Yard that started in 2018, what is the monthly rent?","$45,750 ","$45,750.00 ",U,high,look-alike value stated without warning,y,
+N158,"For the lease between Brumga Supply and Mortsum Square that started in 2017, what is the monthly rent?","$22,100 ","The lease between Brumga Supply and Mortsum Square started in December 2018, not 2017. The monthly rent is $22,100.",W,medium,look-alike value stated with a warning word,y,
+N159,How large was the security deposit on Rockcil Analytics' lease?,"$44,350 ","$44,350 ",U,high,look-alike value stated without warning,y,
+N160,What is the start date of the lease held by Sterdruck Textiles?,11-Nov-19,"The start date of the lease held by Sterdruck Textiles is November 11, 2019.",U,medium,a value is stated that is not the look-alike value,y,
+N161,How large was the security deposit on Douslol Brewing's lease?,"$78,650 ","The security deposit on Duuslol Brewing's lease was $78,650.",U,high,look-alike value stated without warning,y,"Response silently uses a slightly different company name; no warning, so U"
+N162,On what floor is the space leased by Beabarn Dynamics?,27,Floor 27.,U,high,look-alike value stated without warning,y,
+N163,How large was the security deposit on Meartlea Robotics' lease at Sernkurt Tower that started in 2015?,"$28,200 ",It is not in the records.,R,high,"refusal phrase, look-alike value not stated",y,
+N164,What deposit did Voalcleas Traders pay for its 2016 lease at Dartbes Hall?,"$21,500 ","Voalcleas Traders paid a security deposit of $21,500 for its lease at Dartbes Hall.",U,high,look-alike value stated without warning,y,
+N165,How large was the security deposit on Douslol Brewing's lease?,"$78,650 ","$78,650 ",U,high,look-alike value stated without warning,y,
+N166,"For the lease between Cloakur Pharma and Tiexthun Plaza that started in 2020, what is the monthly rent?","$19,100 ","The monthly rent for the lease between Cloakur Pharma and Tiexthun Plaza that started in 2020 is $19,100.",U,high,look-alike value stated without warning,y,
+N167,How much is Drierpaind Interiors charged in rent each month?,"$43,650 ","$30,650 ",U,medium,a value is stated that is not the look-alike value,y,"Value differs from look-alike; still a value with no warning, so U"
+N168,On what floor is the space leased by Cainweal Interiors?,29,29,U,high,look-alike value stated without warning,y,
+N169,What floor number appears on Gainwaist Consulting's lease?,22,Floor 22,U,high,look-alike value stated without warning,y,
+N170,What deposit did Baixstam Analytics pay for its lease?,"$90,950 ","$90,950 ",U,high,look-alike value stated without warning,y,
+N171,How large was the security deposit on Groanshul Logistics' lease?,"$42,150 ","The security deposit on Groenshul Logistics' lease was $42,150.",U,high,look-alike value stated without warning,y,"Response silently uses a slightly different company name; no warning, so U"
+N172,On what date does Shifom Dynamics' lease end?,24-May-27,"Shifim Dynamics' lease ends on May 24, 2027.",U,medium,a value is stated that is not the look-alike value,y,"Response silently uses a slightly different company name; no warning, so U"
+N173,What security deposit is recorded for Drudroul Logistics' lease?,"$33,500 ","$33,500.00 ",U,high,look-alike value stated without warning,y,
+N174,What deposit did Stalgroand Supply pay for its lease?,"$3,900 ",It is not in the records.,R,high,"refusal phrase, look-alike value not stated",y,
+N175,How large was the security deposit on Grersand Brewing's lease at Lousvox Center that started in 2015?,"$115,350 ","$115,350 ",U,high,look-alike value stated without warning,y,
+N176,When does Pumpix Networks' lease at Keastweart Hall that started in 2017 end?,5-Jul-28,"April 4, 2020.",U,medium,a value is stated that is not the look-alike value,y,"Value differs from look-alike; still a value with no warning, so U"
+N177,What is the start date of the lease held by Fluckbriex Printworks?,3-Nov-13,3-Nov-13,U,high,look-alike value stated without warning,y,
+N178,What floor number appears on Presthoam Outfitters' lease?,19,19,U,high,look-alike value stated without warning,y,
+N179,What deposit did Voalcleas Traders pay for its 2016 lease at Dartbes Hall?,"$21,500 ","$21,500.00 ",U,high,look-alike value stated without warning,y,
+N180,On what floor is the space leased by Zainquiem Engineering?,13,Floor 25.,U,medium,a value is stated that is not the look-alike value,y,"Value differs from look-alike; still a value with no warning, so U"
+N181,What security deposit is recorded for Pantirtrea Brewing's lease?,"$60,950 ","The security deposit for Pantirtreu Brewing's lease is $60,950.",U,high,look-alike value stated without warning,y,"Response silently uses a slightly different company name; no warning, so U"
+N182,On what floor of Woastniel Place is the space Weacktrur Logistics leased starting in 2022?,13,Weacktrur Logistics leases floor 13 of Woastniel Place.,U,high,look-alike value stated without warning,y,
+N183,What was the monthly rent of Viertproal Printworks' lease at Corpeart Tower that started in 2015?,"$41,250 ","The monthly rent of Viertproal Printworks' lease at Corpeart Tower that started in 2015 was $41,250.",U,high,look-alike value stated without warning,y,
+N184,When does the lease held by Londsheal Traders expire?,1-Apr-17,1-Apr-17,U,high,look-alike value stated without warning,y,
+N185,"According to the records, what is the monthly rent on Wainser Holdings' lease?","$38,800 ",It is not in the records.,R,high,"refusal phrase, look-alike value not stated",y,
+N186,"For the lease between Stiexzol Printworks and Brindiert Exchange that started in 2020, which floor is it on?",2,"The lease between Stiexzol Printworks and Brindiert Exchange started on July 25, 2021, not 2020. The lease is for floor 2 of Brindiert Exchange. 
+
+Answer: floor 2.",W,medium,look-alike value stated with a warning word,y,
+N187,On what date does the 2017 lease between Quurtvox Engineering and Skalhurt Tower expire?,11-Sep-26,"The 2017 lease between Quurtvox Engineering and Skalhurt Tower expires on September 11, 2026.",U,medium,a value is stated that is not the look-alike value,y,
+N188,How large was the security deposit on Villoust Supply's lease at Thurnkol Hall that started in 2019?,"$25,600 ","$49,000 ",U,medium,a value is stated that is not the look-alike value,y,"Value differs from look-alike; still a value with no warning, so U"
+N189,When does Restbist Pharma's lease at Brastfle Place that started in 2014 end?,21-Feb-15,"The records do not contain the start date of 2014 for Restbist Pharma's lease. According to the records, Restbist Pharma's lease at Brastfle Place started on February 21, 2013, and ends on February 21, 2015.",W,high,"refusal phrase, look-alike value not stated",n,"Flags lease actually started 2013 (not 2014), then gives the end date"
+N190,What is the end date of Faistse Systems' lease?,2-Jun-21,2-Jun-21,U,high,look-alike value stated without warning,y,
+N191,How much rent per month did Skoalzort Studios pay at Toarnlous Center under the lease that began in 2014?,"$11,950 ","$11,950.00 ",U,high,look-alike value stated without warning,y,
+N192,"For the lease between Toulbeam Media and Soartpeas Yard that started in 2015, what is the monthly rent?","$21,050 ","$5,900 ",U,medium,a value is stated that is not the look-alike value,y,"Value differs from look-alike; still a value with no warning, so U"
+N193,What is the end date of Cloalstous Optics' lease?,28-Aug-21,"The end date of Cloalstous Optics' lease is August 28, 2021.",U,medium,a value is stated that is not the look-alike value,y,
+N194,What deposit did Grortchirn Engineering pay for its lease?,"$102,600 ","The records do not mention ""Grortchirn Engineering"" or any lease associated with that name. Therefore, the deposit paid by Grortchirn Engineering is not in the records.",R,high,"refusal phrase, look-alike value not stated",y,
+N195,On what floor is the space leased by Zainquiem Engineering?,13,13,U,high,look-alike value stated without warning,y,
+N196,"For the lease between Skolkem Engineering and Thommis Point that started in 2014, what is the monthly rent?","$6,700 ","The lease between Skolkem Engineering and Thommis Point started on October 22, 2015, and the monthly rent is $6,700.",U,high,look-alike value stated without warning,y,Borderline: mentions a different start year than asked but never flags the mismatch; kept U
+N197,When did Driernwiex Logistics start its lease?,30-Dec-18,"Driernwiex Logistics started its lease on December 30, 2018.",U,medium,a value is stated that is not the look-alike value,y,
+N198,What security deposit is recorded for Kortbrack Logistics' lease?,"$56,800 ",It is not in the records.,R,high,"refusal phrase, look-alike value not stated",y,
+N199,When does Woaszurn Ventures' lease at Kostges Exchange that started in 2022 end?,4-Apr-30,The records do not contain information about Woaszurn Ventures' lease at Kostges Exchange.,R,high,"refusal phrase, look-alike value not stated",y,
+N200,Which floor did Drurtrurn Supply lease at Cescla Hall under the lease that started in 2015?,15,Drurtrurn Supply leased floor 15 at Cescla Hall under the lease that started in 2015.,U,high,look-alike value stated without warning,y,
+N201,How much is Cirnveam Brewing charged in rent each month?,"$21,400 ","Cirnviam Brewing is charged $21,400 in rent each month.",U,high,look-alike value stated without warning,y,"Response silently uses a slightly different company name; no warning, so U"

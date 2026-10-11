@@ -1,0 +1,203 @@
+{
+ "models": [
+  "Qwen3 4B",
+  "Llama 3.1 8B",
+  "Gemma 3 27B",
+  "Qwen3 30B-A3B",
+  "Llama 3.3 70B",
+  "Qwen3-Next 80B",
+  "GLM-4.5-Air"
+ ],
+ "exchange": 5.85470810349573,
+ "exchange_lo": 5.516866460922245,
+ "exchange_hi": 6.252056760344957,
+ "exchange_sens": 7.936947871712995,
+ "or_strong": 123.66342070704316,
+ "or_doubling": 1.1224027793789595,
+ "or_sibling": 0.5842260520586199,
+ "n_reg": 16960,
+ "b_len_none": 1.8264978790034336,
+ "b_len_strong": -0.09742886149803764,
+ "exp2": [
+  {
+   "model": "Qwen3 4B",
+   "none": 0.0,
+   "strong": 0.65,
+   "separate": true,
+   "captured": 0.9948717948717949
+  },
+  {
+   "model": "Llama 3.1 8B",
+   "none": 0.004166666666666667,
+   "strong": 0.6458333333333334,
+   "separate": true,
+   "captured": 0.9792746113989638
+  },
+  {
+   "model": "Gemma 3 27B",
+   "none": 0.05,
+   "strong": 0.9083333333333333,
+   "separate": true,
+   "captured": 0.579295154185022
+  },
+  {
+   "model": "Qwen3 30B-A3B",
+   "none": 0.016666666666666666,
+   "strong": 0.8291666666666667,
+   "separate": true,
+   "captured": 0.9583333333333334
+  },
+  {
+   "model": "Llama 3.3 70B",
+   "none": 0.0,
+   "strong": 0.9416666666666667,
+   "separate": true,
+   "captured": 0.9478260869565217
+  },
+  {
+   "model": "Qwen3-Next 80B",
+   "none": 0.0,
+   "strong": 0.8666666666666667,
+   "separate": true,
+   "captured": 0.9812734082397003
+  },
+  {
+   "model": "GLM-4.5-Air",
+   "none": 0.004166666666666667,
+   "strong": 0.9333333333333333,
+   "separate": true,
+   "captured": 0.9383116883116883
+  }
+ ],
+ "breaking": [
+  {
+   "model": "Qwen3 4B",
+   "break_k": 128,
+   "drop_k": 64,
+   "made_up_at_break": 0.03125,
+   "acc_8k": 0.95,
+   "acc_at_break": 0.653125,
+   "made_up_128k": 0.03125,
+   "made_up_max": 0.03125,
+   "max_at_k": 128,
+   "acc_at_max": 0.653125
+  },
+  {
+   "model": "Llama 3.1 8B",
+   "break_k": 128,
+   "drop_k": 128,
+   "made_up_at_break": 0.0625,
+   "acc_8k": 0.76875,
+   "acc_at_break": 0.603125,
+   "made_up_128k": 0.0625,
+   "made_up_max": 0.0625,
+   "max_at_k": 128,
+   "acc_at_max": 0.603125
+  },
+  {
+   "model": "Gemma 3 27B",
+   "break_k": 32,
+   "drop_k": 32,
+   "made_up_at_break": 0.059375,
+   "acc_8k": 0.98125,
+   "acc_at_break": 0.78125,
+   "made_up_128k": null,
+   "made_up_max": 0.2125,
+   "max_at_k": 64,
+   "acc_at_max": 0.45
+  },
+  {
+   "model": "Qwen3 30B-A3B",
+   "break_k": 128,
+   "drop_k": null,
+   "made_up_at_break": 0.08125,
+   "acc_8k": 1.0,
+   "acc_at_break": 0.971875,
+   "made_up_128k": 0.08125,
+   "made_up_max": 0.08125,
+   "max_at_k": 128,
+   "acc_at_max": 0.971875
+  },
+  {
+   "model": "Llama 3.3 70B",
+   "break_k": 128,
+   "drop_k": 64,
+   "made_up_at_break": 0.74375,
+   "acc_8k": 0.984375,
+   "acc_at_break": 0.478125,
+   "made_up_128k": 0.74375,
+   "made_up_max": 0.74375,
+   "max_at_k": 128,
+   "acc_at_max": 0.478125
+  },
+  {
+   "model": "Qwen3-Next 80B",
+   "break_k": null,
+   "drop_k": null,
+   "made_up_at_break": null,
+   "acc_8k": 0.99375,
+   "acc_at_break": null,
+   "made_up_128k": 0.0,
+   "made_up_max": 0.0,
+   "max_at_k": 8,
+   "acc_at_max": 0.99375
+  },
+  {
+   "model": "GLM-4.5-Air",
+   "break_k": 128,
+   "drop_k": 128,
+   "made_up_at_break": 0.175,
+   "acc_8k": 1.0,
+   "acc_at_break": 0.79375,
+   "made_up_128k": 0.175,
+   "made_up_max": 0.175,
+   "max_at_k": 128,
+   "acc_at_max": 0.79375
+  }
+ ],
+ "filler_lower_in": 7,
+ "filler_acc_change_min": -0.24062499999999998,
+ "filler_acc_change_max": -0.017187500000000022,
+ "p4": "partly supported",
+ "exp7": {
+  "Qwen3 4B": {
+   "one": 0.63125,
+   "twelve": 0.75625
+  },
+  "Llama 3.1 8B": {
+   "one": 0.575,
+   "twelve": 0.95
+  }
+ },
+ "exp6": {
+  "Qwen3 4B": {
+   "lookalike_32k": 0.6533333333333333,
+   "random_32k": 0.0033333333333333335
+  },
+  "Llama 3.1 8B": {
+   "lookalike_32k": 0.5566666666666666,
+   "random_32k": 0.0033333333333333335
+  },
+  "Gemma 3 27B": {
+   "lookalike_32k": 0.8466666666666667,
+   "random_32k": 0.01
+  },
+  "Qwen3 30B-A3B": {
+   "lookalike_32k": 0.8066666666666666,
+   "random_32k": 0.01
+  },
+  "Llama 3.3 70B": {
+   "lookalike_32k": 0.77,
+   "random_32k": 0.12666666666666668
+  },
+  "Qwen3-Next 80B": {
+   "lookalike_32k": 0.87,
+   "random_32k": 0.02
+  },
+  "GLM-4.5-Air": {
+   "lookalike_32k": 0.6133333333333333,
+   "random_32k": 0.05333333333333334
+  }
+ },
+ "exp6_missing": []
+}

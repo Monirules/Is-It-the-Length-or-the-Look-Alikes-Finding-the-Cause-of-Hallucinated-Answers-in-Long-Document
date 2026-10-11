@@ -16,13 +16,13 @@ Step 9 additions (6 October 2026, after seeing the data; listed in the hypothese
 
 Input   the per-run folders written by score/score_all.py, each with a scored.csv:
             <results>/<exp>_<model>_normal_t<T>_s<seed>/scored.csv
-        (on the cluster: outputs/results; on the PC after copying: outputs/results_cluster)
-Output  outputs/figures_main/   fig8_exp2_ladder, fig9_exp3_length, fig10_exp4_copies, fig11_filler
+        (on the cluster: outputs/scored_runs; on the PC after copying: outputs/scored_runs)
+Output  outputs/paper_figures/   fig8_exp2_ladder, fig9_exp3_length, fig10_exp4_copies, fig11_filler
                                 (900 dpi .png + .pdf), main_results.md (all numbers), main_results.csv
 
 Usage (any machine, no GPU; seconds)
-  python -m analysis.main_results --results outputs/results_cluster
-  python -m analysis.main_results --results outputs/results_cluster --boot 200    # faster bootstrap
+  python -m analysis.main_results --results outputs/scored_runs
+  python -m analysis.main_results --results outputs/scored_runs --boot 200    # faster bootstrap
 """
 from __future__ import annotations
 
@@ -577,8 +577,8 @@ def report(rows, models, out, strict=(), boot=500):
 
 def main(argv=None) -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--results", default=str(PROJECT_ROOT / "outputs" / "results"))
-    ap.add_argument("--out", default=str(PROJECT_ROOT / "outputs" / "figures_main"))
+    ap.add_argument("--results", default=str(PROJECT_ROOT / "outputs" / "scored_runs"))
+    ap.add_argument("--out", default=str(PROJECT_ROOT / "outputs" / "paper_figures"))
     ap.add_argument("--dpi", type=int, default=900)
     ap.add_argument("--boot", type=int, default=500, help="bootstrap draws for the exchange-rate interval (0 = skip)")
     a = ap.parse_args(argv)

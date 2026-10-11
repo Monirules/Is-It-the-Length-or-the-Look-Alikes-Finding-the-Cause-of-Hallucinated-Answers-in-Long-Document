@@ -10,3 +10,5 @@ __pycache__/
 
 # private material kept out of the anonymous release
 _private/
+
+outputs/results_release/

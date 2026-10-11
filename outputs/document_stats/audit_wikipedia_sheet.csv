@@ -1,0 +1,143 @@
+item,doc_id,question,true_answers,response,answer_in_passages,notes
+W001,nq171-no_gold_lookalike_32k,When did gps become available for civilian use?,1980s,"In 2000, the Clinton administration removed the military use signal restrictions, thus providing full commercial access to the US GPS satellite system.",,
+W002,nq261-no_gold_lookalike_32k,Where is the macy 's thanksgiving day parade held?,Manhattan,New York City,,
+W003,nq058-no_gold_lookalike_8k,What geographical feature of the ocean floor is between the shoreline and the continental slope?,continental rise,The geographical feature of the ocean floor between the shoreline and the continental slope is the continental shelf.,,
+W004,nq257-no_gold_lookalike_32k,Who is the leader of the others in lost?,Benjamin Linus,Ben Linus is the leader of the Others in Lost.,,
+W005,nq008-no_gold_lookalike_8k,Who ensures that the states abide by constitutional and federal law?,Supreme Court,"The President of Azerbaijan ensures that the constitutions, laws, and regulations of the constituent territories abide by the country’s Constitution and federal laws.",,
+W006,nq051-no_gold_lookalike_8k,When does the new season of got air?,16-Jul-17,"The new season of ""America's Got Talent: The Champions"" is set to air on NBC during the 2018–19 television season and premiere on January 7, 2019.",,
+W007,nq101-no_gold_lookalike_8k,Who wrote stand up stand up for jesus?,"George Duffield , Jr. | George James Webb","The hymn ""Stand Up, Stand Up for Jesus"" was written by Rev. George Duffield Jr., inspired by the last words of Stephen H. Tyng, who said, ""Let us all stand up for Jesus.""",,
+W008,nq196-no_gold_lookalike_8k,Who did southern democrats run for president under the newly formed dixiecrat party in 1948?,Strom Thurmond,Governor Strom Thurmond of South Carolina.,,
+W009,nq244-no_gold_lookalike_32k,Where did the chinese tallow tree come from?,eastern Asia,"The Chinese tallow tree is native to China, but it has also been introduced to other regions, including the Americas, where it has become an invasive species.",,
+W010,nq254-no_gold_lookalike_32k,Whose baby is angela having on the office?,Dwight,"Angela is having the Senator's baby, but it is later revealed that the baby's father is actually Dwight Schrute.",,
+W011,nq091-no_gold_lookalike_8k,Where does most star formation take place in the milky way?,the disk | the spiral arms,"The passages do not explicitly state where most star formation takes place in the Milky Way. However, it is mentioned that star formation occurs in giant molecular clouds, which are generally warmer and produce stars of all masses. These clouds have typical densities of 100 particles per cm and are found throughout the galaxy.",,
+W012,nq224-no_gold_lookalike_32k,In which year was the maratha confederacy defeated by british?,1818,"The Maratha Confederacy was defeated by the British in the Third Anglo-Maratha War, which concluded in 1818. However, the key passage indicating the end of the confederacy states: ""On 5 November, 1817, the Company forced Baji Rao II to sign an agreement renouncing claims on Gaekwad's revenues and ceding large swaths of territory to the British. This treaty of Pune formally ended the Peshwa's titular overlordship over other Maratha chiefs, thus officially ending the Maratha confederacy.""
+
+Therefore, the Maratha Confederacy was officially defeated by the British in **1817**.",,
+W013,nq055-no_gold_lookalike_32k,Where did the idea of representative government first develop?,ancient Athens,"The idea of representative government first developed in Europe during the Middle Ages, specifically in the twelfth to fifteenth centuries.",,
+W014,nq025-no_gold_lookalike_32k,Who played festus on the tv show gunsmoke?,Ken Curtis,Buck Taylor played Festus on the TV show Gunsmoke.,,
+W015,nq034-no_gold_lookalike_8k,What kind of car is in brokenwood mysteries?,1971 Holden Kingswood,The car in *The Brokenwood Mysteries* is a first generation Holden Kingswood sedan.,,
+W016,nq022-no_gold_lookalike_32k,Dark tower who is the man in black?,Randall Flagg,"Based on the passages, the Man in Black is Walter Padick, also known as Walter o'Dim. He is the primary antagonist of Stephen King's ""Dark Tower"" series and serves as a pawn for Roland's true enemy, the Crimson King.",,
+W017,nq084-no_gold_lookalike_32k,What is the last name of the current english royal family?,Mountbatten - Windsor,The last name of the current English royal family is Windsor.,,
+W018,nq246-no_gold_lookalike_8k,When was the samsung galaxy note 8 released?,15-Sep-17,The Samsung Galaxy Note 8 was released on 23 August 2017.,,
+W019,nq139-no_gold_lookalike_8k,Who owns the rights to who wants to be a millionaire?,Sony Pictures Television,"Celador owns the rights to ""Who Wants to Be a Millionaire?""",,
+W020,nq257-no_gold_lookalike_32k,Who is the leader of the others in lost?,Benjamin Linus,"The passages mention several leaders of the Others: Ben Linus, Richard Alpert, and Jacob. Initially, Richard was the leader, then Ben, and Jacob is revealed to be the one who orchestrates things from behind the scenes.",,
+W021,nq157-no_gold_lookalike_32k,Who plays the waitress on it 's always sunny in philadelphia?,Mary Elizabeth Ellis,"The waitress on ""It's Always Sunny in Philadelphia"" is played by various actresses in different episodes, but one notable actress who played the role is Lisa LoCicero.",,
+W022,nq170-no_gold_lookalike_8k,Who is credited with introducing massage into the medical profession?,Chinese medicine,"John Dix Fisher is credited with introducing the stethoscope into the United States and advocating for mediate auscultation, but no individual is explicitly credited in the passages with introducing massage into the medical profession. However, the Society of Trained Masseuses (now the Chartered Society of Physiotherapy) was formed in 1894 by nurses to establish high academic standards and a medical model for massage training, indicating a formal effort to integrate massage into medical practice.",,
+W023,nq152-no_gold_lookalike_8k,The regular cycle of growth and division that cells undergo is called?,cell growth,The regular cycle of growth and division that cells undergo is called the cell cycle.,,
+W024,nq252-no_gold_lookalike_32k,Paris climate agreement signed by how many countries?,195,174 countries signed the Paris Agreement on 22 April 2016.,,
+W025,nq030-no_gold_lookalike_32k,Waste water that contain solid and liquid excreta refers to?,sewage,"Based on the passages, waste water that contains solid and liquid excreta is referred to as human excreta, human waste, or human excreta.",,
+W026,nq025-no_gold_lookalike_32k,Who played festus on the tv show gunsmoke?,Ken Curtis,The passages state that Festus Haggen was played by Ken Curtis.,,
+W027,nq015-no_gold_lookalike_32k,When does pam get pregnant for the second time?,beginning of Season 8,"Pam gets pregnant for the second time during the events of the episode ""Pam's Replacement,"" which is set after her first child is born. This is confirmed by the passage stating that ""Pam's Replacement"" relates to Pam's pregnancy and that Fischer was actually pregnant during filming, with the storyline incorporating her real-life pregnancy.",,
+W028,nq009-no_gold_lookalike_32k,Who played spock 's dad on star trek?,Mark Lenard,"Leonard Nimoy played Spock's father, Sarek, in the Star Trek franchise.",,
+W029,nq196-no_gold_lookalike_8k,Who did southern democrats run for president under the newly formed dixiecrat party in 1948?,Strom Thurmond,Strom Thurmond.,,
+W030,nq247-no_gold_lookalike_8k,The convent of the mission de san jose is in what city?,Fremont,"San Antonio, Texas.",,
+W031,nq252-no_gold_lookalike_32k,Paris climate agreement signed by how many countries?,195,"174 countries signed the agreement on April 22, 2016.",,
+W032,nq214-no_gold_lookalike_32k,Where does a farewell to arms take place?,Italy,"The passages mention ""A Farewell to Arms"" taking place during the Italian campaign of World War I (in the 1957 film adaptation) and also in a Futurama episode where it involves Mars still being in Earth's orbit. Additionally, a farewell to arms is referenced as a location for a concert tour.",,
+W033,nq241-no_gold_lookalike_32k,Who said speak softly and carry a stick?,Theodore Roosevelt,"The phrase ""speak softly and carry a big stick"" is attributed to Theodore Roosevelt, as mentioned in the passage about the Monroe Doctrine.",,
+W034,nq212-no_gold_lookalike_32k,When did guardians of the galaxy vol 2 come out?,5-May-17,May-17,,
+W035,nq012-no_gold_lookalike_32k,Who wrote the song smooth by florida georgia line?,Tyler Hubbard | Nicolle Galyon | Jordan Schmidt | Brian Kelley,"The song ""Smooth"" is not by Florida Georgia Line; it is by Santana featuring Rob Thomas. The passages do not indicate that Florida Georgia Line recorded a song titled ""Smooth.""",,
+W036,nq094-no_gold_lookalike_32k,When did the french join revolution on colonists side?,1778,"In October 1802, Dessalines and Pétion switched sides again and fought against the French.",,
+W037,nq101-no_gold_lookalike_8k,Who wrote stand up stand up for jesus?,"George Duffield , Jr. | George James Webb","The hymn ""Stand Up, Stand Up for Jesus"" was written by family friend and revivalist George Duffield Jr., inspired by the last words of Stephen H. Tyng, ""Let us all stand up for Jesus.""",,
+W038,nq042-no_gold_lookalike_8k,What were the two sides of the chinese civil war?,the Communist Party of China,The two sides of the Chinese Civil War were the Nationalists and the Communists.,,
+W039,nq182-no_gold_lookalike_32k,Who founded the first real centralized empire in china?,First Qin Emperor,"The first real centralized empire in China was founded by Qin Shi Huang, the first emperor of the Qin dynasty, who unified China's Warring States by 221 BCE.",,
+W040,nq226-no_gold_lookalike_8k,When did marty mcfly go to the future in 2015?,26-Oct-85,"October 21, 2015.",,
+W041,nq021-no_gold_lookalike_32k,What us the answer to life the universe and everything?,The number 42,42,,
+W042,nq298-no_gold_lookalike_8k,Where is sperm made in the human body?,testicles,"In the human body, sperm is made in the testes, which are housed in the temperature-regulating scrotum. Immature sperm then travel to the epididymis for development and storage.",,
+W043,nq008-no_gold_lookalike_8k,Who ensures that the states abide by constitutional and federal law?,Supreme Court,The Federal Constitutional Court of Germany can review and reject constitutional amendments on the grounds that they are contradictory to the constitution.,,
+W044,nq270-no_gold_lookalike_32k,When did the first new years eve ball drop?,1907,The first New Year's Eve ball drop in Times Square occurred in 1907.,,
+W045,nq030-no_gold_lookalike_8k,Waste water that contain solid and liquid excreta refers to?,sewage,"Based on the passages, waste water that contains solid and liquid excreta is referred to as **domestic wastewater**.",,
+W046,nq025-no_gold_lookalike_32k,Who played festus on the tv show gunsmoke?,Ken Curtis,"Festus Haggen on the TV show ""Gunsmoke"" was played by actor Ken Curtis.",,
+W047,nq039-no_gold_lookalike_8k,Who is officially elected through the electoral college?,President | Vice President,"Various officials are officially elected through electoral colleges, including:
+
+- Senators in the Republic of the Congo, France, and Morocco  
+- MEPs in Belgium (French-, Dutch-, and German-speaking electoral colleges)  
+- Members of the Rajya Sabha in India  
+- The President of the United States (via the U.S. Electoral College)  
+- The Chief Executive of Hong Kong  
+- The Speaker of the Turkish Parliament  
+- Bishops in the Church in Wales  
+- Members of the Federal National Council in the UAE  
+- Prince-electors of the Holy Roman Empire  
+- Members of Nepal’s National Assembly  
+- Jurats in Jersey  
+- Officials of the Wabigoon Lake Ojibway Nation  
+
+These are just some examples from the provided passages.",,
+W048,nq241-no_gold_lookalike_32k,Who said speak softly and carry a stick?,Theodore Roosevelt,Theodore Roosevelt,,
+W049,nq108-no_gold_lookalike_32k,Who presents the people 's postcode lottery advert?,Jeff Brazier | Judie McCourt | Matt Johnson | Danyl Johnson,"The passages do not specify a single individual who presents the People's Postcode Lottery advert. However, several presenters are mentioned in relation to different versions or regions of the lottery:
+
+- **Angus Purden** is noted as a ""street prize presenter and public face of 'People's Postcode Lottery'"" and became the main host of STV's gameshow ""Postcode"".
+- **Carol Smillie** is mentioned as the original presenter of ""Postcode Challenge"", which is sponsored by The People's Postcode Lottery.
+- **Terry Wogan** and **Fearne Cotton** are mentioned as co-hosts of ""Children in Need"" with Tess Daly, but not related to the People's Postcode Lottery advert.
+- **Rudi Cerne** is mentioned as the honorary ambassador who announces winning numbers in ""Aktion Mensch Gewinner"", which is related to a different lottery.
+
+Therefore, while specific presenters are named, the question about who presents the People's Postcode Lottery advert is not definitively answered by a single name in the passages. The most direct reference is to **Angus Purden** as a public face and host of a related show. 
+
+Answer: Angus Purden.",,
+W050,nq085-no_gold_lookalike_32k,Which country is called land of morning calm?,Korea,"Korea is called the ""Land of the Morning Calm.""",,
+W051,nq028-no_gold_lookalike_32k,When did tobacco companies start putting warning labels on cigarettes?,1966,"Tobacco companies started putting warning labels on cigarettes in 1965, when the Federal Cigarette Labeling and Advertising Act was passed.",,
+W052,nq102-no_gold_lookalike_32k,When does game of thrones season 7 come on hbo?,16-Jul-17,Season 7 will premiere in mid-2017.,,
+W053,nq055-no_gold_lookalike_8k,Where did the idea of representative government first develop?,ancient Athens,"Ancient Greece, specifically Athens, is where the idea of representative government can be traced back to, though it was different from modern forms. It also developed in the United States with James Madison and was novel to classical republics.",,
+W054,nq093-no_gold_lookalike_8k,Where is the minnehaha academy located in minneapolis?,banks of the Mississippi River,"Minnehaha Academy is located in Minneapolis, Minnesota.",,
+W055,nq140-no_gold_lookalike_32k,What can be used to detect the charge of particles?,particle detector,"The charge of particles can be detected using various instruments and methods such as:
+
+- **Faraday cup electrometer**: Measures the current in a beam of charged particles, allowing the charge to be determined.
+- **Electroscope**: Detects the presence and magnitude of electric charge on a body by observing the motion of a test object due to electrostatic forces.
+- **Gaseous ionization detector**: Detects ionizing particles by measuring the current flow caused by ionization of gas atoms or molecules.
+- **Electrometer**: Measures charge by detecting the current generated by charged particles.
+- **Coulomb's law**: Quantifies the electrostatic force between two charged particles, allowing the charge to be inferred from the observed force.
+- **Mass spectrometry**: Can determine the charge-to-mass ratio of particles, which, when combined with mass, allows the charge to be calculated.
+- **Electrostatic induction and separation**: Detects charge through attraction or repulsion between charged and neutral objects or particles.
+- **Ionization methods**: Detect charge through ionization of gas, such as in ion chambers or Geiger-Muller counters.
+
+These methods rely on the interaction of charged particles with electric fields, materials, or other particles to infer their charge.",,
+W056,nq266-no_gold_lookalike_32k,Where do i find the url of a website?,address bar,You can find the URL of a website in the address bar of your web browser.,,
+W057,nq169-no_gold_lookalike_32k,When did look who 's talking come out?,1989,"""Look Who's Talking"" was released in 1989.",,
+W058,nq202-no_gold_lookalike_8k,Who won noble prize for peace in 2012?,European Union ( EU ),The European Union won the Nobel Peace Prize in 2012.,,
+W059,nq293-no_gold_lookalike_8k,Who composed marseilles the national anthem of france?,Claude Joseph Rouget de Lisle,Rouget de Lisle,,
+W060,nq038-no_gold_lookalike_8k,Who wrote the theme song for the flintstones?,Joseph Barbera | Hoyt Curtin | William Hanna,"The passages mention several people involved with the theme song for *The Flintstones*. Hoyt Curtin composed it, and Ann-Margret recorded a version for *The Flintstones in Viva Rock Vegas*. Al Jarreau wrote and performed a version for the TV show ""Moonlighting"" which was inspired by the original. ""Weird Al"" Yankovic also created a parody version called ""Bedrock Anthem"".",,
+W061,nq153-no_gold_lookalike_32k,Which tissue contains high levels of extracellular matrix?,blood | loose connective tissue | bone tissue,Cartilage contains high levels of extracellular matrix.,,
+W062,nq001-no_gold_lookalike_32k,Who won i want to work for diddy?,Suzanne Siegel,Ebony Jones,,
+W063,nq134-no_gold_lookalike_8k,When did cassie died on young and the restless?,2005,"Cassie Newman died on ""The Young and the Restless"" in 2014.",,
+W064,nq029-no_gold_lookalike_8k,How many times do teams play each other in the nba playoffs?,best - of - seven,"Teams play each other in the NBA playoffs in best-of-seven series, meaning they can play up to 7 times.",,
+W065,nq265-no_gold_lookalike_32k,Who won the australian women 's open tennis tournament?,Serena Williams,"Daphne Akhurst won the 1928 Australian Championships, and Chris O'Neil won the 1978 Australian Open.",,
+W066,nq169-no_gold_lookalike_8k,When did look who 's talking come out?,1989,"""Look Who's Talking"" came out in 1989.",,
+W067,nq249-no_gold_lookalike_32k,When did the vice president become part of the cabinet?,1933,"The vice president became part of the Cabinet in the 20th century, when they were regularly included as members and came to be regarded primarily as a member of the executive branch.",,
+W068,nq050-no_gold_lookalike_8k,Religion in the lion the witch and the wardrobe?,Christian,"The passages mention Aslan having an oath ""for the oath's sake,"" and some controversy around whether this implicitly endorses Inclusivism. They also state that some see Aslan as a messianic figure. However, detailed discussion of religion is not present in the passages.",,
+W069,nq205-no_gold_lookalike_32k,When did halloween become a holiday in the us?,19th century,"The passages state that Halloween was first attested in the 16th century as a Scottish shortening of “All-Hallows-Even”, but it wasn’t officially recognized as a federal holiday until 1967.",,
+W070,nq149-no_gold_lookalike_32k,Who won the michigan ohio state game in 2006?,Ohio State Buckeyes,Ohio State won the game 42-39.,,
+W071,nq177-no_gold_lookalike_32k,The bill of rights was added to the constitution by?,James Madison,"The bill of rights was added to the constitution by the First Congress, which introduced 17 amendments to the Constitution, ten of which were ratified by the necessary three-quarters of the states and became part of the U.S. Constitution on December 15, 1791, thereafter known as the Bill of Rights.",,
+W072,nq023-no_gold_lookalike_32k,Who did the voice of kovu in lion king 2?,Jason Marsden,Jason Marsden,,
+W073,nq192-no_gold_lookalike_32k,What is the oldest football team in the nfl?,The Green Bay Packers,The Arizona Cardinals are the oldest continuously run professional football team in the United States.,,
+W074,nq212-no_gold_lookalike_8k,When did guardians of the galaxy vol 2 come out?,5-May-17,"""Guardians of the Galaxy Vol. 2"" was released in May 2017.",,
+W075,nq144-no_gold_lookalike_8k,When do we meet the originals in vampire diaries?,Season two,"The Originals are first introduced in the backdoor pilot episode, ""The Originals,"" which aired on April 25, 2013, as part of the fourth season of *The Vampire Diaries*.",,
+W076,nq215-no_gold_lookalike_8k,When was it 's a wonderful life released?,20-Dec-46,It's a Wonderful Life (album) was released in August 2001.,,
+W077,nq144-no_gold_lookalike_8k,When do we meet the originals in vampire diaries?,Season two,"We meet the Originals in the backdoor pilot episode of ""The Vampire Diaries,"" titled ""The Originals,"" which aired on April 25, 2013.",,
+W078,nq119-no_gold_lookalike_8k,Who forged the ring in lord of the rings?,Sauron the Dark Lord,Sauron forged the One Ring in the fires of Mount Doom.,,
+W079,nq112-no_gold_lookalike_32k,Who was in the video do n 't worry be happy?,Robin Williams | McFerrin | Bill Irwin,"The video for ""Don't Worry Be Happy"" by Guy Sebastian features Guy Sebastian as the main performer. The video portrays him as a businessman having a difficult day, and includes a young girl in a wheelchair who smiles at the end. There is no mention of other specific individuals appearing in the video beyond these characters.",,
+W080,nq092-no_gold_lookalike_32k,Who wrote the music for how to train your dragon?,John Powell,"The music for ""How to Train Your Dragon"" was composed by John Powell.",,
+W081,nq065-no_gold_lookalike_8k,Who is washington addressing in the atlanta exposition?,a predominantly white audience,"Based on the passages, Booker T. Washington was addressing the attendees of the Cotton States and International Exposition in 1895.",,
+W082,nq178-no_gold_lookalike_8k,When was countrywide bought by bank of america?,1-Jul-08,Countrywide was bought by Bank of America in July 2008.,,
+W083,nq261-no_gold_lookalike_8k,Where is the macy 's thanksgiving day parade held?,Manhattan,The Macy's Thanksgiving Day Parade is held in New York City.,,
+W084,nq095-no_gold_lookalike_32k,Who is the captain of colombia football team?,Radamel Falcao,Iván Córdoba,,
+W085,nq081-no_gold_lookalike_8k,Who captained england for the centenary cricket test sereis in 1977?,James Lillywhite,The passage does not explicitly state who captained England for the Centenary Test series in 1977.,,
+W086,nq105-no_gold_lookalike_32k,Who did the patriots lose to in 2011?,New York Giants,"The Patriots lost to the Jets, Ravens, and Giants in 2011.",,
+W087,nq255-no_gold_lookalike_32k,Where in london is the new american embassy?,Nine Elms,"The new American embassy is located at 91 Nine Elms Lane, near Vauxhall.",,
+W088,nq071-no_gold_lookalike_32k,Who plays amy fowler on big bang theory?,Mayim Chaya Bialik,Mayim Bialik.,,
+W089,nq256-no_gold_lookalike_32k,Where is the villi located in the digestive system?,small intestine,"The passages state villi are located in the ileum and also describe them as finger-like projections on the folds of the small intestine. They are also found in the chorionic villi, which sprout from the chorion.",,
+W090,nq135-no_gold_lookalike_32k,When was the first black and white camera invented?,1816,"The passages do not explicitly state when the first black and white camera was invented. However, they mention that the first digital camera, which recorded black and white images, was invented by Steven Sasson in 1975.",,
+W091,nq196-no_gold_lookalike_32k,Who did southern democrats run for president under the newly formed dixiecrat party in 1948?,Strom Thurmond,Thurmond and Wright.,,
+W092,nq256-no_gold_lookalike_32k,Where is the villi located in the digestive system?,small intestine,"The villi are located in the small intestine, specifically in the ileum.",,
+W093,nq290-no_gold_lookalike_32k,When were khakis first introduced in the navy?,1913,"Khakis were first introduced in the navy in 1846 by Sir Henry Lumsden in the Corps of Guides, who dyed cotton pajamas to create a uniform suitable for the Indian climate.",,
+W094,nq121-no_gold_lookalike_32k,How many movies does the twilight series have?,five,"The Twilight Saga film series has five movies: ""Twilight"", ""New Moon"", ""Eclipse"", ""The Twilight Saga: Breaking Dawn – Part 1"", and ""The Twilight Saga: Breaking Dawn – Part 2"".",,
+W095,nq123-no_gold_lookalike_32k,Who does the little prince meet on earth?,a fox,"The little prince meets a variety of characters on Earth, including a little girl, a man with a little red hat, a man with a little red hat and a little red hat, and a man with a little red hat and a little red hat. However, in the context of the provided passages, the most consistent and specific answer is that the little prince meets a little girl.",,
+W096,nq105-no_gold_lookalike_32k,Who did the patriots lose to in 2011?,New York Giants,The New England Patriots lost to the New York Giants in Super Bowl XLVI in 2011.,,
+W097,nq287-no_gold_lookalike_32k,Who appoints the speaker of parliament in ghana?,the Legislature,"The President of Ghana appoints the Speaker of Parliament, who is then presented to Parliament for approval.",,
+W098,nq299-no_gold_lookalike_32k,Who is responsible for developing the best-known theory of motivation the hierarchy of needs?,Abraham Harold Maslow,"Abraham Maslow is responsible for developing the best-known theory of motivation, the hierarchy of needs.",,
+W099,nq231-no_gold_lookalike_32k,When was the office of the vice president created?,1787,"The passages state the office was created in 1789 with the establishment of the U.S. federal government, and also in 1987 in Suriname. It was also created in 1990 in Fiji.",,
+W100,nq127-no_gold_lookalike_32k,When is the day as long as the night?,equinox,At the equinoxes.,,
+W101,nq197-no_gold_lookalike_8k,Where are the cayman islands on the map?,western Caribbean Sea,"The Cayman Islands are a three-island archipelago in the Caribbean Sea, consisting of Grand Cayman, Cayman Brac, and Little Cayman. They are located between Cuba and Honduras, south of Havana, Cuba, and northwest of Kingston, Jamaica. The islands are situated on the Cayman Rise, which forms the northern margin of the Cayman Trough, and are positioned between Cuba and Central America.",,
+W102,nq156-no_gold_lookalike_32k,Who plays peter barlow 's son in coronation street?,Alex Bain,"Linus Roache plays Peter Barlow's son, also named Peter, in Coronation Street.",,
+W103,nq169-no_gold_lookalike_32k,When did look who 's talking come out?,1989,"The passages do not specify the exact release date of ""Look Who's Talking."" However, one passage mentions that the film was released in December 1990, as it was the sequel to ""Look Who's Talking"" which hit theaters in December of that year. Therefore, ""Look Who's Talking"" came out in December 1990.",,
+W104,nq175-no_gold_lookalike_32k,When did wizards of the coast buy d&d?,10-Apr-97,Wizards of the Coast bought Dungeons & Dragons in 1997.,,
+W105,nq129-no_gold_lookalike_8k,Who wrote i can see clearly now song?,Johnny Nash,"The song ""I Can See Clearly Now"" was written by Jimmy Cliff.",,

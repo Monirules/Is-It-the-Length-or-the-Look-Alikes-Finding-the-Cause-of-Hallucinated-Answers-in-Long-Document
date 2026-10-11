@@ -3,8 +3,8 @@
 Step 9: the one-page results summary. One final claim per research question, each with its exact numbers,
 plus the supporting checks and what changed from the plan. Writing starts from this page.
 
-Input   outputs/figures_main/main_results.json   (python -m analysis.main_results --results outputs/results_cluster)
-        outputs/riker/exp1_summary.json          (python -m riker.exp1_summary)
+Input   outputs/paper_figures/main_results.json   (python -m analysis.main_results --results outputs/scored_runs)
+        outputs/riker/reanalysis_summary.json          (python -m riker.reanalysis_summary)
 Output  outputs/results_summary.md
 
 Usage (Ubuntu, nullscale env, project folder; instant)
@@ -27,12 +27,12 @@ def p(x, d=1):
 
 def main(argv=None) -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--main", default=str(PROJECT_ROOT / "outputs" / "figures_main" / "main_results.json"))
-    ap.add_argument("--exp1", default=str(PROJECT_ROOT / "outputs" / "riker" / "exp1_summary.json"))
+    ap.add_argument("--main", default=str(PROJECT_ROOT / "outputs" / "paper_figures" / "main_results.json"))
+    ap.add_argument("--exp1", default=str(PROJECT_ROOT / "outputs" / "riker" / "reanalysis_summary.json"))
     ap.add_argument("--out", default=str(PROJECT_ROOT / "outputs" / "results_summary.md"))
     a = ap.parse_args(argv)
-    for f, cmd in ((a.main, "python -m analysis.main_results --results outputs/results_cluster"),
-                   (a.exp1, "python -m riker.exp1_summary")):
+    for f, cmd in ((a.main, "python -m analysis.main_results --results outputs/scored_runs"),
+                   (a.exp1, "python -m riker.reanalysis_summary")):
         if not Path(f).exists():
             sys.exit(f"missing {f}: run  {cmd}  first")
     R = json.loads(Path(a.main).read_text(encoding="utf-8"))
@@ -99,7 +99,7 @@ def main(argv=None) -> None:
                  f"passages {p(rlo, 0)} to {p(rhi, 0)}." + (f" Not run: {', '.join(R['exp6_missing'])}." if R.get("exp6_missing") else ""))
     for m, v in e7.items():
         M.append(f"- Exp 7, {m}: one question per call {p(v['one'])} vs 12 per call {p(v['twelve'])} made up.")
-    M += ["- Temperature 0.7 (three seeds) stays within a few points of temperature 0 (outputs/figures_main/main_results.md).",
+    M += ["- Temperature 0.7 (three seeds) stays within a few points of temperature 0 (outputs/paper_figures/main_results.md).",
           "- Scoring rules agree with RIKER2's own scorer on 99.21% of 605,948 answers (Cohen's kappa 0.981).", "",
           "## Changed from the plan (see hypotheses.md change log)", "",
           "- No hand check; no Exp 5; no API model; Gemma 3 27B not run at 128K; GLM-4.5-Air only half of the 128K documents.",
