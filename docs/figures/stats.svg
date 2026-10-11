@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="170" viewBox="0 0 1280 170">
+  <defs>
+    <linearGradient id="c1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2563EB"/><stop offset="1" stop-color="#1E3A8A"/></linearGradient>
+    <linearGradient id="c2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7C3AED"/><stop offset="1" stop-color="#4C1D95"/></linearGradient>
+    <linearGradient id="c3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F97316"/><stop offset="1" stop-color="#C2410C"/></linearGradient>
+    <linearGradient id="c4" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#10B981"/><stop offset="1" stop-color="#047857"/></linearGradient>
+  </defs>
+  <g font-family="Helvetica Neue, Helvetica, Arial, sans-serif" text-anchor="middle">
+    <rect x="8" y="10" width="300" height="150" rx="18" fill="url(#c1)"/>
+    <text x="158" y="78" font-family="Georgia, serif" font-size="50" font-weight="700" fill="#FFFFFF">93,660</text>
+    <text x="158" y="114" font-size="18" fill="#DBEAFE">scored answers</text>
+    <text x="158" y="138" font-size="14" fill="#BFDBFE">7 open models · 6 experiments</text>
+    <rect x="328" y="10" width="300" height="150" rx="18" fill="url(#c3)"/>
+    <text x="478" y="78" font-family="Georgia, serif" font-size="50" font-weight="700" fill="#FFFFFF">+64 to 94</text>
+    <text x="478" y="114" font-size="18" fill="#FFEDD5">points from one look-alike</text>
+    <text x="478" y="138" font-size="14" fill="#FED7AA">at a fixed length of 32K</text>
+    <rect x="648" y="10" width="300" height="150" rx="18" fill="url(#c4)"/>
+    <text x="798" y="78" font-family="Georgia, serif" font-size="50" font-weight="700" fill="#FFFFFF">0.0 to 5.8%</text>
+    <text x="798" y="114" font-size="18" fill="#D1FAE5">with the same records</text>
+    <text x="798" y="138" font-size="14" fill="#A7F3D0">but no near match to the key</text>
+    <rect x="968" y="10" width="300" height="150" rx="18" fill="url(#c2)"/>
+    <text x="1118" y="78" font-family="Georgia, serif" font-size="50" font-weight="700" fill="#FFFFFF">3 of 7</text>
+    <text x="1118" y="114" font-size="18" fill="#EDE9FE">models hurt by length alone</text>
+    <text x="1118" y="138" font-size="14" fill="#DDD6FE">only where reading fails</text>
+  </g>
+</svg>

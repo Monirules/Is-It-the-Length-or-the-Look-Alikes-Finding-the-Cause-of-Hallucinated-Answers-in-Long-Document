@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="400" viewBox="0 0 1280 400">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0B1B33"/>
+      <stop offset="0.55" stop-color="#14305A"/>
+      <stop offset="1" stop-color="#1B4B7A"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#F6C46A"/>
+      <stop offset="1" stop-color="#EF8A3A"/>
+    </linearGradient>
+    <filter id="sh" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+  <rect width="1280" height="400" rx="22" fill="url(#bg)"/>
+  <g opacity="0.07" stroke="#FFFFFF" stroke-width="1">
+    <path d="M0 80 H1280 M0 160 H1280 M0 240 H1280 M0 320 H1280"/>
+    <path d="M160 0 V400 M320 0 V400 M480 0 V400 M640 0 V400 M800 0 V400 M960 0 V400 M1120 0 V400"/>
+  </g>
+  <text x="64" y="74" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="17" letter-spacing="4" fill="#9FC3EA" font-weight="600">NAACL 2027 SUBMISSION  ·  ANONYMOUS</text>
+  <text x="64" y="150" font-family="Georgia, 'Palatino Linotype', 'Book Antiqua', serif" font-size="54" font-weight="700" fill="#FFFFFF">Is It the Length or the</text>
+  <text x="64" y="214" font-family="Georgia, 'Palatino Linotype', 'Book Antiqua', serif" font-size="54" font-weight="700" fill="url(#gold)">Look-Alikes?</text>
+  <text x="64" y="268" font-family="Georgia, 'Palatino Linotype', serif" font-style="italic" font-size="25" fill="#D6E4F5">Finding the Cause of Hallucinated Answers</text>
+  <text x="64" y="302" font-family="Georgia, 'Palatino Linotype', serif" font-style="italic" font-size="25" fill="#D6E4F5">in Long Document Question Answering</text>
+  <rect x="64" y="332" width="120" height="4" rx="2" fill="url(#gold)"/>
+  <g transform="translate(860,58)" filter="url(#sh)">
+    <rect x="34" y="18" width="300" height="280" rx="12" fill="#FFFFFF" opacity="0.12"/>
+    <rect x="18" y="10" width="300" height="280" rx="12" fill="#FFFFFF" opacity="0.2"/>
+    <rect x="0" y="0" width="300" height="280" rx="12" fill="#F8FAFD"/>
+    <g fill="#C9D3E0">
+      <rect x="24" y="28" width="230" height="10" rx="5"/>
+      <rect x="24" y="50" width="200" height="10" rx="5"/>
+      <rect x="24" y="72" width="245" height="10" rx="5"/>
+      <rect x="24" y="190" width="215" height="10" rx="5"/>
+      <rect x="24" y="212" width="250" height="10" rx="5"/>
+      <rect x="24" y="234" width="180" height="10" rx="5"/>
+    </g>
+    <rect x="14" y="98" width="272" height="76" rx="9" fill="#FFF1E2" stroke="#EF8A3A" stroke-width="2.5"/>
+    <text x="28" y="128" font-family="Helvetica Neue, Arial, sans-serif" font-size="17" fill="#7A3B06" font-weight="700">Morva<tspan fill="#D9480F">nn</tspan>e Logistics</text>
+    <text x="28" y="155" font-family="Helvetica Neue, Arial, sans-serif" font-size="15" fill="#7A3B06">pays $8,400 per month</text>
+  </g>
+  <g transform="translate(700,250)" font-family="Helvetica Neue, Arial, sans-serif">
+    <rect x="0" y="0" width="190" height="64" rx="12" fill="#0B1B33" stroke="#EF8A3A" stroke-width="1.5" opacity="0.95"/>
+    <text x="16" y="26" font-size="13" fill="#9FC3EA">Asked about</text>
+    <text x="16" y="48" font-size="16" fill="#FFFFFF" font-weight="700">Morvane Logistics</text>
+  </g>
+</svg>
